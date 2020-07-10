@@ -1,0 +1,19 @@
+<html>
+  <body>
+    <!-- action의 주소 값 : 로그인하여 제출되는 서버 주소의 예제. -->
+    <form action="http://localhost/login.php">
+      <!-- input은 사용자가 입력할수있도록 만들어주며 
+        name은 각 입력칸이 어떤 내용인지 서버쪽에서 알아 볼 수 있도록 지정해주는 것이다. value는 해당 칸에 들어갈 기본 내용을 입력 할 수있게 해준다.-->
+      <p>
+        아이디 : <input type="text" name="id" value="아이디를 입력하세요." />
+      </p>
+      <p>
+        비밀번호 :
+        <input type="text" name="pwd" value="비밀번호를 입력하세요." />
+      </p>
+      <p>textarea : <textarea cols="50" rows="10"> </textarea></p>
+      <p>주소 : <input type="text" name="address" /></p>
+      <input type="submit" />
+    </form>
+  </body>
+</html>

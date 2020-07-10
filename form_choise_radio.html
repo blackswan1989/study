@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <form action="http:.//localhost/order.php">
+
+      <!-- input type="radio"는 옛날 라디오 버튼 방식처럼 하나의 채널 버튼을 눌렀다가 다른 버튼을 누르면 처음 눌렀던 버튼은 다시 풀리는 방식을 라디오 타입으로 표현 한 것이다. 즉 raido들을 같은 name으로 설정해주면 중복해서 선택되지 않는 성격을 가지고 있다. -->
+      <p>
+        <input type="radio" name="color" />
+        <input type="radio" name="color" />
+        <input type="radio" name="color" />
+      </p>
+      <p>
+        <input type="radio" name="color2" />
+        <input type="radio" name="color2" />
+        <input type="radio" name="color2" />
+      </p>
+
+      <!-- 각각의 선택지가 어떤 값이 되어야하는 지는 value로 설정해주면 된다. -->
+      <p>
+        <h1>색상(단일선택)</h1> 
+        붉은색 : <input type="radio" name="color" value="red" />
+        검은색 : <input type="radio" name="color" value="balck"/>
+        파란색 : <input type="radio" name="color" value="blue" />
+      </p>
+      <p>
+        <h1>사이즈(다중선택)</h1>
+        95 : <input type="checkbox" name="size" value="95">
+        100 : <input type="checkbox" name="size" value="100" checked>
+        105 : <input type="checkbox" name="size" value="105" checked>
+        <!-- checked를 입력해놓으면 구동시 미리 체크가 되어있다. -->
+        <!-- value 값을 지정해 놓으면 제출시 체크된 체크박스에 해당되는 내용이 form의 action주소로 전송되게 된다. -->
+      </p>
+      <input type="submit">
+    </form>
+  </body>
+</html>

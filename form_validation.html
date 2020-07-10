@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <!-- input type를 email이나 number등으로 설정하면 해당 내용이 아닐 경우 제출이 되지 않도록 설정할수있다. 또 required를 입력해주면 '반드시'입력해야 될 정보가 되어 미입력시 제출되지 않도록 할수있다.
+    그리고 required pattern=""을 설정하면 패턴까지 필터링해준다.-->
+    <form action="register.php">
+      <input
+        type="text"
+        name="id"
+        placeholder="아이디를 입력해주세요."
+        required
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="이메일을 입력해주세요."
+        required
+        pattern="[a-zA-z]."
+      />
+      <input type="submit" />
+    </form>
+  </body>
+</html>
+
+<!-- required pattern="정규표현식"은 []넣어 입력한다. 참조
+
+1. "[a-zA-z]."  알파벳이 첫 문자로 들어가고 그 뒤에 입력한 .은 두번째 문자부터는 알파벳이든 무엇이든 상관없다는 뜻이다.
+
+2. "[a-zA-z].+" 위 내용에서 그 뒤에 +까지 붙이면 어떤 문자든 하나 이상은 추가로 입력해주어야 된다는 뜻이 된다.
+
+3. "[a-zA-z].+[0-9]" [0-9]까지 추가하면 제일 끝에는 숫자가 와야 제출이 가능해진다.
+
+-->

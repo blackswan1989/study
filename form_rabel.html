@@ -1,0 +1,35 @@
+<html>
+  <body>
+    <form action=" ">
+      <p>
+        <!-- label로 해당 input에 대한 대상을 지정해줄수있으며, 
+          lavel for="id_txt"와 input id="id_txt"에 대상을 한번 더 명확하게 해주면 구동된 화면에서 text만 클릭해도 사용자의 입력칸에 커서가 뜨게 된다. password와 textarea등도 동일하게 가능.-->
+        <label for="id_txt">text :</label>
+          <input id="id_txt" type="text" name="id" value="default value">
+        
+        <p>
+          <label for="password">password :</label> 
+          <input id="password" type="password" name="pwd" value="default value">
+        </p>
+        <p>
+          <label for="comment">textarea :</label>
+          <textarea id="comment" rows="2">default value</textarea>
+        </p>
+        <!-- 위와 비슷하지만 조금 더 간단한 다른 방법이 또 있는데, 아래처럼 label 안에 통째로 넣어주면 비슷하게 구동이 가능하다. -->
+        <label>textarea2 :
+          <textarea rows="2">default value</textarea>
+        </label> 
+        <!-- 위 내용을 응용하면 아래처럼 checkbox 기능과 같은 경우 <label>로 모두 감싸게 되었을 때 '붉은색'만을 클릭해도 체크박스에 체크가 되도록 할 수 있다.-->
+        <p>
+          <label>
+            <input type="checkbox" name="color" value="red"> 붉은색
+          </label>
+        <!-- 아래는 label로 모두 감싸지 않고 첫번째와 같은 방법으로 작성한 경우의 예시로 붉은색과 동일하게 구동 가능하다. -->
+          <label for="color_bule">
+            <input id="color_blue" type="checkbox" name="color" value="blue"> 파란색
+          </label> 
+        </p> 
+      </p>
+    </form>
+  </body>
+</html>
