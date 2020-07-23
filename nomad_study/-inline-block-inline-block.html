@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Nomad Coders" />
+    <meta name="description" content="Welcome to my Kakao Clone" />
+    <title>Inline Example</title>
+    <style>
+      /* 폭과 높이가 존재하는 가로정렬의 블록형태 */
+      .box {
+        background-color: red;
+        width: 200px;
+        height: 200px;
+        border: 2px solid black;
+        display: inline-block;
+      }
+      /* 폭과 높이가 존재하는 세로 정렬의 블록형태
+      .box {
+        background-color: red;
+        width: 200px;
+        height: 200px;
+        border: 2px solid black;
+        display: block;
+      }*/
+      /* 폭과 높이가 반영되지 않는 텍스트 길이만 존재하는 형태
+      .box {
+        background-color: red;
+        width: 200px; (=적용되지 않음)
+        height: 200px; (=적용되지 않음)
+        border: 2px solid black;
+        display: inline;
+      }*/
+    </style>
+  </head>
+
+  <body>
+    <div class="box">1234</div>
+    <div class="box">1234</div>
+    <div class="box">1234</div>
+  </body>
+</html>

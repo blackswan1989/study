@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initialpscale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Transformations</title>
+
+    <style>
+      .box {
+        width: 300px;
+        height: 300px;
+        background: coral;
+        transition: all 0.5s ease-in-out;
+      }
+      /* rotate(#deg,trun...) 기울기, 턴 효과
+         scale(#, #) 사이즈 축소 효과 */
+      .box:hover {
+        transform: rotate(50deg) scale(0.5, 0.5);
+      }
+    </style>
+
+    <body>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </body>
+  </head>
+</html>

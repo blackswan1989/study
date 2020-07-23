@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initialpscale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Transitions</title>
+
+    <style>
+      /* transition : all -> 1개 이상의 설정 변경가능 
+       종류는 hover, active, focus, visited가 있다. */
+      .box {
+        background-color: lightgreen;
+        color: white;
+        transition: all 0.5s ease-in-out;
+      }
+      .box:hover {
+        background-color: black;
+        color: pink;
+      }
+    </style>
+
+    <body>
+      <span class="box">Text</span>
+    </body>
+  </head>
+</html>

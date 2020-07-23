@@ -1,0 +1,26 @@
+/* css의 구조
+
+1. selector {
+  property-name: value;
+  property-name: value;
+  property-name: value;
+  property-name: value;
+  ...
+}
+(selector는 모든 태그+대괄호를 사용한다. 태그, 링크, 헤더, 푸터, div 등 모든 태그 이름이 해당된다.
+id를 사용할 경우 #id{}처럼 #을 id값에 붙여 작성하고
+class를 사용할 경우 .class{}처럼 .을 class값에 붙여 작성한다. 
+
+selector( id, class, tag name) {}
+그리고 위 처럼 동시에 여러 태그를 섞어서 사용 할 수 있다.)
+
+
+2. property
+property-name: value; 
+(selector안에 사용되며 소문자를 사용하고 세미클론으로 구분해준다.)
+*/
+
+h1 {
+  color: red;
+  font-size: 5rem;
+}

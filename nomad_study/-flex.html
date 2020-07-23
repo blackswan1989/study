@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initialpscale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>flex</title>
+    
+    <style>
+    /* Flex는 부모 클래스에만 선언&적용하면 된다. */
+    html, body {
+      height: 100%;
+    }
+    /* justify-content 수평으로 적용되고
+       align-item은 수직으로 적용된다.
+       flex-direction은 flex의 방향을 지정하는 것으로
+       colum값을 주면 세로 정렬, row는 가로로 정렬된다. */
+    .father {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      height: 100%;
+      flex-direction: column-reverse;
+      flex-wrap:wrap;
+
+    }
+    .box {
+      background-color: red;
+      width: 200px;
+      height: 200px;
+      border: 1px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }  
+    </style> 
+  </head>
+
+  <body>
+    <div class="father">
+      <div class="box">1</div>
+      <div class="box">2</div>
+      <div class="box">3</div>
+      <div class="box">4</div>
+      <div class="box">5</div>
+      <div class="box">6</div>
+      <div class="box">7</div>
+      <div class="box">8</div>
+      <div class="box">9</div>
+  </body>
+
+</html>      

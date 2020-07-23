@@ -1,0 +1,29 @@
+<!-- 웹서버들이 index파일을 제일 먼저 찾도록 디폴드 값으로 설계되어있다.-->
+
+<!DOCTYPE html>
+<html>
+  <!-- head는 유저에게 보이지 않고, 브러우저에게 웹사이트에 관한 정보를 제공한다. 컨텐츠는 body에 입력한다.-->
+  <head>
+    <meta charset="utf-8" />
+    <!-- 아래 meta의 내용은 주소창등의 검색시 나오는 사이트 정보이다.-->
+    <meta name="author" content="Nomad Coders" />
+    <meta name="description" content="Welcome to my Kakao Clone" />
+    <title>This is my title</title>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <section>
+      <!-- id는 여권번호처럼 고유하고 class는 이름이나 국적처럼 여러개 존재 가능. 즉 class는 동일한 속성이 있을때마다 반복해서 여러번 사용 할 수 있다. 
+      ( Ex. 채팅창은이나 메뉴바 같은 element 등은 아이콘이 많고 계속 반복되기 때문에 class를 주롤 많이 사용하게 될 것이다. 반면 헤더나 네비게이션과 같은 몇 없지만 고유한 속성들은 id를 사용해주게 될 것이다.) -->
+      <header id="headerNumberOne" class="defaultHeader">
+        <h1>Title of a Section</h1>
+      </header>
+    </section>
+    <div>
+      <header id="diffrentGeader" class="defaultHeader">
+        Title of the unkown contaainer
+      </header>
+    </div>
+  </body>
+</html>

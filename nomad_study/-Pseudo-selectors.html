@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initialpscale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Selectors and Pseudo Selectors</title>
+    <style>
+      /* 가상 셀렉터란 selector이지만 element가 아닌 것을 뜻한다. 이는 id나 class를 쓰지 않고도 선택 할 수 있는 방법이다.*/
+      input[type="submit"] {
+        background-color: red;
+      }
+      input[required="required"] {
+        background-color: blue;
+      }
+      input {
+        border: 2px solid yellow;
+      }
+      .box {
+        background-color: lightblue;
+        display: block;
+        height: 100px;
+        border: 1px solid black;
+      }
+      /* pseudo selector의 last child를 사용하면 마지막 차일드 박스를 선택 할 수있다. 또 first는 첫번째 선택, 그 외에는 nth-child(숫자)를 입력하면 해당 숫자 순서에 해당하는 박스가 선택된다. nth-child의 괄호안에는 여러 수식이 적용 된다. 예를들면 (3n),(2n+1),(3n+2)등 자유자재로 적용 가능하다. */
+      .box:first-child {
+        background-color: pink;
+      }
+      .box:nth-child(2n + 2) {
+        background-color: lightcoral;
+      }
+      /* input + box 이러한 작성법은 서로가 형제임을 뜻한다. 
+        input > box 직계 박스만 해당 즉, direct child를 의미하며 그 밑에 다른 박스들이 있다면 그 박스들은 해당되지 않는다.*/
+      input + .box {
+        border: 1px solid yellow;
+      }
+      /* 아래 .container > .box {} 처럼 직계 박스를 노랑으로 설정하면 "box child"를 제외한 직계  박스들이 모두 노랑색으로 변하는 것을 확인 할 수 있다. (child 박스만 핑크색이고 40px의 폭을 갖게 된다.) */
+      .container > .box {
+        background-color: yellow;
+      }
+      .child {
+        width: 40px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="box">
+        <div class="box child"></div>
+      </div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box">
+        <input type="password" required="required" />
+        <input type="submit" required="required" />
+      </div>
+    </div>
+  </body>
+</html>

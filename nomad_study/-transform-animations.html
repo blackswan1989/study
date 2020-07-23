@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initialpscale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Transformations</title>
+
+    <style>
+      .box {
+        width: 300px;
+        height: 300px;
+        font-size: 9rem;
+        background: coral;
+        animation: 3.5s scaleAndRotateSquare ease-in-out;
+        /* animation을 무한 반복하고 싶으면 위처럼 infinite를 추가로 작성해준다. */
+      }
+
+      /* 먼저 animation 이름을 지어준다 -> @keyframes는 css로 하여금 애니메이션을 생성했다는 것을 알려준다. 그 다음 옆에 원하는 애니메이션의 이름을 적어준다. 그리고 2가지 스텝 1)from 2)to 을 작성한다. */
+      @keyframes scaleAndRotateSquare {
+        from {
+          transform: none;
+        }
+        to {
+          transform: rotate(1turn) scale(0.5, 0.5);
+        }
+      }
+      /* 스테이지가 2개 이상이면 아래처럼 %값을 입력하여 작성도 가능하다. */
+      @keyframes scaleAndRotateSquare {
+        0% {
+          transform: none;
+        }
+        50% {
+          transform: rotate(1turn) scale(0.5, 0.5);
+          color: white;
+          font-size: 6rem;
+        }
+        100% {
+          transform: none;
+          color: purple;
+          font-size: 9rem;
+        }
+      }
+    </style>
+
+    <body>
+      <div class="box">hello</div>
+      <div class="box">hello</div>
+    </body>
+  </head>
+</html>
