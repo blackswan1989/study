@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .father {
+        display: flex;
+        /* flex-direction: row-reverse; */
+        justify-content: space-between;
+
+        /* ### aligh-content는 line에 대한 정렬이다. 즉 세로&가로 선상에 여분의 공간이 있는 경우 flex컨테이너 사이의 간격을 조절해준다. ### */
+        align-content: center;
+
+        height: 100vh;
+
+        /* nowrap은 element들에게 항상 같은 줄에만 있도록 명령해준다. */
+        flex-wrap: nowrap;
+        /* wrap은 element들에게 항상 width크기를 유지하도록 명령해준다. */
+        flex-wrap: wrap;
+        /* flex-wrap: wrap-reverse; */
+      }
+
+      .child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: pink;
+        color: white;
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="child">1</div>
+      <div class="child">2</div>
+      <div class="child">3</div>
+      <div class="child">4</div>
+      <div class="child">5</div>
+      <div class="child">6</div>
+      <div class="child">7</div>
+    </div>
+  </body>
+</html>

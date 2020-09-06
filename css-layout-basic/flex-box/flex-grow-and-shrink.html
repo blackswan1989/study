@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .father {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* flex-grow, flex-shirnk는 child에게 줄 수 있는 property이다. */
+      .child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: pink;
+        color: white;
+        height: 200px;
+        font-size: 3rem;
+      }
+
+      /* flex-shirnk는 flexBox가 width를 무시하고 찌그러질때(?) 형태를 정의해준다.*/
+      .child:nth-child(2) {
+        background: skyblue;
+        /* 기본값은 1이다. 2는 2배, 3은 3배 등으로 설정된다. */
+        flex-shrink: 1;
+      }
+
+      /* flex-grow는 shirnk의 반대로 작용한다.(width를 무시하고 커진다) */
+      .child:nth-child(3) {
+        /* 남아있는 빈공간을 가져오거나, 여분의 공간 만큼 커지게 된다. */
+        background: lightgreen;
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="child">1</div>
+      <div class="child">2</div>
+      <div class="child">3</div>
+    </div>
+  </body>
+</html>

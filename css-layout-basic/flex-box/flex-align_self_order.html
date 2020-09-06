@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .father {
+        display: flex;
+        /* flex-direction: column;*/
+        justify-content: center;
+        height: 50vh;
+      }
+
+      .child {
+        background: pink;
+        color: white;
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+      }
+
+      .child:nth-child(2) {
+        /* align-self는 하나의 element에만 설정해도 적용된다.(cross axis에서) */
+        justify-self: center;
+        align-self: center;
+      }
+
+      .child:nth-child(3) {
+        align-self: flex-end;
+      }
+
+      .child:nth-child(1) {
+        /* 박스1을 2로 바꾸어준다. */
+        order: 2;
+        align-self: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="child">1</div>
+      <div class="child">2</div>
+      <div class="child">3</div>
+    </div>
+  </body>
+</html>
