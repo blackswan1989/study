@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        background: rgb(255, 110, 139);
+        display: grid;
+        height: 100vh;
+        gap: 5px;
+        color: white;
+        font-size: 1.5rem;
+        grid-template-columns: repeat(4, 100px);
+        grid-template-rows: repeat(4, 100px);
+
+        justify-content: space-evenly;
+        align-content: space-evenly;
+
+        /* place-content는 모든 사각형 전체에 대한 설정. */
+        /* justify-content + align-content */
+        place-content: center end;
+      }
+
+      .header {
+        background-color: #00c954;
+        border: 2px solid white;
+
+        /* 자신만 움직이도록 self  */
+        align-self: end;
+        justify-self: center;
+      }
+
+      .content {
+        background-color: #3498db;
+        border: 2px solid white;
+
+        /* justify-self +  align-self */
+        place-self: start center;
+      }
+
+      .nav {
+        background-color: #8e44ad;
+        border: 2px solid white;
+      }
+
+      .footer {
+        background-color: #f39c12;
+        border: 2px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+    </div>
+  </body>
+</html>

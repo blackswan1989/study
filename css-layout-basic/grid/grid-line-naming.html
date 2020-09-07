@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        display: grid;
+        /* 각 라인을 아래처럼 이름지어 사용 가능 */
+        grid-template-columns: [first-line] 100px [second-line] 100px [third-line] 100px [fourth-line] 100px [fifth-line] 100px;
+
+        /* row line을 sexy-line으로 이름 설정후 사용 가능 */
+        grid-template-rows: repeat(4, 100px [sexy-line]);
+        gap: 10px;
+        color: white;
+        font-size: 2rem;
+      }
+
+      .header {
+        background-color: #2ecc71;
+
+        /* grid의 격자line을 의미 */
+
+        grid-column-start: first-line;
+
+        /* -1은 끝에서 첫번째를 의미하므로 마지막 line을 뜻하게 된다.
+        (-2는 끝에서 두번째를 뜻한다.) */
+        grid-column-end: -1;
+      }
+
+      .content {
+        background-color: #3498db;
+        grid-column-start: 1;
+        grid-column-end: -2;
+        /* grid-column: start / end 한줄로 작성도 가능 */
+        grid-row: 2 / -2;
+      }
+
+      .nav {
+        background-color: #8e44ad;
+        /* start와 end대신 span + cell갯수로 적어 줄 수도 있다. */
+        grid-column: span 5;
+        grid-row: sexy-line 4 / sexy-line 3;
+      }
+
+      .footer {
+        background-color: #f39c12;
+        grid-row: 2 / span 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">navigation</div>
+      <div class="footer">footer</div>
+    </div>
+  </body>
+</html>

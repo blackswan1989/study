@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        display: grid;
+        gap: 5px;
+        color: white;
+        font-size: 1.5rem;
+        grid-auto-rows: 100px;
+        margin-bottom: 30px;
+      }
+      .grid:first-child {
+        /* auto-fill은 입력한 사이즈 내에서 column을 가능한 많이 만들어준다. */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      }
+
+      .grid:nth-child(2) {
+        /* auto-fit은 현재의 element를 쭉 늘려서(stretch) row에 딱 맞게(fit하게) 빈공간 없이 맞춰준다. */
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      }
+
+      .item:nth-child(odd) {
+        background-color: pink;
+      }
+
+      .item:nth-child(even) {
+        background-color: skyblue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>auto-fill</h2>
+    <div class="grid">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+      <div class="item">5</div>
+      <div class="item">6</div>
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+      <div class="item">5</div>
+      <div class="item">6</div>
+    </div>
+    <h2>auto-fit</h2>
+    <div class="grid">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+    </div>
+  </body>
+</html>

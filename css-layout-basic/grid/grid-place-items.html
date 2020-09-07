@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        display: grid;
+        height: 100vh;
+        gap: 5px;
+        color: white;
+        font-size: 2rem;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+
+        /* justify-items의 기본값은 stretch이다. 즉 grid-container는 모든 grid 자식을 가지고 있고, 자식들을 늘려서 본체를 채우게 한다. */
+        justify-items: center; /* 세로축, 수직 */
+        align-items: center; /* 가로축, 수평 */
+
+        /* place-items는 각 사각형 하나하나에 어떤걸 적용하는지에 관한 것. */
+        /* justify-items + align-items(y축/x축)*/
+        place-items: stretch / center;
+      }
+
+      .header {
+        background-color: #2ecc71;
+        /* grid-area: header; */
+        height: 100px;
+      }
+
+      .content {
+        background-color: #3498db;
+        /* grid-area: content; */
+        height: 100px;
+      }
+
+      .nav {
+        background-color: #8e44ad;
+        /* grid-area: nav;*/
+        height: 100px;
+      }
+
+      .footer {
+        background-color: #f39c12;
+        /* grid-area: footer; */
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="header">header</div>
+      <div class="content">content</div>
+      <div class="nav">nav</div>
+      <div class="footer">footer</div>
+    </div>
+  </body>
+</html>

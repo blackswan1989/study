@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        display: grid;
+        gap: 5px;
+        color: white;
+        font-size: 1.5rem;
+
+        /* 박스를 만들때 min-content는 content가 작아질 수 있는 만큼 작게 만들고 max-content는 박스를 content가 필요한 만큼 크게 만드는 것이다. */
+        grid-template-columns: repeat(2, minmax(min-content, 1fr));
+        grid-template-rows: 200px;
+        margin-bottom: 30px;
+      }
+
+      .grid2 {
+        display: grid;
+        gap: 5px;
+        color: white;
+        font-size: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(50px, max-content));
+        grid-template-rows: 100px;
+      }
+
+      .item:nth-child(odd) {
+        background-color: pink;
+      }
+
+      .item:nth-child(even) {
+        background-color: skyblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="item">This is very long text</div>
+      <div class="item">
+        This is very long text super super super super super super super super
+        super super long
+      </div>
+      <div class="item">This is a text</div>
+      <div class="item">This is very long text</div>
+    </div>
+    <div class="grid2">
+      <div class="item">This is very long text</div>
+      <div class="item">
+        This is very long text super super super super super super super super
+        super super long
+      </div>
+      <div class="item">This is a text</div>
+      <div class="item">This is very long text</div>
+    </div>
+  </body>
+</html>

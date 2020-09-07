@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .grid {
+        display: grid;
+        /*
+        grid-template-columns: 100px 100px 100px 100px;
+        grid-template-rows: 150px 150px 150px 150px; */
+
+        /* auto는 모든 공간을 사용하도록 해준다. 그 다음 px크기 사용 */
+        grid-template-columns: auto 200px;
+        /* grid의 repeat()함수 반복되는 내용에 사용 : 4개 100px */
+        grid-template-rows: 100px repeat(2, 150px) 100px;
+
+        /* grid-template-areas는 눈에 잘 보이게 layout을 디자인해준다.
+        각 파트에 "grid-area: name"을 설정해주어야 작동된다. "."은 빈공간으로 만들 수 있다. */
+        grid-template-areas:
+          "header header header header"
+          "content content . nav"
+          "content content . nav"
+          "footer footer footer footer";
+      }
+
+      .header {
+        background-color: #2ecc71;
+        grid-area: header;
+      }
+
+      .content {
+        background-color: #3498db;
+        grid-area: content;
+      }
+
+      .nav {
+        background-color: #8e44ad;
+        grid-area: nav;
+      }
+
+      .footer {
+        background-color: #f39c12;
+        grid-area: footer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <div class="header"></div>
+      <div class="content"></div>
+      <div class="nav"></div>
+      <div class="footer"></div>
+    </div>
+  </body>
+</html>

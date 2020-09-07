@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice</title>
+    <style>
+      .father {
+        display: grid;
+        /* grid설정후 원하는 만큼의 column 갯수와 사이즈를 적으면 된다. */
+        grid-template-columns: 150px 150px 150px;
+
+        /* row는 세로크기와 갯수를 설정해준다. */
+        grid-template-rows: 150px 100px 150px;
+
+        /* margin과 비슷한 효과(세로여백, 가로여백) */
+        column-gap: 10px;
+        row-gap: 10px;
+        gap: 20px;
+      }
+
+      /* flex-grow, flex-shirnk는 child에게 줄 수 있는 property이다. */
+      .child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: pink;
+        color: white;
+        font-size: 3rem;
+      }
+
+      .child {
+        /* flex-basis는 element에게 초기의 크기(initial size)를 주는 것이다. main axis(가로축)에서 작용하는 width이다. (box가 찌그러지거나 늘어나기 전에) */
+        flex-basis: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="father">
+      <div class="child">1</div>
+      <div class="child">2</div>
+      <div class="child">3</div>
+      <div class="child">4</div>
+      <div class="child">5</div>
+      <div class="child">6</div>
+      <div class="child">7</div>
+      <div class="child">8</div>
+      <div class="child">9</div>
+    </div>
+  </body>
+</html>
