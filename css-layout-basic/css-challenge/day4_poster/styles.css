@@ -23,8 +23,9 @@ body {
 }
 
 .grid__block {
-  display: flex;
-  justify-content: center;
+  /* grid속성 사용하여 text -> center 정렬 */
+  display: grid;
+  justify-items: center;
   align-items: center;
 }
 
@@ -33,17 +34,9 @@ body {
   grid-row: 1 / 3;
   font-size: 3.5rem;
   color: #4ac29a;
-  background: #efefbb; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #d4d3dd,
-    #efefbb
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #d4d3dd,
-    #efefbb
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #efefbb;
+  background: -webkit-linear-gradient(to top, #d4d3dd, #efefbb);
+  background: linear-gradient(to top, #d4d3dd, #efefbb);
 }
 
 .grid__block.two {
@@ -51,17 +44,9 @@ body {
   grid-row: 1 / 3;
   font-size: 3.5rem;
   color: #efefbb;
-  background: #be93c5; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #7bc6cc,
-    #be93c5
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #7bc6cc,
-    #be93c5
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #be93c5;
+  background: -webkit-linear-gradient(to top, #7bc6cc, #be93c5);
+  background: linear-gradient(to top, #7bc6cc, #be93c5);
 }
 
 .grid__block.three {
@@ -69,17 +54,9 @@ body {
   grid-row: 3 / 5;
   font-size: 3.5rem;
   color: #34314c;
-  background: #4ac29a; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to top,
-    #bdfff3,
-    #4ac29a
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to top,
-    #bdfff3,
-    #4ac29a
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #4ac29a;
+  background: -webkit-linear-gradient(to top, #bdfff3, #4ac29a);
+  background: linear-gradient(to top, #bdfff3, #4ac29a);
 }
 
 .grid__block.four {
