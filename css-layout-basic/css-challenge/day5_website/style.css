@@ -1,0 +1,144 @@
+/* TODO Day5 Condition
+1. The columns should be responsive
+2. Use minmax and maybe auto-fill or auto-fit */
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+@import url("https://fonts.googleapis.com/css2?family=Solway:wght@400;700;800&display=swap");
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: "Solway", serif;
+  width: 100%;
+  height: 100vh;
+  font-weight: 400;
+  background-color: #e0e0e0;
+}
+
+header {
+  font-size: 5vw;
+  text-align: center;
+  margin: 15px;
+  color: #1e2022;
+}
+
+.grid {
+  display: grid;
+  grid-auto-rows: 350px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.grid__block:nth-child(1) {
+  background: url(images/04.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(2) {
+  background: #534847;
+  color: #9b8281;
+}
+
+.grid__block:nth-child(3) {
+  background: url(images/01.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(4) {
+  background: url(images/08.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(5) {
+  background: #9b8281;
+  color: #534847;
+}
+
+.grid__block:nth-child(6) {
+  background: url(images/03.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(7) {
+  background: url(images/09.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(8) {
+  background: url(images/06.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(9) {
+  background: #d09e88;
+  color: #333030;
+}
+
+.grid__block:nth-child(10) {
+  background: #333030;
+  color: #8b8687;
+}
+
+.grid__block:nth-child(11) {
+  background: url(images/05.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.grid__block:nth-child(12) {
+  background: url(images/07.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* text block */
+.grid__block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.text:first-child {
+  font-size: 1.5vw;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.text:last-child {
+  font-size: 1vw;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.grid__block:nth-child(1):hover,
+.grid__block:nth-child(3):hover,
+.grid__block:nth-child(4):hover,
+.grid__block:nth-child(6):hover,
+.grid__block:nth-child(7):hover,
+.grid__block:nth-child(8):hover,
+.grid__block:nth-child(11):hover,
+.grid__block:nth-child(12):hover {
+  transform: scale(0.9);
+  border-radius: 5%;
+  transition: 0.5s ease-in-out;
+}
+
+.grid__block:nth-child(2):hover,
+.grid__block:nth-child(5):hover,
+.grid__block:nth-child(9):hover,
+.grid__block:nth-child(10):hover {
+  background-color: #e0e0e0;
+  transform: scale(0.9);
+  transition: 0.5s ease-in-out;
+}
+
+footer {
+  margin: 15px;
+  text-align: center;
+}
