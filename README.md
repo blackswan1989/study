@@ -15,43 +15,43 @@
 - [x] flex-basis
 
 ## Grid:
-- [ ] grid-template-columns
-- [ ] grid-template-rows
-- [ ] grid-column-gap
-- [ ] grid-row-gap
-- [ ] grid-gap
-- [ ] grid-template-areas
-- [ ] grid-template
-- [ ] justify-items
-- [ ] align-items
-- [ ] justify-content
-- [ ] align-content
-- [ ] grid-auto-columns
-- [ ] grid-auto-rows
-- [ ] grid-auto-flow
-- [ ] grid-column-start
-- [ ] grid-column-end
-- [ ] grid-row-start
-- [ ] grid-row-end
-- [ ] grid-column
-- [ ] grid-row
-- [ ] justify-self
-- [ ] align-self  
+- [x] grid-template-columns
+- [x] grid-template-rows
+- [x] grid-column-gap
+- [x] grid-row-gap
+- [x] grid-gap
+- [x] grid-template-areas
+- [x] grid-template
+- [x] justify-items
+- [x] align-items
+- [x] justify-content
+- [x] align-content
+- [x] grid-auto-columns
+- [x] grid-auto-rows
+- [x] grid-auto-flow
+- [x] grid-column-start
+- [x] grid-column-end
+- [x] grid-row-start
+- [x] grid-row-end
+- [x] grid-column
+- [x] grid-row
+- [x] justify-self
+- [x] align-self  
 
 ### Keywords & Functions:
-- [ ] repeat
-- [ ] min-content
-- [ ] max-content
-- [ ] minmax
-- [ ] auto-fit
-- [ ] auto-fill
+- [x] repeat
+- [x] min-content
+- [x] max-content
+- [x] minmax
+- [x] auto-fit
+- [x] auto-fill
 
 
 ## SCSS:
-- [ ] Variables
-- [ ] Nesting
-- [ ] Partials
-- [ ] Mixins
-- [ ] Extend
-- [ ] Responsive
+- [x] Variables
+- [x] Nesting
+- [x] Partials
+- [x] Mixins
+- [x] Extend
+- [x] Responsive
 
