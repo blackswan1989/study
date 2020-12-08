@@ -8,6 +8,8 @@
 
 ---
 
+<br>
+
 ## 01. AngularJS Introduction
 
 <br>
@@ -122,7 +124,9 @@ AngularJS controllers는 애플리케이션을 제어(control)한다.
 
 ## 02. AngularJS Expressions (AngularJS 표현식)
 
-AngularJS binds data to HTML using Expressions.
+<br>
+
+#### &nbsp;&nbsp; AngularJS binds data to HTML using Expressions.
 
 - AngularJS 표현식은 이중 중괄호 안에 작성할 수 있다 : {{ expression }}
 - AngularJS 표현식은 지시문 안에 작성할 수도 있다 : ng-bind="expression"
@@ -261,6 +265,8 @@ AngularJS의 Arrays는 JavaScript의 Arrays와 같다.
 
 ## 03. AngularJS Modules
 
+<br>
+
 - AngularJS module은 애플리케이션을 정의(defines)한다.
 - Module은 application의 다른 부분에 대한 컨테이너(container)입니다.
 - Module은 애플리케이션 컨트롤러(controllers)의 컨테이너(container)이다.
@@ -272,7 +278,7 @@ AngularJS의 Arrays는 JavaScript의 Arrays와 같다.
 
 AngularJS function을 사용하여 Module(`angular.module`)을 만든다.
 
-`"myApp"`parameter(매개변수)는 애플리케이션이 실행 될 HTML 요소를 나타낸다.
+`"myApp"`parameter(매개변수)는 애플리케이션이 실행 될 HTML 요소를 나타낸다.  
 이제 AngularJS 애플리케이션에 컨트롤러(controllers), 지시문(directives), 필터 등을 추가 할 수 있다.
 
 - **Examples :**
