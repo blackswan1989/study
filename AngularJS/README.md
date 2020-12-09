@@ -3,6 +3,7 @@
 - AngularJS는 JavaScript 프레임 워크이다. `<script>` 태그를 사용하여 HTML 페이지에 추가 할 수 있다.
 - AngularJS는 Directives로 HTML 속성을 확장 하고 Expressions로 데이터를 HTML에 바인딩 해준다.
 - AngularJS는 JavaScript 파일로 배포되며 스크립트 태그를 사용하여 웹 페이지에 추가 할 수 있다.
+- AngularJS는 데이터베이스 CRUD(Create Read Update Delete) 애플리케이션에 적합하다.
 
   url : https://www.w3schools.com/angular/angular_intro.asp
 
@@ -401,5 +402,197 @@ AngularJS 애플리케이션에서는 Module과 Controller를 JavaScript 파일�
 
 <br>
 <br>
+<br>
+
+## 04. AngularJS Directives (AngularJS의 지시어)
+
+- AngularJS를 사용하면 Directives라는 새로운 속성으로 HTML을 확장할 수 있다.
+- AngularJS에는 애플리케이션에 기능을 제공하는 내장 지시문 세트가 있다.
+- AngularJS를 사용하면 고유 한 지시문을 정의 할 수도 있다.
+- URL : https://www.w3schools.com/angular/angular_directives.asp
+
+---
+
+### &nbsp;&nbsp;&nbsp;# What is Directives?
+
+- AngularJS 지시문은 `ng-`접두사가 있는 확장된 HTML 속성이다.
+
+- **Examples :**
+
+  ```
+  <div ng-app="" ng-init="firstName='John'">  // input 텍스트 필드에 John으로 초기화되어있다.
+    <p>Name: <input type="text" ng-model="firstName"></p>
+    <p>You wrote: {{ firstName }}</p>  // input의 입력값이 반영된다.
+  </div>
+  ```
+
+  **Tip:** `ng-app`은 `<DIV>`element가 AngularJS와 애플리케이션의 "소유자"라고 AngularJS에게 알려준다.
+
+  <br>
+
+  #### 1. The ng-app Directive
+
+  - `ng-app` 지시문은 AngularJS 애플리케이션의 '루트 요소(Root element)'를 정의해 준다.
+  - `ng-app` 지시문은 웹 페이지가 로드 될 때 애플리케이션을 자동으로 초기화(Auto-bootstrap)해 준다.
+
+  <br>
+
+  #### 2. The ng-init Directive
+
+  - `ng-init`지시문은 AngularJS 애플리케이션의 초기 값을 정의한다.
+  - 일반적으로 `ng-init`를 사용하는 대신 컨트롤러 또는 모듈을 사용한다.
+
+  <br>
+
+  #### 3. The ng-model Directive
+
+  - `ng-model` 지시문은 HTML 컨트롤(입력, 선택, 텍스트 영역)의 값을 애플리케이션 데이터에 바인딩(binds)한다.
+  - `ng-model` 지시문은 다음을 수행 할 수도 있다 :
+
+    - Provide type validation for application data (number, email, required).
+    - Provide status for application data (invalid, dirty, touched, error).
+    - Provide CSS classes for HTML elements.
+    - Bind HTML elements to HTML forms.
+
+<br>
+<br>
+
+### 1) Data Binding
+
+데이터 바인딩이란 두 데이터 혹은 정보의 소스를 모두 일치시키는 기법이다.  
+즉 화면에 보이는 데이터와 브라우저 메모리에 있는 데이터를 일치시키는 기법으로,  
+많은 자바스크립트 프레임워크가 이러한 데이터 바인딩 기술을 제공하고 있다.  
+하지만 대다수의 자바스크립트 프레임워크가 단방향 데이터 바인딩을 지원하는 반면  
+AngularJS는 양방향 데이터 바인딩을 제공하고 있다.
+
+위의 예제에서 `{{ firstName }}`표현식은 AngularJS의 데이터 바인딩 표현식이다.  
+즉 {{ firstName }}와 `ng-model="firstName"`은 양방향으로 데이터가 바인딩 되고 있다.
+
+- **Examples :**
+
+  ```
+  <div data-ng-app="" data-ng-init="quantity=1;price=5">
+    <h2>Cost Calculator</h2>
+    Quantity: <input type="number" ng-model="quantity">
+    Price: <input type="number" ng-model="price">
+    <p><b>Total in dollar: {{quantity * price}}</b></p>
+  </div>
+  ```
+
+<br>
+<br>
+
+### 2) Repeating HTML Elements
+
+`ng-repeat`지시문은 HTML 요소를 반복시켜준다.
+
+- **Examples :**
+
+```
+<div ng-app="" ng-init="names=['Jani','Hege','Kai']">
+  <p>Looping with ng-repeat:</p>
+  <ul>
+    <li ng-repeat="x in names">
+      {{ x }}
+    </li>
+  </ul>
+</div>
+```
+
+<br>
+
+`ng-repeat` 지시문은 수집한 각 항목에 대해 HTML 요소를 한 번씩 복제해준다.
+
+- **Examples : 객체 배열에 사용되는 ng-repeat 지시문**
+
+```
+// 결과 : [Jani, Norway | Hege, Sweden | Kai, Denmark]
+
+<div ng-app="" ng-init="names=[
+  {name:'Jani',country:'Norway'},
+  {name:'Hege',country:'Sweden'},
+  {name:'Kai',country:'Denmark'}]">
+
+  <ul>
+    <li ng-repeat="test in names">
+    {{ test.name + ', ' + test.country }}</li>
+  </ul>
+</div>
+```
+
+<br>
+<br>
+
+### 3) Create New Directives
+
+기본적으로 내장된 AngularJS 지시문 외에도 모든 고유 한 지시문을 만들 수 있다.  
+`.directive` function을 사용하여 새 지시문을 만들 수 있다.  
+새로운 지시문을 호출하려면 새롭게 만든 지시문과 동일한 태그명을 가진 HTML element를 만들면 된다.
+
+지시문의 이름을 지정할 때에는 낙타문법(`w3TestDirective`)과 같은 방식으로 지정 해야 하지만  
+지시문을 호출 할 때에는 `-`로 구분 된 문법(`w3-test-directive`)의 방식을 사용하여 호출 해야 한다.
+
+- **Examples :**
+
+  ```
+  <body ng-app="myApp">
+
+    <w3-test-directive></w3-test-directive>  // 지시문과 동일한 태그명을 가진 지시문을 작성하여 호출
+
+    // 속성(Attribute)을 추가하여 <div w3-test-directive></div> 작성 가능
+    // 클래스(class)를 추가하여 <div class="w3-test-directive"></div> 작성 가능
+
+    <script>
+      var app = angular.module("myApp", []);
+      app.directive("w3TestDirective", function() {  // 지시문의 이름 "w3TestDirective" 지정
+          return {
+              template : "<h1>Made by a directive!</h1>"  // 지시문 내용 작성
+          };
+      });
+    </script>
+
+  </body>
+  ```
+
+<br>
+<br>
+
+### 4) Restrictions
+
+지시문이 일부 Methods에 의해서만 호출되도록 제한(restrict)할 수 있다.
+
+- The legal restrict values are:
+
+  - EA : Default
+  - E : Element name
+  - A : Attribute
+  - C : Class
+  - M : Comment
+
+- **Examples :**
+
+  값이 "A"인 제한 속성을 추가하면 지시문은 해당 속성(attributes)에 포함되는 요소들만 호출할 수 있다.
+
+  ```
+  <body ng-app="myApp">
+
+    <w3-test-directive></w3-test-directive>
+    <div w3-test-directive></div>
+
+    <script>
+      var app = angular.module("myApp", []);
+      app.directive("w3TestDirective", function() {
+          return {
+              restrict : "A",
+              template : "<h1>Made by a directive!</h1>"
+          };
+      });
+    </script>
+
+  </body>
+  ```
+
+  _Note: restrict 속성을 "A"로 설정하면 "w3-test-directive"에 속성(div, p Attribute등)이 있는 HTML 요소만 호출할 수 있다._
+
 <br>
 <br>
