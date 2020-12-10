@@ -393,56 +393,56 @@ Controller는 표준 JavaScript Objects 생성자에 의해 생성 된 JavaScrip
 
 - **Examples 1 :**
 
-```
-// fullName() 결과 : [Full Name: John Doe]
+  ```
+  // fullName() 결과 : [Full Name: John Doe]
 
-<div ng-app="myApp" ng-controller="personCtrl">
-  First Name: <input type="text" ng-model="firstName"><br>
-  Last Name: <input type="text" ng-model="lastName"><br>
-  Full Name: {{fullName()}}
-</div>
+  <div ng-app="myApp" ng-controller="personCtrl">
+    First Name: <input type="text" ng-model="firstName"><br>
+    Last Name: <input type="text" ng-model="lastName"><br>
+    Full Name: {{fullName()}}
+  </div>
 
-<script src="personController.js"></script>
-```
+  <script src="personController.js"></script>
+  ```
 
-```
-// personController.js
+  ```
+  // personController.js
 
-angular.module('myApp', []).controller('personCtrl', function($scope) {
-    $scope.firstName = "John",
-    $scope.lastName = "Doe",
-    $scope.fullName = function() {
-        return $scope.firstName + " " + $scope.lastName;
-    }
-});
-```
+  angular.module('myApp', []).controller('personCtrl', function($scope) {
+      $scope.firstName = "John",
+      $scope.lastName = "Doe",
+      $scope.fullName = function() {
+          return $scope.firstName + " " + $scope.lastName;
+      }
+  });
+  ```
 
 <br>
 
 - **Examples 2 :**
 
-```
-// 결과 : [Jani, Norway | Hege, Sweden | Kai, Denmark]
+  ```
+  // 결과 : [Jani, Norway | Hege, Sweden | Kai, Denmark]
 
-<div ng-app="myApp" ng-controller="namesCtrl">
-  <ul>
-    <li ng-repeat="test in names">
-      {{ test.name + ', ' + test.country }}
-    </li>
-  </ul>
-</div>
+  <div ng-app="myApp" ng-controller="namesCtrl">
+    <ul>
+      <li ng-repeat="test in names">
+        {{ test.name + ', ' + test.country }}
+      </li>
+    </ul>
+  </div>
 
-<script src="namesController.js"></script>
-```
+  <script src="namesController.js"></script>
+  ```
 
-```
-// namesController.js
+  ```
+  // namesController.js
 
-angular.module('myApp', []).controller('namesCtrl', function($scope) {
-  $scope.names = [
-    {name:'Jani', country:'Norway'},
-    {name:'Hege', country:'Sweden'},
-    {name:'Kai', country:'Denmark'}
-  ];
-});
-```
+  angular.module('myApp', []).controller('namesCtrl', function($scope) {
+    $scope.names = [
+      {name:'Jani', country:'Norway'},
+      {name:'Hege', country:'Sweden'},
+      {name:'Kai', country:'Denmark'}
+    ];
+  });
+  ```
