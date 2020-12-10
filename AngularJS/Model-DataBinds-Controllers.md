@@ -1,4 +1,4 @@
-# AngularJS Model
+# 1. AngularJS Model
 
 URL : https://www.w3schools.com/angular/angular_model.asp
 
@@ -159,7 +159,7 @@ URL : https://www.w3schools.com/angular/angular_model.asp
 
 ---
 
-# AngularJS Data Binding
+# 2. AngularJS Data Binding
 
 **AngularJS의 Data Binding은 Model과 View간의 Synchronization(동기화)이다.**
 
@@ -307,7 +307,7 @@ AngularJS의 데이터 바인딩 덕분에 View는 컨트롤러의 모든 변경
 
 ---
 
-# AngularJS Controllers
+# 3. AngularJS Controllers
 
 - AngularJS 컨트롤러는 AngularJS 애플리케이션의 데이터를 제어한다.
 - AngularJS 컨트롤러는 표준 JavaScript Objects이다.
