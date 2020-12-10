@@ -1,5 +1,7 @@
 # AngularJS
 
+<br>
+
 - AngularJS는 JavaScript 프레임 워크이다. `<script>` 태그를 사용하여 HTML 페이지에 추가 할 수 있다.
 - AngularJS는 Directives로 HTML 속성을 확장 하고 Expressions로 데이터를 HTML에 바인딩 해준다.
 - AngularJS는 JavaScript 파일로 배포되며 스크립트 태그를 사용하여 웹 페이지에 추가 할 수 있다.
@@ -7,7 +9,7 @@
 
   url : https://www.w3schools.com/angular/angular_intro.asp
 
----
+## <br>
 
 <br>
 
@@ -449,10 +451,10 @@ AngularJS 애플리케이션에서는 Module과 Controller를 JavaScript 파일�
   - `ng-model` 지시문은 HTML 컨트롤(입력, 선택, 텍스트 영역)의 값을 애플리케이션 데이터에 바인딩(binds)한다.
   - `ng-model` 지시문은 다음을 수행 할 수도 있다 :
 
-    - Provide type validation for application data (number, email, required).
-    - Provide status for application data (invalid, dirty, touched, error).
-    - Provide CSS classes for HTML elements.
-    - Bind HTML elements to HTML forms.
+    - 애플리케이션 데이터 Type(number, email, required)에 대한 유효성 검사.
+    - 애플리케이션 데이터에 대한 상태(status: invalid, dirty, touched, error)제공.
+    - HTML Elements에 대한 CSS 클래스들을 제공해 준다.
+    - HTML Elements를 HTML Form에 바인딩 해준다.
 
 <br>
 <br>
