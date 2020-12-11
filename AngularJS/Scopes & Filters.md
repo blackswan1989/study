@@ -2,11 +2,11 @@
 
 # 1. AngularJS Scope
 
-#### &nbsp;&nbsp;Scope는 HTML(View)과 JavaScript(Controller) 사이의 'Binding Part' 이다.
+#### &nbsp;&nbsp; Scope는 HTML(View)과 JavaScript(Controller) 사이의 'Binding Part' 이다.
 
-#### &nbsp;&nbsp;Scope는 사용 가능한 Properties(속성) 및 Methods가 있는 Object(개체)다.
+#### &nbsp;&nbsp; Scope는 사용 가능한 Properties(속성) 및 Methods가 있는 Object(개체)다.
 
-#### &nbsp;&nbsp;Scope는 View와 Controller 모두에서 사용할 수 있다.
+#### &nbsp;&nbsp; Scope는 View와 Controller 모두에서 사용할 수 있다.
 
 <br>
 
