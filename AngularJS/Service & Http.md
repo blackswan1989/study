@@ -213,7 +213,7 @@ $ interval 서비스는 window.setInterval 함수의 AngularJS 버전입니다.
   </script>
   ```
 
-    <br>
+  <br>
 
   추가로 객체 또는 배열의 값을 표시 할 때 필터를 사용할 수 있다.
 
@@ -245,7 +245,7 @@ $ interval 서비스는 window.setInterval 함수의 AngularJS 버전입니다.
   // 결과 : [1388, fb, c8]
   ```
 
-  _url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_services_filter2_
+  <small>_url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_services_filter2_</small>
 
   <br>
   <br>
@@ -274,36 +274,160 @@ $ interval 서비스는 window.setInterval 함수의 AngularJS 버전입니다.
 
 ## 01. AngularJS $http
 
+AngularJS `$http` 서비스는 서버에 요청(request)하고 응답(response)을 반환(return)해 준다.
+
+<br>
+
+### 1) Methods
+
 Methods는 모두 `$http` 서비스를 호출하는 바로 가기(shortcuts)이다.
 
-- Methods
-
-  - `.delete()`
-  - `.get()`
-  - `.head()`
-  - `.jsonp()`
-  - `.patch()`
-  - `.post()`
-  - `.put()`
+- `.delete()`
+- `.get()`
+- `.head()`
+- `.jsonp()`
+- `.patch()`
+- `.post()`
+- `.put()`
 
   <br>
 
 - **Examples : 객체(object)를 인수(argument)로 사용하여 `$http` 서비스를 실행한다.**
 
   ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Today's welcome message is:</p>
+    <h1>{{myWelcome}}</h1>
+  </div>
+
   <script>
   var app = angular.module('myApp', []);
   app.controller('myCtrl', function($scope, $http) {
     $http({
       method : "GET",
       url : "welcome.htm"
-    }).then(function mySuccess(response) {
+    }).then(function(response) {    // 성공할 경우 수행
         $scope.myWelcome = response.data;
-      }, function myError(response) {
+    }).catch(function(response) {   // 실패할 경우 수행
         $scope.myWelcome = response.statusText;
     });
   });
   </script>
+
+  // 결과 : [Today's welcome message is: Hello AngularJS Students]
   ```
 
-  객체는 HTTP Methods, URL, 성공시 수행 할 작업 및 실패시 수행 할 작업을 지정해 준다.
+  - 위 예제에서는 객체를 인수로 사용하여 `$http` 서비스를 실행한다.
+  - `$http` 서비스는 서버의 페이지를 요청하고 응답은 `"myWelcome"`변수의 값으로 설정된다.
+  - HTTP Methods, URL, 성공시 수행 할 작업 및 실패시 수행 할 작업을 지정해 준다.
+
+<br>
+<br>
+<br>
+
+### 2) Properties
+
+서버의 응답(response)은 다음 속성들(properties)을 가진 객체(object)이다.
+
+- `.config` : 요청을 생성하는 데 사용되는 객체
+- `.data` : 서버에서 응답을 전달하는 문자열 또는 객체
+- `.headers` 헤더 정보를 얻는 데 사용하는 함수(function)
+- `.status` HTTP 상태를 정의하는 숫자
+- `.statusText` HTTP 상태를 정의하는 문자열
+
+&nbsp;&nbsp;&nbsp; <small>HTTP response status codes : https://developer.mozilla.org/en-US/docs/Web/HTTP/Status</small>
+
+<br>
+
+- **Examples 1 : 응답 객체(response object)의 속성들(properties)중에 data, status, statusText 값 예시**
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Data : {{content}}</p>
+    <p>Status : {{statuscode}}</p>
+    <p>StatusText : {{statustext}}</p>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http) {
+      $http.get("welcome.htm")
+      .then(function(response) {
+          $scope.content = response.data;
+          $scope.statuscode = response.status;
+          $scope.statustext = response.statusText;
+      });
+    });
+  </script>
+
+  // 결과 : [ Data : Hello AngularJS Students, Status : 200,  StatusText :     ]
+  ```
+
+<br>
+
+- **Examples 2 : 에러를 처리하기 위해 `.then` method에 function을 추가한 예시**
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <h1>{{content}}</h1>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http) {
+      $http.get("wrongfilename.htm").then(function(response) {
+        $scope.content = response.data;
+      }, function(response) {
+          $scope.content = "Something went wrong!";
+      });
+    });
+  </script>
+
+  // 결과 : [ Something went wrong! ]
+  ```
+
+  - `$http` 서비스는 성공과 실패에 대해 다른 기능을 실행한다.
+
+<br>
+<br>
+<br>
+
+### 3) JSON
+
+- 응답(response)에서 얻은 데이터는 JSON 형식이어야 한다.
+- JSON은 데이터를 전송하는 훌륭한 방법이며 AngularJS 또는 다른 JavaScript 내에서 사용하기 쉽다.
+- EX) 서버에는 15명의 고객이 포함 된 JSON 객체를 반환하는 파일이 있으며 모두 `records`라는 배열로 래핑(wrapped)되어 있다.
+- EX) IMG : `records` JSON (customers.php)
+
+  <img width="300" alt="customers" src="https://user-images.githubusercontent.com/67410919/102034371-35986000-3e01-11eb-882d-8be071d491a7.PNG">
+
+<br>
+
+- **Examples : `ng-repeat` 지시문을 사용한 예시**
+
+  ```
+  <div ng-app="myApp" ng-controller="customersCtrl">
+    <ul>
+      <li ng-repeat="test in myData">
+        {{ test.Name + ', ' + test.Country }}  // Name과 Country정보가 출력된다. (City로 하면 도시 정보 출력)
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('customersCtrl', function($scope, $http) {
+      $http.get("customers.php").then(function (response) {
+          $scope.myData = response.data.records;
+      });
+    });
+  </script>
+
+  // 결과 : [ - Alfreds Futterkiste, Germany    - Ana Trujillo Emparedados y helados, Mexico... ]
+  ```
+
+  - `$scope` 및 `$http` 객체를 사용하여 `customersCtrl` 컨트롤러를 정의한다.
+  - `$http`는 외부 데이터를 요청하기 위한 `XMLHttpRequest` object이다.
+  - `$http.get()`은 "https://www.w3schools.com/angular/customers.php"에서 JSON 데이터를 읽어온다.
+  - `$http.get()`에 성공하면 컨트롤러는 서버의 JSON 데이터를 사용하여 scope에 `myData` 속성을 만든다.
+  - <small> url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_customers_json</small>
