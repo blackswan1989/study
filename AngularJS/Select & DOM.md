@@ -120,11 +120,11 @@ AngularJS의 객체 또는 배열을 기반으로 드롭다운(dropdown) 목록�
 <br>
 <br>
 
-### 3) `ng-options` VS `ng-repeat`
+## 02. `ng-options` VS `ng-repeat`
 
 <br>
 
-- **Examples : 객체 배열이 있다고 가정**
+- **NOTE: 객체 배열이 있다고 가정**
 
   ```
   $scope.cars = [
@@ -136,28 +136,223 @@ AngularJS의 객체 또는 배열을 기반으로 드롭다운(dropdown) 목록�
 
 <br>
 
-- **Examples : Using `ng-repeat`**
+### 1) `ng-repeat`
 
-`ng-repeat` 지시문을 사용하여 드롭다운 목록을 만들 때 선택한 값은 문자열이어야 한다.  
-아래 예제에서는 선택한 값으로 사용할 색상 또는 모델 중에서 선택 해야 한다.
+<br>
 
-```
-<div ng-app="myApp" ng-controller="myCtrl">
-  <p>Select a car:</p>
-  <select ng-model="selectedCar">
-    <option ng-repeat="x in cars" value="{{x.model}}">{{x.model}}</option>
-  </select>
-  <h1>You selected: {{selectedCar}}</h1>
-</div>
+- **Examples 1 : Using `ng-repeat`**
 
-<script>
-  var app = angular.module('myApp', []);
-  app.controller('myCtrl', function($scope) {
-      $scope.cars = [
-          {model : "Ford Mustang", color : "red"},
-          {model : "Fiat 500", color : "white"},
-          {model : "Volvo XC90", color : "black"}
-      ];
-  });
-</script>
-```
+  `ng-repeat` 지시문을 사용하여 드롭다운 목록을 만들 때 선택한 값은 문자열이어야 한다.  
+  아래 예제에서는 선택한 값으로 사용할 색상 또는 모델 중에서 선택 해야 한다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar">
+      <option ng-repeat="x in cars" value="{{x.model}}">{{x.model}}</option>
+    </select>
+    <h1>You selected: {{selectedCar}}</h1>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = [
+            {model : "Ford Mustang", color : "red"},
+            {model : "Fiat 500", color : "white"},
+            {model : "Volvo XC90", color : "black"}
+        ];
+    });
+  </script>
+
+  // 결과 : 드롭다운 -> Ford Mustang 선택시 "You selected: {{selectedCar}}"에 해당 선택지 출력
+  // {{x.model}} -> {{x.color}} 변경 후 드롭다운 -> red 선택시 "You selected: {{selectedCar}}"에 Ford Mustang 출력
+  ```
+
+  _<small> url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_select_repeat_selected</small>_
+
+<br>
+
+- **Examples 2 : `ng-repeat`를 객체로 사용**
+
+  값을 객체로 사용할 때 `value`대신 `ng-value`를 사용한다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar">
+      <option ng-repeat="x in cars" ng-value="{{x}}">{{x.model}}</option>
+    </select>
+    <h1>You selected a {{selectedCar.color}} {{selectedCar.model}}</h1>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = [
+            {model : "Ford Mustang", color : "red"},
+            {model : "Fiat 500", color : "white"},
+            {model : "Volvo XC90", color : "black"}
+        ];
+    });
+  </script>
+
+  // 결과 : 드롭다운 -> Ford Mustang 선택시 "You selected a red Ford Mustang" 출력
+  // {{x.model}} -> {{x.color}} 변경 후 드롭다운 -> "You selected a red Ford Mustang" 출력
+  ```
+
+  _<small> url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_select_repeat_selected_2</small>_
+
+<br>
+<br>
+<br>
+
+### 2) `ng-options`
+
+<br>
+
+- **Examples : Using `ng-options`**
+
+  `ng-options` 지시문을 사용하여 드롭다운 목록을 만들면 선택한 값이 객체가 될 수 있다.
+  선택한 값이 객체이면 더 많은 정보를 보유 할 수 있고 응용 프로그램이 더 유연해질 수 있다.
+  아래 예제에서는 선택한 요소의 모델과 색상을 모두 표시 할 수 있다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar" ng-options="x.model for x in cars"></select>   // Ford Mustang 선택시
+
+    <h1>You selected: {{selectedCar.model}}</h1>  // You selected: Ford Mustang 출력
+    <p>Its color is: {{selectedCar.color}}</p>    // Its color is: red 출력
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = [
+            {model : "Ford Mustang", color : "red"},
+            {model : "Fiat 500", color : "white"},
+            {model : "Volvo XC90", color : "black"}
+        ];
+    });
+  </script>
+  ```
+
+<br>
+<br>
+<br>
+<br>
+
+## 03. 객체로서의 데이터 소스
+
+이전 예제에서 데이터 소스는 배열이었지만 객체를 사용할 수도 있다.
+
+<br>
+
+- **Examples 1 :**
+
+  ##### NOTE: 키(key)와 값(value)이 쌍으로 이루어진 객체가 있다고 가정
+
+  ```
+  $scope.cars = {
+    car01 : "Ford",
+    car02 : "Fiat",
+    car03 : "Volvo"
+  };
+  ```
+
+  <br>
+
+  `ng-options` 속성의 표현식은 객체에 대해 약간 다르다.  
+  아래 예제에서는 드롭다운 목록을 만들 때 데이터 소스로 객체를 사용하는 방법을 보여준다.  
+  객체를 데이터 소스로 사용하면 x(car)는 키를 나타내고 y는 값을 나타낸다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar" ng-options="car for (car, y) in cars"></select>
+    <h1>You selected: {{selectedCar}}</h1>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = {
+            car01 : "Ford",
+            car02 : "Fiat",
+            car03 : "Volvo"
+        }
+    });
+  </script>
+  ```
+
+  _<small> url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_select_object</small>_
+
+<br>
+
+- **Examples 2 :**
+
+  ##### NOTE: 키(key)와 값(value)이 쌍으로 이루어진 객체가 있으며 값(value)도 객체로 이루어져있다고 가정
+
+  ```
+  $scope.cars = {
+    car01 : {brand : "Ford", model : "Mustang", color : "red"},
+    car02 : {brand : "Fiat", model : "500", color : "white"},
+    car03 : {brand : "Volvo", model : "XC90", color : "black"}
+  };
+  ```
+
+  <br>
+
+  선택한 값은 개체를 나타낸다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar" ng-options="x for (x, y) in cars"></select>
+
+    <h1>You selected: {{selectedCar.brand}}</h1>
+    <h2>Model: {{selectedCar.model}}</h2>
+    <h3>Color: {{selectedCar.color}}</h3>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = {
+            car01 : {brand : "Ford", model : "Mustang", color : "red"},
+            car02 : {brand : "Fiat", model : "500", color : "white"},
+            car03 : {brand : "Volvo", model : "XC90", color : "black"}
+        }
+    });
+  </script>
+  ```
+
+  _<small> url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_select_object_object</small>_
+
+  <br>
+
+  드롭 다운 목록의 옵션은 key&value가 쌍으로 이루어질 필요는 없으며  
+  그 목록 안에 표시되는 텍스트는 value 또는 value object의 속성일 수도 있다.
+
+  ```
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <p>Select a car:</p>
+    <select ng-model="selectedCar" ng-options="y.brand for (x, y) in cars"></select>
+
+    <h1>You selected: {{selectedCar.brand}}</h1>
+    <h2>Model: {{selectedCar.model}}</h2>
+    <h3>Color: {{selectedCar.color}}</h3>
+  </div>
+
+  <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope) {
+        $scope.cars = {
+            car01 : {brand : "Ford", model : "Mustang", color : "red"},
+            car02 : {brand : "Fiat", model : "500", color : "white"},
+            car03 : {brand : "Volvo", model : "XC90", color : "black"}
+        }
+    });
+  </script>
+  ```
