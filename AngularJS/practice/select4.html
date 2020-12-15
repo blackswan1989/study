@@ -2,9 +2,10 @@
 <html>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
   <body>
+    <!-- 드롭 다운 목록의 옵션은 key&value가 쌍으로 이루어질 필요는 없으며  
+    그 목록 안에 표시되는 텍스트는 value 또는 value object의 속성일 수도 있다. -->
     <div ng-app="App" ng-controller="Ctrl">
       <p>Select a car:</p>
-
       <select
         ng-model="selectCar"
         ng-options="car.carBrand for (x, car) in cars"
