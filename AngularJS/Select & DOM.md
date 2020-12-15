@@ -356,3 +356,222 @@ AngularJS의 객체 또는 배열을 기반으로 드롭다운(dropdown) 목록�
     });
   </script>
   ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+---
+
+<br>
+
+# 1. AngularJS HTML DOM
+
+#### &nbsp;&nbsp; AngularJS에는 애플리케이션 데이터를 HTML DOM 요소의 속성에 바인딩하기위한 지시문이 있다.
+
+<br>
+
+&nbsp;&nbsp; URL : https://www.w3schools.com/angular/angular_htmldom.asp
+
+<br>
+
+---
+
+<br>
+
+## 01. The ng-disabled Directive
+
+`ng-disabled` 지시문은 AngularJS 애플리케이션 데이터를 HTML 요소의 disabled 속성(attribute)에 바인딩(binds)해 준다.
+
+`ng-disabled` 지시문은 값을 `true`와 `false` 사이에서 이동할 수 있어야한다.  
+HTML에서는 `disabled` 속성을 `false`로 설정할 수 없다. `disabled` 속성이 있으면 값에 관계 없이 요소가 비활성화된다.
+
+<br>
+
+- **Syntax :**
+
+  `<input ng-disabled="expression"></input>`
+
+  Supported by `<input>`, `<select>`, and `<textarea>` elements.
+
+<br>
+
+- **Parameter Values :**
+
+  - expression : `true`를 반환하는 경우 요소의 `disabled` 속성을 설정하는 표현식
+
+<br>
+
+- **Examples 1 :**
+
+  ```
+  <body ng-app="">
+    Click here to disable all the form fields: <input type="checkbox" ng-model="all">
+    {{ all }}
+    <br>
+    <br>
+    <input type="text" ng-disabled="all">   //
+    <input type="radio" ng-disabled="all">
+    <select ng-disabled="all">
+      <option>Female</option>
+      <option>Male</option>
+    </select>
+  </body>
+  ```
+
+  - 입력 필드 비활성화(Disable) / 활성화(enable)
+  - `ng-disabled` 지시문은 form 필드(입력, 선택 또는 텍스트 영역)의 비활성화 된 속성을 설정해준다.
+  - `ng-disabled` 속성 내의 표현식이 `true`를 반환하면 form 필드가 비활성화된다.
+
+<br>
+
+- **Examples 2 :**
+
+  ```
+  <div ng-app="" ng-init="mySwitch=true">
+      <button ng-disabled="mySwitch">Click Me!</button>   // button이 체크되어있으면 비활성화
+      <input type="checkbox" ng-model="mySwitch"/>Button
+      {{ mySwitch }}  // button이 체크되어있으면 true 반환
+  </div>
+
+  // 즉 mySwitch 값이 true로 평가되면 버튼이 비활성화되고, false로 평가되면 버튼이 비활성화되지 않는다.
+  ```
+
+  - `ng-disabled` 지시문은 애플리케이션 데이터 `mySwitch`를 버튼의 `disabled` 속성에 바인딩하고 있다.
+  - `ng-model` 지시문은 checkbox 요소의 값을 `mySwitch`의 값에 바인딩하고 있다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 02. The ng-show Directive
+
+`ng-show` 지시문은 표현식이 `true`로 평가되면 지정된 HTML 요소를 표시하고 그렇지 않으면 HTML 요소가 숨겨진다.
+
+<br>
+
+- **Syntax :**
+
+  `<element ng-show="expression"></element>`
+
+  Supported by all HTML elements.
+
+<br>
+
+- **Parameter Values :**
+
+  - expression : 표현식이 `true`를 반환하는 경우에만 요소를 표시하는 표현식
+
+<br>
+
+- **Examples 1 : `ng-show`는 `ture`or`false` 값을 기반으로 HTML 요소를 표시하거나 숨긴다**
+
+  ```
+  // 결과 : [I am visible.]
+
+  <body>
+    <div ng-app="">
+      <p ng-show="true">I am visible.</p>
+      <p ng-show="false">I am not visible.</p>    // false값이므로 출력되지 않음
+    </div>
+  </body>
+  ```
+
+<br>
+
+- **Examples 2 : `checkbox`가 선택되면 true가 되어 섹션 표시**
+
+  ```
+  <body ng-app="">
+    Show HTML: <input type="checkbox" ng-model="myVar"> {{myVar}}  // 체크됨 = true
+
+    <div ng-show="myVar">   // 체크박스가 선택되면 출력
+      <h1>Welcome</h1>
+      <p>Welcome to my home.</p>
+    </div>
+  </body>
+  ```
+
+<br>
+
+- **Examples 3 : hour은 12보다 크므로 true가 되어 HTML 요소를 표시**
+
+  ```
+  <body>
+    <div ng-app="" ng-init="hour=13">
+      <p ng-show="hour > 12"> I am visible. </p>  // 13 > 12 = true로 텍스트 출력됨
+      {{hour}}   // 13
+    </div>
+  </body>
+  ```
+
+<br>
+<br>
+<br>
+<br>
+
+## 03. The ng-hide Directive
+
+`ng-hide` 지시문은 HTML 요소를 숨기거나 표시해주는 것으로 표현식이 true로 평가되면 HTML 요소를 숨긴다.  
+이는 AngularJS에 미리 정의 된 CSS 클래스이며 `display`를 `none`으로 설정해 준다.
+
+<br>
+
+- **Syntax :**
+
+  `<element class="ng-hide"></element>`
+
+  `<element ng-hide="expression"></element>` | when used as a CSS class
+
+  Supported by all HTML elements.
+
+<br>
+
+- **Parameter Values :**
+
+  - expression : 표현식이 `true`를 반환하는 경우 요소를 숨겨주는 표현식
+
+<br>
+
+- **Examples 1 : `checkbox`가 선택되면 true가 되어 섹션 숨김**
+
+  ```
+  <body ng-app="">
+    Hide HTML: <input type="checkbox" ng-model="myVar">
+
+    <div ng-hide="myVar">
+      <h1>Welcome</h1>
+      <p>Welcome to my home.</p>
+    </div>
+  </body>
+  ```
+
+<br>
+
+- **Examples 2 : `ture`or`false` 값을 기반으로 HTML 요소를 표시하거나 숨긴다**
+
+  ```
+  <body>
+    <div ng-app="">
+      <p ng-hide="true">I am not visible.</p>   // true값이므로 element가 숨겨진다
+      <p ng-hide="false">I am visible.</p>    // false값이므로 element가 출력된다
+    </div>
+  </body>
+  ```
+
+<br>
+
+- **Examples 3 : `ng-show`와 마찬가지로 hour은 12보다 크므로 true가 되어 HTML 요소를 숨겨준다**
+
+  ```
+  <body>
+    <div ng-app="" ng-init="hour=13">
+      <p ng-hide="hour > 12">I am not visible.</p>  // 13 > 12 = true로 텍스트가 숨겨짐
+      <p ng-hide="hour > 13">I am visible.</p>    // 12 > 13 = false이므로 텍스트가 표시됨
+    </div>
+  </body>
+  ```
