@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <body>
+    <div ng-app="myApp" ng-controller="myCtrl">
+      <p>Select a car:</p>
+
+      <select ng-model="selectedCar">
+        <option ng-repeat="x in cars" value="{{x.model}}">{{x.color}}</option>
+      </select>
+
+      <h1>You selected: {{selectedCar}}</h1>
+    </div>
+
+    <script>
+      // ng-repeat 지시문을 사용하여 드롭 다운 목록을 만들 때 선택한 값은 문자열이어야 한다.
+      // 이 소스에서는 선택한 값으로 사용할 색상 또는 모델 중에서 선택해야한다.
+      var app = angular.module("myApp", []);
+      app.controller("myCtrl", function ($scope) {
+        $scope.cars = [
+          { model: "Ford Mustang", color: "red" },
+          { model: "Fiat 500", color: "white" },
+          { model: "Volvo XC90", color: "black" },
+        ];
+      });
+    </script>
+  </body>
+</html>

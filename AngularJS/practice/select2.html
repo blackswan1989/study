@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <body>
+    <div ng-app="myApp" ng-controller="myCtrl">
+      <p>Select a car:</p>
+
+      <select
+        ng-model="selectCar"
+        ng-options="car.carModel for car in cars"
+      ></select>
+
+      <h1>You Selected : {{selectCar.carModel}}</h1>
+      <h2>It's color is : {{selectCar.carColor}}</h2>
+    </div>
+
+    <script>
+      // `ng-options` 지시문을 사용하여 드롭 다운 목록을 만들면 선택한 값이 객체가 될 수 있다.
+      // 선택한 값이 객체이면 더 많은 정보를 보유 할 수 있고 응용 프로그램이 더 유연해질 수 있다.
+      // 이 소스에서는 선택한 요소의 모델과 색상을 모두 표시 할 수 있다.
+
+      var app = angular.module("myApp", []);
+      app.controller("myCtrl", function ($scope) {
+        $scope.cars = [
+          { carModel: "Ford Mustang", carColor: "red" },
+          { carModel: "Fiat 500", carColor: "white" },
+          { carModel: "Volvo XC90", carColor: "black" },
+        ];
+      });
+    </script>
+  </body>
+</html>

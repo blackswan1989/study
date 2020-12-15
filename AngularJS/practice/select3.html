@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <body>
+    <!-- 아래 소스에서는 드롭 다운 목록을 만들 때 데이터 소스로 개체를 사용하는 방법을 보여준다. -->
+    <div ng-app="App" ng-controller="Ctrl">
+      <p>Select a car:</p>
+      <!-- 객체를 데이터 소스로 사용하면 x는 키를 나타내고 y는 값을 나타낸다. -->
+      <select
+        ng-model="selectCar"
+        ng-options="car for (car, y) in cars"
+      ></select>
+
+      <h1>You selected: {{selectCar}}</h1>
+    </div>
+
+    <script>
+      var app = angular.module("App", []);
+      app.controller("Ctrl", function ($scope) {
+        $scope.cars = {
+          car1: "Ford",
+          car2: "Fiat",
+          car3: "Volvo",
+        };
+      });
+    </script>
+  </body>
+</html>
