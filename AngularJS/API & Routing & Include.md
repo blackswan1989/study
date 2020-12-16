@@ -256,7 +256,7 @@
 <br>
 <br>
 
-### &nbsp; 4) `$routeProvider` 제공하기
+### &nbsp; 3) `$routeProvider` 제공하기
 
 - `$routeProvider`를 사용하여 애플리케이션에서 다른 경로를 구성합니다.
 - `$routeProvider`를 사용하면 사용자가 링크를 클릭할 때 표시할 페이지를 정의 할 수 있다.
