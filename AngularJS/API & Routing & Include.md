@@ -300,7 +300,7 @@
 <br>
 <br>
 
-## 03. Controllers
+## 03. Controller를 정의하여 `$routeProvider` 사용하기
 
 <br>
 
@@ -322,33 +322,103 @@
     <div ng-view></div>
 
     <script>
-    var app = angular.module("myApp", ["ngRoute"]);
-    app.config(function($routeProvider) {
-        $routeProvider
-        .when("/", {
-            templateUrl : "main.htm",
-        })
-        .when("/london", {
-            templateUrl : "london.htm",
-            controller : "londonCtrl"
-        })
-        .when("/paris", {
-            templateUrl : "paris.htm",
-            controller : "parisCtrl"
-        });
-    });
-    app.controller("londonCtrl", function ($scope) {
-        $scope.msg = "I love London";
-    });
-    app.controller("parisCtrl", function ($scope) {
-        $scope.msg = "I love Paris";
-    });
-
+      var app = angular.module("myApp", ["ngRoute"]);
+      app.config(function($routeProvider) {
+          $routeProvider
+          .when("/", {
+              templateUrl : "main.htm",
+          })
+          .when("/london", {
+              templateUrl : "london.htm",
+              controller : "londonCtrl"
+          })
+          .when("/paris", {
+              templateUrl : "paris.htm",
+              controller : "parisCtrl"
+          });
+      });
+      app.controller("londonCtrl", function ($scope) {
+          $scope.msg = "I love London";
+      });
+      app.controller("parisCtrl", function ($scope) {
+          $scope.msg = "I love Paris";
+      });
     </script>
 
   </body>
   ```
 
+  ```
+  // london.htm
+
+  <h1>London</h1>
+  <h3>London is the capital city of England.</h3>
+  <p>It is the most populous city in the United Kingdom, with a metropolitan area of over 13 million inhabitants.</p>
+  <p>{{msg}}</p>
+  ```
+
+  ```
+  //paris.html
+
+  <h1>Paris</h1>
+  <h3>Paris is the capital city of France.</h3>
+  <p>The Paris area is one of the largest population centers in Europe, with more than 12 million inhabitants.</p>
+  <p>{{msg}}</p>
+  ```
+
   - 각 "View"에는 "msg"변수에 값을 제공하는 자체 컨트롤러가 있다.
+
   - `"london.htm"`과 `"paris.htm"`은 일반 HTML 파일이며 다른 HTML 섹션과 마찬가지로 AngularJS 표현식을 추가할 수 있다.
+
   - _url : https://www.w3schools.com/code/tryit.asp?filename=GLPULJE0LK7L_
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## 04. Template 속성을 사용하여 HTML 직접 입력하기
+
+<br>
+
+1. 위의 예제들에서는 `$routeProvider.when` 메서드에서 `templateUrl` 속성을 사용했다.
+
+2. 페이지를 참조하지 않고 직접 HTML을 작성할 수있는 `template` 속성(property)을 사용할 수도 있다.
+
+<br>
+
+- **Examples : `ng-view` 지시문에 표시된 HTML은 `$routeProvider.when` Method의 템플릿 속성에 작성된다.**
+
+  ```
+  <body ng-app="myApp">
+
+    <p><a href="#/!">Main</a></p>
+    <a href="#!banana">Banana</a>
+    <a href="#!tomato">Tomato</a>
+
+    <div ng-view></div>
+
+    <script>
+      var app = angular.module("myApp", ["ngRoute"]);
+      app.config(function($routeProvider) {
+          $routeProvider
+          .when("/", {
+              template : "<h1>Main</h1><p>Click on the links to change this content</p>"
+          })
+          .when("/banana", {
+              template : "<h1>Banana</h1><p>Bananas contain around 75% water.</p>" // 직접 HTML을 작성
+          })
+          .when("/tomato", {
+              template : "<h1>Tomato</h1><p>Tomatoes contain around 95% water.</p>"
+          });
+      });
+    </script>
+
+  </body>
+  ```
+
+  _<small>url : https://www.w3schools.com/code/tryit.asp?filename=GLQMTQOOQ2W6</small>_
+
+<br>
+<br>
