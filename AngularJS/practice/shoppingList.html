@@ -1,0 +1,68 @@
+<!-- https://www.w3schools.com/angular/angular_application.asp -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var app = angular.module("shoppingList", []);
+      app.controller("shoppingController", function ($scope) {
+        $scope.shoppingProducts = ["Milk", "Cheese", "Beer"];
+        $scope.addList = function () {
+          $scope.errorMessage = "";
+          if (!$scope.addListItem) {
+            return; // 아무 입력도 하지 않으면 return해서 아무반응도 일어나지 않도록
+          }
+          if ($scope.shoppingProducts.indexOf($scope.addListItem) === -1) {
+            $scope.shoppingProducts.push($scope.addListItem);
+            $scope.addListItem = ""; // push가 정상적으로 되면 input을 비워주도록
+          } else {
+            $scope.errorMessage = "The item is already in your shoppinglist!"; // push가 안되면 에러 메세지 출력
+          }
+        };
+        $scope.removeListItem = function (shoppingProductsList) {
+          $scope.shoppingProducts.splice(shoppingProductsList, 1);
+        };
+      });
+    </script>
+
+    <div ng-app="shoppingList" ng-controller="shoppingController">
+      <ul>
+        <li ng-repeat="shoppingProductsList in shoppingProducts">
+          {{shoppingProductsList}}
+          <span ng-click="removeListItem($index)">X</span>
+        </li>
+      </ul>
+      <input ng-model="addListItem" />
+      <button ng-click="addList()">Add</button>
+      <p>{{errorMessage}}</p>
+    </div>
+  </body>
+</html>
+
+<!--
+1) shoppingList라는 애플리케이션을 만들고 shoppingController이라는 컨트롤러를 추가
+2) 컨트롤러는 shoppingProducts라는 배열을 현재 $scope에 추가
+3) HTML에서는 ng-repeat 지시문을 통해 배열의 item을 사용하여 목록을 표시해준다.
+
+4) input field를 추가하고 ng-model 지시문을 사용하여 애플리케이션에 바인딩해준다.
+5) 컨트롤러에서 addList라는 함수를 만들고 addListItem의 input field 값을 사용하여 shoppingProducts 배열에 항목을 추가되도록 한다.
+6) 버튼을 추가하고 버튼을 클릭 할 때 addList 함수를 실행하는 ng-click 지시문을 작성해준다.
+
+7) 컨트롤러에서 제거하려는 항목의 index를 매개 변수로 사용하는 removeItem이라는 함수를 만듭니다.
+8) HTML에서 각 항목에 대해 <span> element를 만들고 현재 $index로 removeItem 함수를 호출하는 ng-click 지시문을 작성해준다.
+
+9) 오류처리를 위해 if문을 작성 -> 
+* indexOf()메서드는 배열에 있는 요소의 첫 번째 인덱스를 반환해준다. 찾을 수없는 경우에는 -1을 반환해준다.
+* 따라서 -1이 반환되면 === 현재 배열속에 없는 item이므로 push가 되도록 하였다.
+-->
+
+<!-- 
+  ng-repeat : https://docs.angularjs.org/api/ng/directive/ngRepeat
+  indexOf MDN : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+-->
