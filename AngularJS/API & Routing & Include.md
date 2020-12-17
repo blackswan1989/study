@@ -422,3 +422,127 @@
 
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+
+---
+
+<br>
+
+# 2. AngularJS Includes
+
+<br>
+
+#### &nbsp;&nbsp; AngularJS를 사용하면 외부 파일의 HTML을 포함시킬 수 있다.
+
+<br>
+
+&nbsp;&nbsp; _URL : https://www.w3schools.com/angular/angular_includes.asp_
+
+<br>
+
+---
+
+<br>
+
+## 01. Includes
+
+<br>
+
+1. 외부 HTML 조각들을 가져오고 컴파일하고 포함(Includes)시켜준다.
+
+2. 기본적으로 template URL은 애플리케이션 문서와 동일한 도메인 및 프로토콜로 제한된다.
+
+3. 다른 도메인 또는 프로토콜에서 템플릿을로드하려면 신뢰할 수있는 리소스 URL 목록에 추가하거나 신뢰할 수있는 값으로 래핑 할 수 있습니다.
+
+4. 기본적으로 `ng-include` 지시문은 다른 도메인의 파일을 포함하는 것을 허용하지 않는다.
+
+<br>
+<br>
+<br>
+
+### 1) 문법
+
+<br>
+
+- **Examples 1 : as element**
+
+  ```
+  <ng-include
+    src="string"
+    [onload="string"]
+    [autoscroll="string"]>
+  ...
+  </ng-include>
+  ```
+
+<br>
+
+- **Examples 2 : as attribute**
+
+  ```
+  <ANY
+    ng-include="string"
+    [onload="string"]
+    [autoscroll="string"]>
+  ...
+  </ANY>
+  ```
+
+  <small>_url : https://docs.angularjs.org/api/ng/directive/ngInclude_</small>
+
+<br>
+<br>
+<br>
+
+### 2) 예제
+
+<br>
+
+- **Examples 1 : `ng-include` 지시문을 사용하여 HTML 콘텐츠를 포함시킬 수 있다.**
+
+  ```
+  <body ng-app="">
+    <div ng-include="'myFile.htm'"></div>
+  </body>
+  ```
+
+<br>
+
+- **Examples 2 : `ng-include` 지시문으로 포함하는 HTML 파일에는 AngularJS 코드도 포함될 수 있다.**
+
+  ```
+  // myTable.htm:
+
+  <table>
+    <tr ng-repeat="x in names">
+      <td>{{ x.Name }}</td>
+      <td>{{ x.Country }}</td>
+    </tr>
+  </table>
+  ```
+
+  웹 페이지에 위의 "myTable.htm" 파일을 포함 시키면 모든 AngularJS 코드가 실행된다.
+
+  ```
+  <body>
+    <div ng-app="myApp" ng-controller="customersCtrl">
+      <div ng-include="'myTable.htm'"></div>
+    </div>
+
+    <script>
+      var app = angular.module('myApp', []);
+      app.controller('customersCtrl', function($scope, $http) {
+          $http.get("customers.php").then(function (response) {
+              $scope.names = response.data.records;
+          });
+      });
+    </script>
+
+    <p>The HTML, and AngularJS code, for this table are located in the file "myTable.htm".</p>
+  </body>
+  ```
+
+  <small>_url : https://www.w3schools.com/angular/tryit.asp?filename=try_ng_include_table_</small>
