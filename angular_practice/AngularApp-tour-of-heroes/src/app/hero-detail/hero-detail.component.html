@@ -1,0 +1,19 @@
+<div *ngIf="hero">
+  <h2>{{ hero.name | uppercase }} Details</h2>
+  <div>
+    <span>id: </span>
+    {{ hero.id }}
+  </div>
+  <div>
+    <label>
+      name:
+      <input [(ngModel)]="hero.name" placeholder="name" />
+    </label>
+  </div>
+</div>
+
+<!--
+  HeroDetailComponent.html에는 선택된(selectedHero) 히어로가 아니라 히어로 한 명의 상세정보를 표시합니다. 
+
+  https://angular.kr/tutorial/toh-pt3#%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%9E%91%EC%84%B1%ED%95%98%EA%B8%B0 
+  -->
