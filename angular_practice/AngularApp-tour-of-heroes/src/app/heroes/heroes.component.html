@@ -1,0 +1,60 @@
+<h2>My Heroes</h2>
+<ul class="heroes">
+  <!-- <li> 엘리먼트에 *ngFor를 적용해서 배열을 순회 -->
+  <li
+    *ngFor="let hero of heroes"
+    (click)="onSelect(hero)"
+    [class.selected]="hero === selectedHero"
+  >
+    <span class="badge">
+      {{ hero.id }}
+    </span>
+    {{ hero.name }}
+  </li>
+</ul>
+
+<app-hero-detail [hero]="selectedHero"></app-hero-detail>
+
+<!-- 
+  처음 작성했던 {{ hero }}에서 {{ hero.name }}으로 변경해주어야 제대로 표시되는 이유는, 
+  *HeroesComponent에서 히어로 프로퍼티 값을 문자열 타입에서 객체 타입으로 변경했기 때문이다.
+
+  export class HeroesComponent implements OnInit {
+      hero: Hero = {
+      id: 1,
+      name: 'Windstorm',
+    };
+    ...
+  };
+  여기서 Hero 는 hero.ts에 타입을 interface로 정의해두었다.
+-->
+
+<!--
+  * <input [(ngModel)]="hero.name" placeholder="name" />
+   [(ngModel)] 는 Angular의 양방향 바인딩 문법이다.
+
+  양방향 바인딩 : https://angular.kr/tutorial/toh-pt1#%EC%96%91%EB%B0%A9%ED%96%A5-%EB%B0%94%EC%9D%B8%EB%94%A9
+-->
+
+<!--
+  *ngFor는 항목을 반복하는 Angular 디렉티브입니다. 이 디렉티브는 목록에 있는 항목마다 호스트 엘리먼트를 반복합니다.
+
+  ngFor 로 히어로 목록 표시하기 : https://angular.kr/tutorial/toh-pt2#ngfor-%EB%A1%9C-%ED%9E%88%EC%96%B4%EB%A1%9C-%EB%AA%A9%EB%A1%9D-%ED%91%9C%EC%8B%9C%ED%95%98%EA%B8%B0
+ -->
+
+<!-- 
+  *클릭 이벤트 바인딩하기 <li *ngFor="let hero of heroes" (click)="onSelect(hero)">
+  이렇게 (click) 이벤트를 바인딩하면 Angular가 <li> 엘리먼트에서 발생하는 click 이벤트를 감지할 수 있습니다. 
+  그래서 사용자가 <li> 엘리먼트를 클릭하면 Angular는 onSelect(hero) 표현식을 실행합니다.
+
+  hero 목록 및 상세정보 : https://angular.kr/tutorial/toh-pt2#%EB%AA%A9%EB%A1%9D%EC%83%81%EC%84%B8%EC%A0%95%EB%B3%B4
+  -->
+
+<!-- 
+  * 선택된 항목 스타일 지정하기 - 클래스 바인딩 문법
+  
+  특정 조건에 따라 CSS 클래스를 추가하거나 제거할 수 있습니다. 
+  스타일을 지정하려는 엘리먼트에 [class.some-css-class]="some-condition"와 같은 문법을 추가하면 됩니다.
+
+  https://angular.kr/tutorial/toh-pt2#%EC%84%A0%ED%83%9D%EB%90%9C-%ED%95%AD%EB%AA%A9-%EC%8A%A4%ED%83%80%EC%9D%BC-%EC%A7%80%EC%A0%95%ED%95%98%EA%B8%B0
+-->
