@@ -1,0 +1,15 @@
+<div *ngIf="messageService.messages.length">
+  <h2>Messages</h2>
+  <button class="clear" (click)="messageService.clear()">Clear</button>
+  <div *ngFor="let message of messageService.messages">{{ message }}</div>
+</div>
+
+<!-- 
+  *MessageService 바인딩하기
+  - 이 템플릿은 컴포넌트에 의존성으로 주입된 messageService를 직접 바인딩합니다.
+  - 메시지가 존재할 때만 컴포넌트의 내용을 표시하기 위해 *ngIf를 사용했습니다.
+  - 리스트에 존재하는 메시지마다 <div> 엘리먼트를 반복하기 위해 *ngFor를 사용했습니다.
+  - 버튼을 클릭했을 때 MessageService.clear() 함수를 실행하기 위해 이벤트 바인딩 문법을 사용했습니다.
+  
+  https://angular.kr/tutorial/toh-pt4#messageservice-%EB%B0%94%EC%9D%B8%EB%94%A9%ED%95%98%EA%B8%B0
+ -->
