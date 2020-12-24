@@ -1,0 +1,21 @@
+<h3>Top Heroes</h3>
+
+<div class="grid grid-pad">
+  <a
+    *ngFor="let hero of heroes"
+    class="col-1-4"
+    routerLink="/detail/{{ hero.id }}"
+  >
+    <div class="module hero">
+      <h4>{{ hero.name }}</h4>
+    </div>
+  </a>
+</div>
+
+<!-- 컴포넌트의 heroes 배열에 있는 항목을 모두 링크로 만들기 위해 *ngFor를 사용  -->
+<!-- 
+  *DashboardComponent에서 상세정보로 가는 링크 "routerLink="/detail/{{hero.id}}"
+  이 때 *ngFor로 순회하는 각 링크의 routerLink의 값으로 hero.id를 지정하기 위해 문자열 바인딩(interpolation binding)문법을 사용.
+
+  https://angular.kr/tutorial/toh-pt5#dashboardcomponent%EC%97%90%EC%84%9C-%EC%83%81%EC%84%B8%EC%A0%95%EB%B3%B4%EB%A1%9C-%EA%B0%80%EB%8A%94-%EB%A7%81%ED%81%AC 
+-->
