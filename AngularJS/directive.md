@@ -102,6 +102,8 @@ ngClass 지시문(Directives)을 사용하면 추가할 모든 클래스를 나�
 3. 표현식이 배열로 평가되는 경우 배열의 각 요소는 '1번 유형'과 같은 문자열이거나 '2번 유형'와 같은 객체여야 합니다.  
    즉, 배열에서 문자열과 객체를 함께 혼합하여 표시되는 CSS 클래스를 보다 잘 제어할 수 있습니다.
 
+<br>
+
 특정 클래스가 이미 설정된 경우 지시문은 중복 클래스를 추가하지 않습니다. 표현식이 변경되면 이전에 추가 된 클래스가 제거되고 새로운 클래스만 추가됩니다. 그리고 알려진 이슈로 동일한 요소에 `ngClass` 지시문을 사용하는 경우 `class` 속성 값에 interpolation을 사용하면 안됩니다.
 
 <br>
@@ -169,3 +171,36 @@ ngClass 지시문(Directives)을 사용하면 추가할 모든 클래스를 나�
   ```
 
   <small>url : https://plnkr.co/edit/hoCFCMoAQO2YSYA4</small>
+
+<br>
+<br>
+<br>
+<br>
+
+## # ng-Checked (ngChecked)
+
+<br>
+
+- ngChecked 내부의 표현식이 `true`인 경우 요소에 체크 된 속성을 설정해준다.
+
+- 지시문은 예상치 못한 동작으로 이어질 수 있으므로 ngModel과 함께 사용해서는 안된다.
+
+<br>
+
+- **Example :**
+
+  ```
+  //html
+  <label>Check me to check both:
+    <input type="checkbox" ng-model="leader">
+  </label><br/>
+  <input id="checkFollower" type="checkbox" ng-checked="leader" aria-label="Follower input">
+
+
+  //js
+  it('should check both checkBoxes', function() {
+    expect(element(by.id('checkFollower')).getAttribute('checked')).toBeFalsy();
+    element(by.model('leader')).click();
+    expect(element(by.id('checkFollower')).getAttribute('checked')).toBeTruthy();
+  });
+  ```
