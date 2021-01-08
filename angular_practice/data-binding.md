@@ -49,6 +49,7 @@ export class AppComponent {
 <br>
 <br>
 <br>
+<br>
 
 # 2. 데이터 바인딩(Data binding)
 
@@ -62,6 +63,7 @@ Angular는 아래와 같이 7가지 데이터 바인딩을 제공한다.
 
 ![data-binding](https://user-images.githubusercontent.com/67410919/103861760-4a66cb80-5101-11eb-8237-10d209bdfc89.PNG)
 
+<br>
 <br>
 <br>
 <br>
@@ -110,6 +112,7 @@ Angular는 아래와 같이 7가지 데이터 바인딩을 제공한다.
 
   컴포넌트 클래스의 프로퍼티가 문자열이 아닌 경우 문자열로 변환되며 존재하지 않는 프로퍼티에 접근하는 경우(위 예제의 gender) 에러 발생 없이 아무것도 출력하지 않는다.
 
+<br>
 <br>
 <br>
 <br>
@@ -162,6 +165,7 @@ Angular는 뷰를 렌더링하기 이전에 인터폴레이션을 프로퍼티 �
 <br>
 <br>
 <br>
+<br>
 
 ## 2.3 어트리뷰트 바인딩(Attribute binding)
 
@@ -180,3 +184,362 @@ https://poiemaweb.com/angular-component-data-binding#33-%EC%96%B4%ED%8A%B8%EB%A6
 Attribute와 Property는 모두 '속성'으로 변역되어 같은 것으로 오해할 수 있으나 이들은 서로 다른 것이다. 어트리뷰트는 HTML 문서에 존재하는 것으로 어트리뷰트의 값은 변하지 않는다. 프로퍼티는 DOM 노드 객체에 있는 것으로 동적으로 변한다.
 
 브라우저는 HTML 문서를 파싱하여 DOM 트리로 변환하고 메모리에 적재한다. 이때 HTML 요소는 DOM 노드 객체로, HTML 어트리뷰트는 DOM 노드 객체의 프로퍼티로 변환된다.
+
+<br>
+<br>
+
+예를 들어 아래의 input 요소는 3개의 어트리뷰트를 가지고 있다.
+
+`<input id="user" type="text" value="ungmo2">`
+
+<br>
+
+브라우저가 위의 코드를 파싱하면 DOM 노드 객체 HTMLInputElement가 생성되고 이 객체는 다양한 프로퍼티를 소유한다. input 요소의 모든 어트리뷰트는 HTMLInputElement 객체의 attributes 프로퍼티로 변환되고 이것은 getAttribute 메소드로 취득 가능하다.
+
+`document.getElementById('user').getAttribute('value'); // ungmo2`
+
+<br>
+<br>
+
+DOM 노드 객체의 attributes 프로퍼티는 HTML 어트리뷰트의 값을 가지며 그 값은 결코 변하지 않는다. HTML 어트리뷰트는 원래 변하지 않는 초기 기본값을 나타내기 때문이다.
+
+위 input 요소의 value 어트리뷰트는 input 요소의 초기 기본값을 설정한 것으로 사용자의 입력에 의해 상태가 변경된다 하더라도 value 어트리뷰트의 값은 변경되지 않는다. 즉, DOM 노드 객체의 attributes 프로퍼티 값 또한 변경되지 않는다.
+
+<br>
+<br>
+
+하지만 DOM은 상태(예를 들어 input 요소에 값을 입력한 상태 또는 checkbox 요소를 체크한 상태)를 가지고 있으며 이 상태는 변화하는 살아있는 것이다. 따라서 DOM 노드 객체는 상태 변화를 관리하기 위한 프로퍼티를 갖는다.
+
+예를 들어 input 요소는 입력값의 상태를 관리하기 위해 value 프로퍼티를 갖는다. 이 value 프로퍼티는 HTML 어트리뷰트의 고정된 값을 관리하는 attributes 프로퍼티와는 달리 상태 변화에 반응한다.
+
+```
+// HTMLInputElement.attributes.value의 값을 취득한다. 결과는 언제나 동일하다.
+document.getElementById('user').getAttribute('value'); // ungmo2
+
+// HTMLInputElement.value의 값을 취득한다. 결과는 요소의 상태에 따라 동적으로 변경된다.
+document.getElementById('user').value;
+```
+
+<br>
+<br>
+
+주의하여야 할 것은 HTML 어트리뷰트와 상태 변화를 관리하기 위한 프로퍼티가 언제나 1:1로 매핑되는 것은 아니라는 것이다. 예를 들어 살펴보자.
+
+<br>
+
+- id 어트리뷰트와 id 프로퍼티는 1:1 매핑한다.
+
+- class 어트리뷰트는 classList 프로퍼티로 변환된다.
+
+- td 요소의 colspan 어트리뷰트의 경우, 매핑하는 프로퍼티가 존재하지 않는다.
+
+- textContent 프로퍼티의 경우, 대응하는 어트리뷰트가 존재하지 않는다.
+
+- input 요소의 value 어트리뷰트는 value 프로퍼티와 1:1 매핑하지만 서로 다르게 동작한다.
+
+<br>
+
+id 어트리뷰트는 id 프로퍼티와 1:1 매핑하므로 DOM 노드 객체 HTMLInputElement에는 id 프로퍼티가 생성되고 id 어트리뷰트의 값 ‘user’가 할당된다. 하지만 value 어트리뷰트는 value 프로퍼티와 1:1 매핑하지만 서로 다르게 동작한다.
+
+DOM 노드 객체에 value 프로퍼티가 생성되고 value 어트리뷰트의 값 ‘ungmo2’가 할당된다. 여기까지는 1:1 매핑하는 id 어트리뷰트와 동일하지만 사용자에 의해 input 요소에 새로운 값이 입력되면 다르게 동작하기 시작한다.
+
+만약 사용자에 의해 “lee”가 입력되면 DOM 노드 객체의 value 프로퍼티는 “lee”로 변경된다. 하지만 value 어트리뷰트는 초기 기본값 “ungmo2”인 상태에서 변경되지 않는다. 이는 HTML 요소가 DOM 노드 객체로 변환된 이후에 HTML 요소의 어트리뷰트는 변하지 않기 때문이다.
+
+하지만 DOM 프로퍼티는 언제든지 바뀔 수 있다. 즉, value의 경우, 어트리뷰트는 DOM 프로퍼티의 초기 기본값을 의미하며 DOM 프로퍼티는 현재의 상태 값을 의미한다.
+
+<br>
+
+- **Example:**
+
+  ```
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'app-root',
+    template: `
+      <!-- 프로퍼티 바인딩 -->
+      <input id="user" type="text" [value]="name">        // Hello
+      <!-- 어트리뷰트 바인딩 -->
+      <input id="user" type="text" [attr.value]="name">   // Hello
+    `
+  })
+  export class AppComponent {
+    name = 'Hello';
+  }
+  ```
+
+  - 프로퍼티 바인딩은 DOM 노드 객체의 프로퍼티에 컴포넌트 클래스의 프로퍼티 값을 바인딩해준다.
+
+  - 어트리뷰트 바인딩은 HTML 요소의 어트리뷰트(DOM 노드 객체의 attributes 프로퍼티)에 컴포넌트 클래스의 프로퍼티 값을 바인딩한다.
+
+  ```
+  // 프로퍼티 바인딩
+  document.getElementById('user').value = 'ungmo2';
+
+  // 어트리뷰트 바인딩
+  document.getElementById('user').setAttribute('value', 'ungmo2');
+  ```
+
+  따라서 위 컴포넌트는 아래와 같이 변환될 것이다.
+
+  ```
+  <!-- 프로퍼티 바인딩의 변환 결과 -->
+  <input id="user" type="text">
+
+  <!-- 어트리뷰트 바인딩의 변환 결과 -->
+  <input id="user" type="text" value="ungmo2">
+  ```
+
+<br>
+
+- **Example: td 요소의 colspan 어트리뷰트**
+
+  ```
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'app-root',
+    template: `
+      <table>
+        <tr>
+          <!-- colspan 프로퍼티는 존재하지 않기 때문에 어튜리뷰트 바인딩을 사용한다. -->
+          <td [attr.colspan]="length">A + B</td>    // [X] <td [colspan]="length">A + B</td>
+        </tr>
+        <tr>
+          <td>C</td><td>D</td>
+        </tr>
+      </table>
+    `,
+    styles: [`
+      table, td {
+        width: 200px;
+        border: 1px solid black;
+        text-align: center;
+      }
+    `]
+  })
+  export class AppComponent {
+    length = 2;
+  }
+  ```
+
+  td 요소의 colspan 어트리뷰트의 경우, 매핑하는 프로퍼티가 존재하지 않는다. 따라서 프로퍼티 바인딩 대신 어트리뷰트 바인딩을 사용한다.
+
+  이와 같이 DOM의 프로퍼티는 HTML 요소의 어트리뷰트와는 다르게 동작하기 때문에 프로퍼티 바인딩과 어트리뷰트 바인딩은 구분되어 사용하여야 한다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 2.4 클래스 바인딩(Class binding)
+
+<br>
+
+클래스 바인딩을 사용하면 HTML 요소의 class 어트리뷰트에 클래스를 추가 또는 삭제할 수 있다. 클래스 바인딩은 아래와 같이 두 가지의 방식으로 사용할 수 있다.
+
+<br>
+
+- `<element [class.class-name]="booleanExpression">...</element>`
+
+- `<element [class]="class-name-list">...</element>`
+
+<br>
+<br>
+
+### 1) 단항 클래스 바인딩
+
+<br>
+
+클래스 바인딩의 좌변에는 class 뒤에 HTML 요소의 class 어트리뷰트에 반영할 클래스 이름을 지정하고, 우변에는 참이나 거짓으로 평가될 수 있는 표현식을 바인딩한다.
+
+<br>
+
+- `<div [class.alert]="isError">...</div>`
+
+  위 예제의 경우, 우변의 표현식 isError의 값이 참이면 좌변의 class 뒤에 지정한 클래스 alert을 class 어트리뷰트에 추가하고, isError의 값이 거짓이면 class 어트리뷰트에서 삭제한다.
+
+<br>
+
+- `<div class="rounded" [class.alert]="isError">...</div>`와 같이 다른 클래스가 적용되어 있는 경우
+
+  isError의 값이 참일때 : `<div class="rounded" [class.alert]="isError">...</div>`
+
+  isError의 값이 거짓일때 : `<div class="rounded">...</div>`
+
+<br>
+
+- `<div class="alert" [class.alert]="isError">...</div>`와 같이 이미 alert 클래스가 적용되어 있는 경우
+
+  isError의 값이 참일때 : `<div class="alert">...</div>`
+
+  isError의 값이 거짓일때 : `<div>...</div>`
+
+<br>
+<br>
+
+### 2) 다항 클래스 바인딩
+
+<br>
+
+클래스 바인딩의 좌변에는 class를 지정하고 우변에는 HTML 요소의 class 어트리뷰트에 반영할 클래스의 리스트(공백으로 구분된 클래스 리스트의 문자열)를 바인딩한다.
+
+마치 DOM 객체의 class 프로퍼티에 프로퍼티 바인딩을 하는 것과 유사하지만 DOM 객체에는 class 프로퍼티가 존재하지 않는다. 따라서 다항 클래스 바인딩은 프로퍼티 바인딩이 아니며 단항 클래스 바인딩와 마찬가지로 HTML 요소의 어트리뷰트를 조작한다.
+
+<br>
+
+- `<div [class]="my-classes">...</div>`
+
+  다항 클래스 바인딩은 우변의 표현식 `my-classes`의 값을 `class` 어트리뷰트에 반영한다.
+
+  위 예제의 경우, `my-classes`의 값이 `‘my-class1 my-class2’`이면 `<div class="my-class1 my-class2">...</div>`로 변환 된다.
+
+<br>
+
+- `<div class="my-class1 my-class2" [class]="my-classes">...</div>`와 같이 이미 클래스가 적용되어 있는 경우
+
+  `my-classes`의 값이 `‘my-class3 my-class4’`라면 `<div class="my-class3 my-class4">...</div>`와 같이 변환된다.
+
+<br>
+
+이와 같이 HTML 요소의 class 어트리뷰트에 의해 이미 클래스가 지정되어 있을 때 한 개의 클래스를 대상으로 하는 단항 클래스 바인딩(`[class.class-name]`)은 class 어트리뷰트를 병합(merge)하여 새로운 class 어트리뷰트를 작성한다.
+
+하지만 복수의 클래스를 대상으로 하는 다항 클래스 바인딩(`[class]`)은 기존의 class 어트리뷰트를 삭제하고 바인딩된 클래스의 리스트를 기준으로 새로운 class 어트리뷰트를 작성한다.
+
+다시 말해 클래스 바인딩은 기존 class 어트리뷰트보다 우선한다. 따라서 기존 class 어트리뷰트는 클래스 바인딩에 의해 리셋된다. 이때 클래스 바인딩의 위치는 관계없다.
+
+<br>
+
+- **Example:**
+
+```
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <!-- 조건의 의한 클래스 바인딩: 우변의 표현식이 true이면 클래스를 추가한다 -->
+    <div [class.text-large]="isLarge">text-large</div>
+
+    <!-- 조건의 의한 클래스 바인딩 : 우변의 표현식이 false이면 클래스를 삭제한다 -->
+    <div class="text-small color-red" [class.color-red]="isRed">text-small</div>
+
+    <!-- 여러 개의 클래스를 한번에 지정할 수 있다 -->
+    <div [class]="myClasses">text-large color-red</div>
+
+    <!-- 클래스 바인딩은 기존 클래스 어트리뷰트보다 우선한다. 따라서 기존 클래스 어트리뷰트는
+         클래스 바인딩에 의해 reset된다. 클래스 바인딩의 위치는 관계없다. -->
+    <div class="text-small color-blue" [class]="myClasses">text-large color-red</div>
+  `,
+  styles: [`
+    .text-small { font-size: 18px;}
+    .text-large { font-size: 36px;}
+    .color-blue { color: blue;}
+    .color-red { color: red;}
+  `]
+})
+export class AppComponent {
+  isLarge = true;
+  isRed = false;
+  myClasses = 'text-large color-red';
+}
+```
+
+클래스 바인딩은 주로 하나의 클래스를 조건에 의해 추가 또는 삭제하는 용도로 사용한다. 여러 개의 클래스를 지정할 때도 클래스 바인딩을 사용할 수 있으나 `ngClass` 디렉티브를 사용하면 좀더 세밀한 제어가 가능하다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 2.5 이벤트 바인딩(Event binding)
+
+<br>
+
+`<element (event)="statement">...</element>`
+
+이벤트 바인딩은 뷰의 상태 변화(버튼 클릭, 체크박스 체크, input에 텍스트 입력 등)에 의해 이벤트가 발생하면 이벤트 핸들러를 호출하는 것을 말한다.
+
+지금까지 살펴본 데이터 바인딩은 모두 컴포넌트 클래스에서 템플릿으로 데이터가 이동했지만 이벤트 바인딩은 템플릿에서 컴포넌트 클래스로 데이터가 이동한다.
+
+<br>
+
+- **Example:**
+
+  ```
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'app-root',
+    template: `
+      <!-- (1) -->
+      <input type="text" [value]="name" (input)="setName($event)">
+
+      <!-- (2) -->
+      <button (click)="clearName()">clear</button>
+
+      <!-- (3) -->
+      <p>name: {{ name }}</p>
+    `
+  })
+  export class AppComponent {
+    name = '';
+
+    setName(event) {
+      console.log(event);
+      // event.target.value에는 사용자 입력 텍스트가 담겨있다.
+      this.name = event.target.value;
+    }
+
+    clearName() {
+      this.name = '';
+    }
+  }
+  ```
+
+  - 사용자의 텍스트 입력에 의해 input 이벤트가 발생하면 이벤트 바인딩을 통하여 이벤트 핸들러 `setName`을 호출한다. 이때 이벤트 정보를 담고 있는 DOM 이벤트 객체 `$event`를 이벤트 핸들러에 전달할 수 있다. $event 객체는 DOM 이벤트의 종류에 의해 타입(KeyboardEvent, InputEvent, MouseEvent 등)이 결정된다. Angular는 표준 DOM 이벤트를 사용하기 때문에 $event를 통해 브라우저의 Event 객체의 프로퍼티나 메소드에 자유롭게 접근할 수 있다. 이벤트 핸들러 setName은 input 이벤트를 발생시킨 input 요소(event.target)의 value 프로퍼티(사용자 입력 텍스트가 담겨있다)를 $event로 부터 추출하여 name 프로퍼티에 할당한다.
+
+  - 버튼이 클릭되면 click 이벤트가 발생하고 이벤트 바인딩을 통하여 이벤트 핸들러 clearName을 호출한다. clearName은 name 프로퍼티에 빈문자열을 할당한다. 그리고 name 프로퍼티는 프로퍼티 바인딩에 의해 다시 input 요소에 바인딩된다.
+
+  - name 프로퍼티는 인터폴레이션에 의해 템플릿에 바인딩된다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 2.6 양방향 데이터 바인딩(Two-way data binding)
+
+<br>
+
+`<element [(ngModel)]="property">...</element>`
+
+양방향 데이터 바인딩은 뷰와 컴포넌트 클래스의 상태 변화를 상호 반영하는 것을 말한다. 즉, 뷰의 상태가 변화하면 컴포넌트 클래스의 상태도 변화하고 그 반대로 컴포넌트 클래스의 상태가 변화하면 뷰의 상태도 변화하는 것이다.
+
+ngModel 디렉티브를 이벤트 바인딩(( ))과 프로퍼티 바인딩([ ]) 형식으로 기술한 후 우변에 뷰와 컴포넌트 클래스가 공유할 프로퍼티를 기술한다. ngModel 디렉티브를 사용하기 위해서는 FormsModule을 모듈에 등록하여야 한다.
+
+<br>
+
+- **Example:**
+
+  ```
+  // src/app/app.module.ts
+
+  import { BrowserModule } from '@angular/platform-browser';
+  import { NgModule } from '@angular/core';
+  import { FormsModule } from '@angular/forms';   // FormsModule 임포트
+
+  import { AppComponent } from './app.component';
+
+  @NgModule({
+    declarations: [AppComponent],
+    imports: [BrowserModule, FormsModule],    // FormsModule 등록
+    providers: [],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule { }
+  ```
+
+  컴포넌트 클래스의 name 프로퍼티는 템플릿의 input 요소와 양방향으로 바인딩되어 있다. 즉, input 요소의 value 프로퍼티가 변화하면 컴포넌트 클래스의 name 프로퍼티도 동일한 값으로 변화하고 반대로 컴포넌트 클래스의 name 프로퍼티가 변화하면 input 요소의 value 프로퍼티도 동일한 값으로 변화한다.
+
+  사실 Angular는 양방향 바인딩을 지원하지 않는다. [( )](이것을 Banana in a box라고 부른다)에서 추측할 수 있듯이 양방향 바인딩은 이벤트 바인딩과 프로퍼티 바인딩의 축약 표현(Shorthand syntax)일 뿐이다. 즉, 양방향 바인딩의 실제 동작은 이벤트 바인딩과 프로퍼티 바인딩의 조합으로 이루어진다.
