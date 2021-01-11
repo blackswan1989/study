@@ -11,9 +11,12 @@ URL: https://joshua1988.github.io/web-development/javascript/javascript-asynchro
 ---
 
 <br>
-<br>
 
 # 1. 비동기 처리란?
+
+<br>
+
+---
 
 <br>
 
@@ -147,9 +150,16 @@ $.get('url', function(response) {
 <br>
 <br>
 <br>
+
+---
+
 <br>
 
 # 2. 자바스크립트의 Promise란?
+
+<br>
+
+---
 
 <br>
 
@@ -249,3 +259,8 @@ Promise 상태란 Promise의 처리 과정을 의미합니다. new Promise()로 
   - new Promise()로 프로미스 객체를 생성하면 콜백 함수 인자로 resolve와 reject를 사용할 수 있다고 했습니다. 여기서 reject를 위와 같이 호출하면 실패(Rejected) 상태가 됩니다.
 
   - 그리고, 실패 상태가 되면 실패한 이유(실패 처리의 결과 값)를 catch()로 받을 수 있습니다.
+
+<br>
+<br>
+
+---
