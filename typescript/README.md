@@ -207,7 +207,7 @@ console.log(profile);         // {name: "Jane", month: 8}
 
 <br>
 
-### 1) 점진적 타입 검사
+### 1) 점진적 타입 검사 (p.82)
 
 <br>
 
@@ -266,20 +266,128 @@ var v = true;         // Boolean type
 
 <br>
 
-#### 3.1) 기본 타입
+### &nbsp; 3.1 기본 타입
 
-기본 타입(primitive types)은 보편적으로 많이 사용되는 내장 타입으로서 종류는 다음과 같습니다.
+<br>
+
+&nbsp;&nbsp;기본 타입(primitive types)은 보편적으로 많이 사용되는 내장 타입으로서 종류는 다음과 같습니다.
 
 <br>
 
 - string, number, boolean
 
   - string 타입은 큰따옴표(`"string"`) 사용 권장되며 백틱(` `` `)과 백틱안의 내장 표현식(${expressions}) 사용 가능
+
   - number타입은 10진수 뿐만 아니라 16진수, 2진수, 8진수도 지원한다. (16진수 -> `let decimal: number = 0xf00d;`)
+
   - boolean타입에는 true 또는 false 값을 할당할 수 있다. (`let isShow: boolean = false;`)
 
 <br>
 
 - symbol(ES6)
+
+  - symbol은 `Symbol()`함수를 이용해 생성한 고유하고 수정 불가능한 데이터 타입으로 객체 속성의 식별자로 사용된다.
+
+  - 예제: `let hello = Symbol()`
+
+<br>
+
 - enum
+
+  - enum은 number에서 확장된 타입으로 첫번째 Enum 요소에는 숫자 0 값이 할당된다. 그다음 값은 초기화 하지 않는 이상 1씩 증가한다.
+
+  - ```
+    enum WeekDay { Mon, Tue, Wed, Thu }
+    let day: WeekDay = WeekDay.Mon;
+    ```
+
+<br>
+
 - 문자열 리터럴
+
+  - 문자열 리터럴 타입은 string 타입의 확장 타입으로 사용자 정의 타입에 정의한 문자열만 할당받을 수 있다.
+
+  - 다음은 type 키워드를 이용해 "keyup" 문자열 또는 "mouseover"문자열만 허용하는 문자열 리터럴 타입을 정의했다.
+
+  - `type EventType = "keyup" | "mouseover";`
+
+<br>
+<br>
+
+### &nbsp; 3.2 객체 타입
+
+<br>
+
+&nbsp;&nbsp; 객체 타입은 속성을 포함하고 있으며, 호출(call) 시그니처와 생성자(construct) 시그니처 등으로 구성된 타입이다.
+
+<br>
+
+#### &nbsp; # 타입스크립트에서 지원하는 객체 타입의 종류
+
+<br>
+
+- Array 타입
+
+  - 배열 요소에 대응하는 타입으로 배열 요소가 1,2,3과 같은 숫자값이면 `number[]`가 array타입이 된다.
+
+  - `let items: number[] = [1, 2, 3]`
+
+<br>
+
+- Tuple 타입
+
+  - 배열 요소가 n개로 정해질 때 각 요소별로 타입을 지정한 타입이다.
+
+  - 배열 요소가 문자 문자열과 숫자라면 `[string, number]` 같은 형태로 타입을 정의한다.
+
+  - ```
+     let x: [string, number];
+     x = ["tuple", 100];
+    ```
+
+<br>
+
+- Function 타입
+
+  - 함수 타입은 시그니처를 포함하도록 정의한 타입이다. (이후 자세히 다룬다)
+
+<br>
+
+- 생성자 타입
+
+  - 하나의 객체(클래스로부터 생성)가 여러 생성자의 시그니처로 구성될 때 포함될 수 있는 타입으로 생성자 타입 리터럴을 사용해 정의한다.
+
+  - 생성자 타입 리터럴은 생성자 시그니처를 구성하는 타입 매개변수, 매개변수 목록, 반환 타입으로 구성된다.
+
+  - 선언 형식: `new <타입1, 타입2, ...> (매개변수1, 매개변수2, ...) => 타입`
+
+<br>
+
+- Class와 Interface 타입
+
+  - 객체타입(object type)으로 분류되고 객체지향 프로그래밍이나 구조 타이핑 등에 활용된다.
+
+<br>
+
+- 유니언(union) 타입
+
+  - 2개 이상의 타입을 하나의 타입으로 정의한 타입이다
+
+  - `var x : string | number;`
+
+<br>
+
+- 인터섹션 타입
+
+  - 두 타입을 합쳐 하나로 만들 수 있는 타입이다.
+
+  - 예를 들어 Cat 인터페이스와 Bird 인터페이스에 선언된 속성을 합치기 위해 Cat & Bird와 같은 방식으로 선언할 수 있다.
+
+  - ```
+    interface Cat { leg: number; }
+    interface Bird { wing: number; }
+
+    let birdCat: Cat & Bird = { leg: 4, wing: 2 };
+    ```
+
+  - 위 코드에서 `birdCat`변수가 인터섹션 타입인 `Cat & Bird`로 선언돼 있으므로 할당 객체는 `leg`, `wing` 속성만 허용한다.
