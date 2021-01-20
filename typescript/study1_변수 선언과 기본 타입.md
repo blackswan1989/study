@@ -1,6 +1,6 @@
 <br>
 
-# TypeScript Quick Start - 변수 선언과 기본 타입
+# TypeScript Quick Start - 02. 변수 선언과 기본 타입
 
 <br>
 
@@ -664,7 +664,7 @@ enum WeekDay {
 <br>
 <br>
 
-## 5. 타입스크립트의 내장 타입
+## 5. 타입스크립트의 내장 타입 (p.102)
 
 <br>
 
@@ -740,3 +740,221 @@ number2.notExistMethod();
 ### 3) any 타입과 유사하지만 동작 방식이 다른 object 타입
 
 <br>
+
+object 타입은 any 타입처럼 타입 구분 없이 값을 할당할 수 있는 특성이 있어 any 타입과 비슷하지만 '속성 유무를 검사하는 시점'이 다르다.
+
+즉 any 타입으로 선언한 변수는 런타임 시에 속성의 유무를 검사하지만, object 타입으로 선언한 변수는 컴파일 시간에 속성의 유무를 검사한다.
+
+따라서 object 타입의 변수에 숫자를 할당하더라도 컴파일 시 숫자 메서드를 인식하지 못하므로, 컴파일 시간에 에러가 발생한다.
+
+<br>
+
+```
+let number: Object = 50;
+number.toFixed(1);            // Property 'toFixed' does not exist on type 'Object'.
+```
+
+<br>
+
+`number`의 변수 타입은 object 이므로 어떤 타입의 값이든 할당 받을 수 있다. 하지만 이때 변수에 할당된 값의 타입이 number인지 string인지 할 수 없기 때문에 위와 같은 에러가 발생한다.
+
+즉 object타입은 컴파일 과정에서만 유효한 타입이므로 실제 자바스크립트로 컴파일 뒤에는 타입이 사라지게 된다. 따라서 컴파일 후에는 타입을 지정하지 않은 것과 같게 된다.
+
+하지만 any 타입으로 선언한다면 컴파일과 실행에 오류가 발생하지 않는다.
+
+<br>
+<br>
+<br>
+
+### 4) 배열 타입과 제네릭 배열 타입
+
+<br>
+
+배열은 여러 개의 값을 하나의 변수에 담아 관리하는 자료 구조로, 타입스크립트에서 배열 타입은 두가지 형태로 나뉘는데 '배열 타입(Array Type)'과 '제네릭 배열 타입(Generic Array Type)'으로 나뉜다.
+
+<br>
+<br>
+
+### 4.1 배열
+
+<br>
+
+- `let myVar: number[] = [1, 2, 3, 4, 5];`
+
+- 위에서 `number`는 요소 타입이며 `number[]`는 배열 타입이다. 그리고 `[1, 2, 3, 4, 5]`는 배열의 요소이다.
+
+<br>
+
+- 요소 타입으로는 string, number, boolean과 같은 내장 타입 뿐만 아니라 클래스나 인터페이스도 올 수 있다.
+
+<br>
+
+- 배열에 값을 나중에 할당하려면 먼저 빈 배열인 `[]`를 이용해 초기화 한 후 `push()` 메서드로 배열 요소를 추가할 수도 있다.
+
+  ```
+  let fruits: string[] = [];
+
+  fruits.push("banana");
+  fruits.push("apple");
+  fruits.push("mango");
+  ```
+
+<br>
+
+- 배열 요소의 타입이 정해져 있지 않다면 `let myVar: any[] = [1, "h1", true];`처럼 any 타입으로 지정할 수 있다.
+
+- 타입을 제약하려면 유니언 타입을 이용해 선언할 수도 있다 `let myVar: (number | string | boolean)[] = [1, "h1", true]`
+
+<br>
+<br>
+
+### 4.2 제네릭 배열
+
+<br>
+
+- 제네릭 배열 타입은 `Array<T>` 형태로 선언합니다. 이때 `T`는 타입을 의미합니다.
+
+<br>
+
+- 제네릭 배열 타입에 `[1,2,3]`배열을 할당하면 `let num: Array<number> = [1, 2, 3];`와 같이 선언합니다.
+
+<br>
+
+- 타입을 숫자나 문자열로 제약하려면 `let num: Array<number | string> = [1, "hello"];`와 같이 유니언 타입으로 선언합니다.
+
+<br>
+
+- 타입을 참조할 때는 타입 쿼리(type queries)를 이용합니다. 타입 쿼리는 `typeof` 연산자를 이용해 참조할 변수의 타입을 얻어와 지정합니다.
+
+  ```
+  let num: Array<number | string> = [1, "hello"];
+  let num2: typeof num = [1, "hello"];              // 타입 쿼리로 num 변수의 타입을 참조
+  ```
+
+<br>
+
+- 제네릭 배열 타입은 내장 타입 외에 객체 타입도 받을 수 있다. 예를 들어 배열요소로 익명 함수를 받으려면 타입을 `() => string`으로 선언한다.
+
+  ```
+  let nums: Array<() => string> = [() => "one", () => "two"];
+
+  console.log(nums[0]());    // "one" 출력
+  ```
+
+<br>
+
+- 배열을 선언하는 부분과 요소를 추가하는 부분을 분리하려면 다음과 같이 작성한다.
+
+  ```
+  let num2: Array<number> = new Array<number>();
+
+  num2.push(1)
+  num2.push(2)
+  num2.push(3)
+  ```
+
+  제네릭 타입 인수로 사용된 number는 컴파일 시점에 타입을 검사합니다. 배열 타입과 제네릭 타입은 컴파일 시 타입 검사를 위해 필요하고, 컴파일 후(ES5)에는 타입이 제거된 배열만 남는다.
+
+<br>
+<br>
+<br>
+
+### 5) 튜플(Tuple) 타입
+
+<br>
+
+튜플 타입은 n개의 요소로 이루어진 배열에 대응하는 타입을 의미한다.
+
+튜플은 배열과 비슷한데, 배열은 배열 요소의 개수에 제한이 없고 `let x: string[] = ["tuple", "tuple2"];`에서 `string[]`처럼 특정 타입으로 배열 요소의 타입을 강제할 수 있다.
+
+<br>
+
+반면 튜플 타입은 배열 요소에 대응하는 n개에 대한 타입이다. 예를들어 `["tuple", 100]`배열에 대한 튜플 타입은 아래와 같이 선언 된다.
+
+<br>
+
+```
+let x: [string, number] = ["tuple", 100];
+
+console.log(typeof x, typeof x[0], typeof x[1]);    // "object", "string", "number"
+console.log(x[0].substr(0, 2), x[1].toFixed(2));    // "tu", "100.00"
+```
+
+- 위에서 `[string, number]`는 튜플 타입이며 `["tuple", 100]`는 배열이다.
+
+- 튜플타입중 `string`은 배열의 첫 번째 요소인 `tuple`에 대응하는 타입이고, 튜플타입`number`는 두번째 요소인 `100`에 대응한다.
+
+- 즉, 튜플에 선언된 타입 수와 할당될 배열의 요소 수가 정확히 일치돼야 할당이 가능해졌다.
+
+<br>
+<br>
+
+- **Example:**
+
+  ```
+  // 튜플 타입으로 선언
+  let x: [string, number];
+
+  // 초기화
+  x = ["hello", 10];          // 성공
+
+  // 잘못된 초기화
+  x = [10, "hello"];          // 오류
+
+
+  // 정해진 인덱스에 위치한 요소에 접근하면 해당 타입이 나타납니다.
+  console.log(x[0].substring(1));     // 성공
+  console.log(x[1].substring(1));     // 오류 'number'에는 'substring' 이 없습니다
+
+
+  // 정해진 인덱스 외에 다른 인덱스에 있는 요소에 접근하면, 오류가 발생하며 실패합니다.
+  x[3] = "world";                     // 오류 '[string, number]' 타입에는 프로퍼티 '3'이 없습니다
+  console.log(x[5].toString());       // '[string, number]' 타입에는 프로퍼티 '5'가 없습니다
+  ```
+
+<br>
+<br>
+<br>
+
+### 6) Void, Null, Undefined
+
+<br>
+
+`void`는 함수의 반환 값이 없을 때 지정하는 타입으로, `void` 타입에는 `null`이나 `undefined`만 할당할 수 있습니다.
+
+그 이유는 `void` 타입이 `null`과 `undefined`의 상위 타입이기 때문입니다. 예를 들어 `hello`라는 함수에 반환값이 없다고 가정해봅시다.
+
+<br>
+
+```
+function hello() {
+  console.log("hello world");
+  // 반환값이 없음
+}
+```
+
+위처럼 반환값이 없을 때 이를 명시적으로 나타내기 위해 `void`를 지정합니다.
+
+<br>
+<br>
+
+만약 아래처럼 변수에 `void` 타입을 지정한다면 반환값이 없는 채로 받습니다.
+
+이때 `myhello` 변수는 `void` 타입으로 지정했으므로 `void`나 `undefined`를 할당할 수 있습니다.
+
+```
+function hello(): void {
+  console.log("hello world");               // "hello world"
+  // 반환값이 없음
+}
+
+let myhello:void = hello();
+
+console.log(myhello, typeof myhello);       // undefined,  "undefined"
+```
+
+<br>
+
+`hello()`함수의 반환 타입은 `void`이지만 반환값이 없으므로 실제로는 `undefined`가 할당되어 출력됩니다.
+
+출력 결과만 보더라도 함수는 반환값이 없으므로 `void` 타입으로 선언하지만 반환값 없이 `myhello` 변수에 할당됐으므로 `undefined`가 됩니다.
