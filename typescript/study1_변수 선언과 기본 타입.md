@@ -916,7 +916,7 @@ console.log(x[0].substr(0, 2), x[1].toFixed(2));    // "tu", "100.00"
 <br>
 <br>
 
-### 6) Void, Null, Undefined
+### 6) Void
 
 <br>
 
@@ -958,3 +958,76 @@ console.log(myhello, typeof myhello);       // undefined,  "undefined"
 `hello()`함수의 반환 타입은 `void`이지만 반환값이 없으므로 실제로는 `undefined`가 할당되어 출력됩니다.
 
 출력 결과만 보더라도 함수는 반환값이 없으므로 `void` 타입으로 선언하지만 반환값 없이 `myhello` 변수에 할당됐으므로 `undefined`가 됩니다.
+
+위 결과는 `let myhello:void = undefined;`로 바꿔 적는 것과 같고 이는 `let empty;`와 같은 의미입니다.
+
+이렇게 변수에 사용하는 `void` 타입은 `undefined` 또는 `null`만 할당할 수 있으므로 유용한 타입이 아닙니다.
+
+즉 결과값이 꼭 필요한 메소드나 함수(function)를 만들때에는 `int`나 `float`등을 사용하고 값을 확인하지 않아도 되는 곳에 `void`를 사용한다.
+
+<br>
+<br>
+<br>
+
+### 6) Null and Undefined
+
+<br>
+
+기본적으로 `null` 과 `undefined`는 다른 모든 타입의 하위 타입 입니다. 이것은 `null`과 `undefined`를 `number` 같은 타입에 할당할 수 있다는 것을 의미합니다.
+
+<br>
+
+TypeScript는 `undefined`과 `null` 둘 다 각각 자신의 타입 이름을 `undefined`, `null`로 사용합니다. `void`처럼 그 자체로 유용한 경우는 거의 없습니다.
+
+```
+// 이 변수들에 할당할 수 있는 값이 이것 밖에 없습니다!
+
+let u: undefined = undefined;
+let n: null = null;
+```
+
+<br>
+<br>
+
+### &nbsp;&nbsp;6.1 undefined와 null의 차이점
+
+<br>
+
+- **Example: 1)**
+
+  ```
+  var testUndefined;
+  console.log(testUndefined, typeof testUndefined);     // undefined, "undefined"
+
+  var testUndefined2: undefined = undefined;
+  console.log(testUndefined2, typeof testUndefined2);   // undefined, "undefined"
+
+  var testNull: null = null;
+  console.log(testNull, typeof testNull);               // null, "object"
+  ```
+
+  위에서 보다시피 undefined는 아직 초기화 되지 않음을 의미합니다. 예제에서 `testUndefined`변수는 초기화되지 않았기 때문에 값을 출력해 보면 undefined가 출력됩니다.
+
+  반면 null은 그 자체로 값이기 때문에 null을 할당한 뒤 확인해 보면 `testNull`변수의 타입이 "object"가 된 것을 알 수 있습니다.
+
+<br>
+<br>
+
+### &nbsp;&nbsp;6.1 undefined와 null 비교
+
+- **Example: 2)**
+
+  ```
+  console.log(null === undefined);          // false
+  console.log(null == undefined);           // true
+  console.log(undefined == undefined);      // true
+  console.log(null === null);               // true
+  ```
+
+  이번 예제에서는 undefined와 null 타입을 비교합니다. `예제1)`을 보면 undefined는 선언은 됐지만 값이 할당되지 않았고 null은 값은 할당됐지만 값이 없습니다. 이처럼 값이 없다는 점에서만 보면 undefined와 null은 같습니다.
+
+  `예제2)`에서 더욱 명확히 살펴보면 타입과 값이 같은지 비교하기위해 `===`연산자를 이용한 결과 null과 undefined는 false입니다. 그 이유는 두 입력값의 타입이 다르기 때문입니다.
+
+  반면 `null == undefined`는 true가 된다는 것은 타입은 다르지만 값이 없다는 점은 같다는 의미 입니다.
+
+  마지막으로 `undefined == undefined`를 수행하면 아무런 값이 할당되지 않았다는 점에서 같으므로 true가 됩니다.
