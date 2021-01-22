@@ -3,9 +3,6 @@
 # TypeScript Quick Start - 03. 연산자
 
 <br>
-
----
-
 <br>
 <br>
 
@@ -45,7 +42,7 @@
   console.log(1 + "happy");       // "1happy"
   console.log(false + "happy");   // "falsehappy"
   console.log(10 + "2");          // "102"
-  console.log(10 / "2");          // 5 (The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.)
+  console.log(10 / "2");          // 5 (arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.)
 
 
 
@@ -73,7 +70,7 @@
 
 <br>
 
-![ts](https://user-images.githubusercontent.com/67410919/105436469-9c335800-5ca2-11eb-9f9b-fb7073806edb.png)
+<img src="https://user-images.githubusercontent.com/67410919/105436469-9c335800-5ca2-11eb-9f9b-fb7073806edb.png" width="500">
 
 <br>
 
@@ -96,14 +93,14 @@
 
 ### &nbsp; 3.1) &&
 
-&nbsp;&nbsp; `&&`은 피연산자가 모두 true일때 true가 된다는 의미로 x가 5일때, `x == 5 && x > 0`은 `true` 입니다.
+&nbsp;&nbsp; `&&`은 피연산자가 모두 true일때 조건식도 true가 된다는 의미로 x가 5일때, `x == 5 && x > 0`은 `true` 입니다.
 
 <br>
 <br>
 
 ### &nbsp; 3.2) ||
 
-&nbsp;&nbsp; `||`은 피연산자 중에 하나 이상이 true일때 true가 된다는 의미로, `x == 5 || x == 6`은 `true` 입니다.
+&nbsp;&nbsp; `||`은 피연산자 중에 하나 이상이 true일때 조건식도 true가 된다는 의미로, `x == 5 || x == 6`은 `true` 입니다.
 
 <br>
 <br>
@@ -119,7 +116,7 @@
 
 &nbsp;&nbsp; `?:`는 조건연산자로 피연산자 3개를 사용하는 삼항 연산자로 `판별조건 ? 표현식1 : 표현식2` 형식으로 사용합니다.
 
-&nbsp;&nbsp; 판별 조건의 결과는 true or false여야 하며 true일때는 `표현식1`이 실행되고 false일때는 `표현식2`가 실행됩니다.
+&nbsp;&nbsp; 판별 조건의 결과는 true 또는 false여야 하며 true일때는 `표현식1`이 실행되고 false일때는 `표현식2`가 실행됩니다.
 
 <br>
 <br>
@@ -150,9 +147,9 @@
 
 이렇게 객체의 속성값을 변수에 할당하는 것을 디스트럭처링 할당(destructuring assignment)이라고 합니다.
 
-<br>
-
 예를 들어 객체를 변수에 디스트럭처링 할당는 과정은 아래처럼 이루어 집니다.
+
+<br>
 
 ```
 let {id, country} = {     // 디스트럭처링 할당 표현식 {id, country}
@@ -183,6 +180,8 @@ console.log(country);     // 88
 
 디스트럭처링 할당시 할당할 객체 속성에 새로운 이름을 부여해 할당하려면 속성 재명명(property renaming)을 이용할 수 있습니다.
 
+아래 코드에서 디스트럭처링 할당 시 `id` 속성값은 새로운 이름인 `newId`로 할당되고 `country`속성은 새로운 이름인 `newCountry`로 할당됩니다.
+
 ```
 let {id: newId, country: newCountry} = {
   id: "hello",
@@ -192,5 +191,3 @@ let {id: newId, country: newCountry} = {
 console.log(newId);          // "hello"
 console.log(newCountry);     // 88
 ```
-
-위 코드에서 디스트럭처링 할당 시 `id` 속성값은 새로운 이름인 `newId`로 할당되고 `country`속성은 새로운 이름인 `newCountry`로 할당됩니다.
