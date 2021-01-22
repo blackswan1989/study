@@ -1,6 +1,6 @@
 <br>
 
-# TypeScript Quick Start - 02. 변수 선언과 기본 타입
+# TypeScript Quick Start - 02. 제어문
 
 <br>
 
