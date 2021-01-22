@@ -1,5 +1,6 @@
 ---
-title: "TypeScript Quick Start - 02. 변수 선언과 기본 타입"
+title: "TypeScript Quick Start"
+output: 02. 변수 선언과 기본 타입
 ---
 
 <br>
