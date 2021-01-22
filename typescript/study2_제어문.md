@@ -1,10 +1,9 @@
-<br>
-
-# TypeScript Quick Start - 02. 변수 선언과 기본 타입
-
-<br>
-
 ---
+title: "TypeScript Quick Start - 02. 변수 선언과 기본 타입"
+---
+
+<br>
+<br>
 
 타입스크립트는 조건문에 타입 제약을 할 수 있고 컴파일러 옵션을 통해 switch문에서 폴스루(fall-through)허용 여부를 설정할 수 있습니다. 또한 최신 자바스크립트 반복문을 이용해 객체를 더욱 쉽게 다룰수도 있습니다.
 
