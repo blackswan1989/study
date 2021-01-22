@@ -70,7 +70,7 @@
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/67410919/105436469-9c335800-5ca2-11eb-9f9b-fb7073806edb.png" width="500">
+<img src="https://user-images.githubusercontent.com/67410919/105436469-9c335800-5ca2-11eb-9f9b-fb7073806edb.png" width="800">
 
 <br>
 
@@ -139,7 +139,7 @@
 <br>
 <br>
 
-# 1) 객체 디스트럭처링(object destructuring)의 기본
+## 1) 객체 디스트럭처링(object destructuring)의 기본
 
 <br>
 
@@ -191,3 +191,123 @@ let {id: newId, country: newCountry} = {
 console.log(newId);          // "hello"
 console.log(newCountry);     // 88
 ```
+
+<br>
+<br>
+<br>
+
+## 2) 디스트럭처링(destructuring) 매개변수 선언
+
+<br>
+
+함수 호출시 객체 리터럴을 전달하고 객체 리터럴의 속상을 검사하는것은 번거로운 작업입니다. 아래 코드를 봅시다.
+
+<br>
+
+- **Example: 1**
+
+  ```
+  function profile(obj) {
+      var name = "";
+      var nationality = "";
+
+      name = (obj.name == undefined) ? "anoymous" : obj.name;
+      nationality = (obj.nationality == undefined) ? "?" : obj.nationality
+
+      console.log(name);                    // happy
+      console.log(nationality);             // ? (nationality는 지정해준 값이 없어 undefined가 되므로 ?가 출력된다.)
+  }
+
+  profile({ name: "happy"});
+  ```
+
+  - 위 코드의 `profile` 함수 내부를 보면 obj객체 속성에 name 속성이 있는지 검사하고, 검사 결과 `undefined`면 `"anoymous"`를 할당하고 `undefined`가 아니라면 객체의 속성을 할당받습니다.
+
+  - 속성이 여럿이면 객체의 속성 검사를 위한 중복 코드가 발생하므로, 객체의 특정 속성이 있는지 없는지를 타입에서 검사하고 없다면 기본값을 할당할 수 있게 만들면 편리할 것입니다.
+
+  - 이때 아래 예제처럼 `function profile({매개변수1, 매개변수2, ...}) {...}`와 같은 형태로 함수에 디스트럭처링 매개변수를 선언합니다.
+
+<br>
+<br>
+
+- **Example: 2**
+
+  디스트럭처링 매개변수명은 객체의 속성명에 대응합니다. 예제로 함수 `Profile`에 디스트럭처링 매개변수`(name, nationality)`를 선언해봅시다
+
+  ```
+  function profile({name, nationality = "?"}) {
+      console.log(name);                // happy
+      console.log(nationality);         // ?
+  }
+
+  profile({ name: "happy"});
+  ```
+
+  - 위 코드에서는 디스트럭처링 매개변수인 name과 nationality는 전달 받을 객체의 name 속성과 nationality속성에 대응합니다. 이때 디스트럭처링 매개변수는 기본값을 설정할 수 있습니다.
+
+  - 여기서는 nationality의 기본값을 `"?"`로 설정함으로써 전달 받은 객체에 속성이 없을때를 대비했습니다. 위 코드에서 `profile`함수는 반드시 객체를 전달해야 합니다.
+
+  - 만약 객체 전달을 생략하려면 아래 예제처럼 우항에 할당식을 추가해야합니다.
+
+<br>
+<br>
+
+- **Example: 3**
+
+  ```
+  // 함수의 매개변수에 인수를 전달할 때 객체 디스트럭처링 적용
+
+  function profile({name, nationality = "none"} = {name: "anonymous"}) {
+      console.log(name, nationality);
+  }
+
+  profile();                                          // anonymous none
+  profile({ name: "happy"});                          // happy none
+  profile({ name: "happy", nationality: "korea"});    // happy korea
+  ```
+
+  - 위 예제는 디스트럭처링 매개변수가 할당받을 수 있게 우항에 객체를 뒀습니다.
+
+  - `profile();` 이때 name은 우항식의 name 속성값을 할당받고 nationality는 기본값인 "none"이 설정돼 있으므로 생략할 수 있습니다.
+
+  - `profile({ name: "happy"}); `에서는 만약 객체에 name 속성만 포함한다면 nationality는 기본값이 있으므로 생략할 수 있습니다.
+
+  - 반면 `profile({ name: "happy", nationality: "korea"});`처럼 nationality 값을 객체에 담아 전달하려면 기본값은 무시되고 전달한 nationality의 값인 `"korea"`가 전달됩니다.
+
+<br>
+<br>
+<br>
+
+## 3) 객체 디스트럭처링시 type 키워드 활용
+
+<br>
+
+type 키워드를 이용해 매개변수의 타입을 선언함으로써 객체 디스트럭처링을 수행할 수 있습니다.
+
+<br>
+
+- **syntax : `type C = { a: string, b?: number }`**
+
+<br>
+<br>
+
+아래 예제에서 객체 디스트럭처링을 수행할 때 매개변수 a, b의 타입을 미리 정의한 타입 변수 `Test`를 이용해 지정합니다.
+
+<br>
+
+- **Example:**
+
+  ```
+  type Test = { a: string, b?: number };
+
+  function fruit( { a, b }: Test ): void {
+      console.log(a, b);
+  }
+
+  fruit({ a: "apple", b: 10});    // apple 10
+  fruit({ a: "apple"});           // apple undefined
+  fruit({ a: 10});                // 10(Error:Type 'number' is not assignable to type 'string'.), undefined
+  fruit({ b: "banana"});          // undefined, "banana"(Error:Type 'string' is not assignable to type 'number | undefined')
+  ```
+
+  예제의 실행결과에서 알 수 있듯이 디스트럭처링에 사용되는 매개변수 a는 string 타입이고 생략할 수 없으며, 매개변수 b는 number 타입이고 선택 연산자인 `?`로 선언했으므로 생략할 수 있습니다.
