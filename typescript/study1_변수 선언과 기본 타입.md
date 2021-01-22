@@ -3,13 +3,8 @@
 # TypeScript Quick Start - 02. 변수 선언과 기본 타입
 
 <br>
-
----
-
 <br>
-
-# 02. 변수 선언과 기본 타입
-
+<br>
 <br>
 
 ## 1. let 선언자
