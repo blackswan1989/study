@@ -123,7 +123,7 @@
 <br>
 <br>
 
-# 2. 디스트럭처링(destructuring)
+# 2. 객체 디스트럭처링(Object Destructuring)
 
 <br>
 
@@ -311,3 +311,151 @@ type 키워드를 이용해 매개변수의 타입을 선언함으로써 객체 
   ```
 
   예제의 실행결과에서 알 수 있듯이 디스트럭처링에 사용되는 매개변수 a는 string 타입이고 생략할 수 없으며, 매개변수 b는 number 타입이고 선택 연산자인 `?`로 선언했으므로 생략할 수 있습니다.
+
+<br>
+<br>
+<br>
+<br>
+
+# 3. 배열 디스트럭처링 (Array Destructuring)
+
+<br>
+
+배열 디스트럭처링은 배열 요소를 간결한 방법으로 변수에 할당하는 방법을 제공합니다.
+
+만약 배열 디스트럭처링을 사용하지 않는다면 아래 예제 처럼 배열 인덱스를 통해 얻은 값을 각 변수에 할당해야 합니다.
+
+```
+let numbers = [1, 2, 3, 4, 5];
+
+let num1 = numbers[0];
+let num2 = numbers[1];
+
+console.log(num1, num2)     // 1, 2
+```
+
+<br>
+<br>
+
+아래 1)의 `let numbers = [1, 2, 3, 4, 5];`처럼 배열 디스트럭처링을 이용하면 더욱 간결한 방법으로 배열 요소를 변수에 할당할 수 있습니다.
+
+<br>
+
+- **Example:**
+
+  ```
+  let numbers = [1, 2, 3, 4, 5];
+
+
+  // 1) 위치에 따라 순서대로 디스트럭처링 수행
+  let [nums1, nums2] = numbers;
+  console.log(nums1, nums2);                                    // 1, 2
+
+
+  // 2) 쉼표를 이용해 부분 생략 가능
+  let [, , nums3, nums4, nums5] = numbers;
+  console.log(nums3, nums4, nums5);                             // 3, 4, 5
+
+
+  // 3) 디스트럭처링을 이용해 변수값 교체
+  [nums4, nums3] = [nums3, nums4];
+  console.log(nums3, nums4);                                    // 4, 3
+
+
+  // 4) 기본값 지정 가능
+  let [color1, color2 = "blue"] = ["black"];
+  console.log(color1, color2);                                  // black, blue
+
+  let [color3 = "red", color4 = "blue"] = ["black", "pink"];
+  console.log(color3, color4);                                  // black, pink
+
+  let [color5 = "red", color6] = ["pink", ,];
+  console.log(color5, color6);                                  // pink, undefined
+  ```
+
+  - 2)의 예제 처럼 `numbers` 배열의 3번째, 4번째 요소를 변수에 할당하려면 앞의 요소는 쉼표로 건너 뛰고 원하는 위치에 있는 요소만 변수로 지정할 수 있습니다.
+
+  - 3)에서는 `nums3`, `nums4`의 변수값을 손쉽게 서로 교환할 수 있음을 알 수 있습니다.
+
+<br>
+<br>
+<br>
+
+## 1) 배열 요소를 함수의 디스트럭처링 매개변수로 전달
+
+<br>
+
+배열 디스트럭처링을 이용하면 함수에 배열을 전달할 때 배열 요소를 디스트럭처링 매개변수로 전달할 수 있다는 장점이 있습니다.
+
+함수 호출시 배열을 전달받아 처리하는 함수는 다음과 같이 선언합니다.
+
+```
+function test([first, second]: [number, string]) {
+  console.log(first);
+  console.log(second);
+}
+
+test([100, "hello"]);             // 100, hello
+```
+
+`test`라는 함수를 호출할 때 인수로 `[100, "hello"]` 배열을 전달하면 배열의 요소가 순서대로 매개변수 `first`와 `second`에 전달됩니다.
+
+<br>
+<br>
+<br>
+<br>
+
+# 3. 전개 연산자(Spread Operator)
+
+<br>
+
+타입스크립트는 ES6의 전개 연산자를 지원합니다. 전개 연산자는 `...`로 나타내는데 다음과 같은 세 가지 경우에 사용됩니다.
+
+<br>
+<br>
+
+1. 첫번째로 **나머지 매개변수를 선언할 때** 나머지 매개변수는 여러 인수를 배열로 받는데 '`...restParameter`'와 같은 형태로 선언해 받습니다. 이는 함수를 다루는 장에서 자세히 설명합니다.
+
+<br>
+
+2. 두번째 **배열 요소를 확장할 때** 전개 연산자를 사용하는데, 배열 합치기(Array Concatenation)와 배열 디스트럭처링(Array Destructuring)에서 사용됩니다.
+
+<br>
+
+3. 세번째로 **객체 요소를 확장할 때** 전개 연산자를 사용하는데, 객체 합치기(Object Concatenation)과 객체 디스트럭처링(Object Concatenation)에서 사용됩니다.
+
+<br>
+<br>
+<br>
+
+## 1) 전개 연산자를 이용한 배열 요소 확장
+
+<br>
+
+먼저 배열 합치기(Array Concatenation)에 전개 연산자를 사용하는 예를 살펴보면, 전개 속성에 전개 연산자를 사용해 배열을 합칠 수 있습니다.
+
+```
+let arr = [3, 4, 5];
+
+let arr2 = [1, 2, ...arr];    // arr + arr2 (...arr에서 '...'는 전개연산자이며 'arr'은 전개 속성이다.)
+let arr3 = [...arr, 6, 7];
+let arr4 = [5, ...arr, 10];
+
+console.log(arr2);            // (5) [1, 2, 3, 4, 5]
+console.log(arr3);            // (6) [3, 4, 5, 6, 7, 8]
+console.log(arr4);            // (5) [5, 3, 4, 5, 10]
+```
+
+위처럼 전개 연산자를 활용하면 배열을 쉽게 합칠 수 있으며, 전개 속성의 위치도 조정할 수 있습니다.
+
+<br>
+<br>
+
+이어서 배열 디스트럭처링에 전개 연산자를 사용한 예를 살펴보면
+
+```
+let [first , ...second] = [1, 2, 3];
+
+console.log(first);         // 1
+console.log(second);        // (2) [2, 3]
+```
