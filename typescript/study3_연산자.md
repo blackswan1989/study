@@ -418,11 +418,11 @@ test([100, "hello"]);             // 100, hello
 
 <br>
 
-2. 두번째 **배열 요소를 확장할 때** 전개 연산자를 사용하는데, 배열 합치기(Array Concatenation)와 배열 디스트럭처링(Array Destructuring)에서 사용됩니다.
+1. 두번째 **배열 요소를 확장할 때** 전개 연산자를 사용하는데, 배열 합치기(Array Concatenation)와 배열 디스트럭처링(Array Destructuring)에서 사용됩니다.
 
 <br>
 
-3. 세번째로 **객체 요소를 확장할 때** 전개 연산자를 사용하는데, 객체 합치기(Object Concatenation)과 객체 디스트럭처링(Object Concatenation)에서 사용됩니다.
+1. 세번째로 **객체 요소를 확장할 때** 전개 연산자를 사용하는데, 객체 합치기(Object Concatenation)과 객체 디스트럭처링(Object Concatenation)에서 사용됩니다.
 
 <br>
 <br>
@@ -451,11 +451,75 @@ console.log(arr4);            // (5) [5, 3, 4, 5, 10]
 <br>
 <br>
 
-이어서 배열 디스트럭처링에 전개 연산자를 사용한 예를 살펴보면
+이어서 배열 디스트럭처링에 전개 연산자를 사용한 예를 살펴보자
 
 ```
-let [first , ...second] = [1, 2, 3];
+let [first , ...second] = [1, 2, 3, 4, 5];      // second에 전개연산자 "..." 사용
 
 console.log(first);         // 1
-console.log(second);        // (2) [2, 3]
+console.log(second);        // [2, 3, 4, 5]
 ```
+
+배열 디스트럭처링이 수행되면 배열을 해체해 여러 변수에 할당하는데, 할당받는 변수에 전개 연산자인 "`...`"을 사용하면 배열의 나머지 요소를 배열로 받을 수 있습니다.
+
+<br>
+
+- **Example: 전개 연산자를 활용한 배열 합치기와 배열 디스트럭처링**
+
+  ```
+  let arr: number[] = [1, 2];
+  let arr2: number[] = [...arr, 3, 4];
+  console.log("1번 :", arr2);             // (4) [1, 2, 3, 4])
+
+  let data: number[] = [10, 11, 12];
+  let test: number[] = [8, 9, ...data];
+  console.log("테스트: ", test);          // 테스트: (5) [8, 9, 10, 11, 12]
+
+
+  let [firstItem, ...rest]: [number, number, number] = [10, 20, 30];
+
+  console.log(`2번 :`, firstItem);        // 10
+  console.log(`3번 :`, rest);             // (2) [20, 30])
+  console.log(`4번 :`, rest[0]);          // 20
+  ```
+
+<br>
+<br>
+<br>
+
+## 2) 전개 연산자를 이용한 객체 요소 확장
+
+<br>
+
+객체 합치기를 수행할 때는 전개 속성에 전개 연산자인 "`...`"를 사용해 합칠 수 있습니다.
+
+<br>
+
+```
+let test = { a: 1, b: 2, c: 3 };
+let test2 = { ...test, d: 4, e: 5 };
+
+console.log(test2);                         // {a: 1, b: 2, c: 3, d: 4, e: 5}
+```
+
+<br>
+
+위 예제에서 두 객체인 `test`와 `test2`를 합칠 때 전개속성 `...`을 이용합니다. 전개 연산자는 얕은 복사(shallow copy) 방식으로 값을 `test2` 객체로 복사합니다.
+
+<br>
+<br>
+
+다음으로 객체 디스트럭처링에서 전개 연산자가 사용되는 예를 보면, 객체 디스트럭처링은 객체를 해체해 속성값을 변수에 할당할 수 있습니다.
+
+예를 들어 지정한 속성 외 나머지 요소들을 객체로 받고 싶다면 객체의 속성에 전개 연산자를 붙여서 받습니다.
+
+```
+let numGroup = { n1: 1, n2: 2, n3: 3, n4: 4};
+let { n2, ...n } = numGroup;
+
+console.log(n2, n);       // 2, {n1: 1, n3: 3, n4: 4}
+```
+
+위 예제에서 속성 `n`에 전개 연산자가 사용됐으므로 `n`은 객체의 레스트 속성(Rest Properties)이 됩니다.
+
+`n`은 `n2`속성을 제외한 나머지에 해당하는 객체(`{ n1: 1, n3: 3, n4: 4}`)를 받습니다.
