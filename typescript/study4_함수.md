@@ -314,3 +314,142 @@ console.log(minusResult1, minusResult2, minusResult3)   // NaN, -1, -1
 ```
 
 앞서 살펴봤던 나머지 매개변수는 최대 개수가 정해져 있지 않기 때문에 불필요한 인수들이 함께 전달될 수 있습니다. 따라서 전달할 인수의 개수를 0개 이상 ~ 1개 미만으로 제한하려면 '선택 매개변수'를 이용해야 합니다.
+
+<br>
+<br>
+
+선택 매개변수는 변수명 뒤에 물음표를 붙이는 식으로 선언합니다. 선택 매개변수를 이용하면 선택 매개변수로 지정한 매개변수는 생략할 수 있습니다.
+
+예를 들어 매개변수로 2개의 인수를 받기로 하고 이 가운데 두 번째 매개변수는 선택 매개변수로 정의했다고 가정해봅시다.
+
+```
+function sum(a: number, b?: number):number { ... }
+```
+
+위는 두 번째 매개변수를 선택 매개변수로 선언했기 때문에 함수 호출 시 선택 매개변수에 전달할 인수는 생략할 수 있습니다.
+
+<br>
+<br>
+
+- **Example: 선택 매개변수를 지정해 함수 호출 시 인수를 생략하는 예제**
+
+  ```
+  function sum(a: number, b?: number): number {
+    return a + b;                   // Problem: (parameter) b: number | undefined
+  }
+  console.log(sum(1));              // NaN
+  ```
+
+  실행결과를 보면 두 번째 매개변수를 선택 매개변수로 사용함으로써 인수 하나를 생략해 호출하더라도 에러가 발생하지 않습니다(strict 모드에서는 problem발생).
+
+  다만 선택 매개변수로 지정된 b가 초기화되지 않았기 때문에 숫자가 아닌 NaN 값이 되어 함수의 반환값도 NaN이 됩니다.
+
+  초기화를 시켜주기 위한 기본 초기화 매개변수는 인수가 생략돼 있을 때 매개변수의 초깃값을 설정할 수 있었지만, 선택 매개변수와 결합해서는 사용할 수 없습니다.
+
+<br>
+<br>
+
+- **Example: 함수 내부에서 초기값을 설정하기**
+
+  ```
+  // 1)
+  function sum2(a: number, b?: number) {
+    if (b === undefined) {
+      b = 0;
+    }
+
+    return a + b;
+  }
+  console.log(sum2(1));             // 1
+
+
+  // 2)
+  function sum(a: number, b?: number): number {
+    const c: number = typeof b === 'number' ? b : 0;
+    return a + c;
+  }
+  console.log(sum(1));              // 1
+  ```
+
+  위 예제 `1)`에서는 매개변수 b를 선택 매개변수로 지정했고, 선택 매개변수 b의 초깃값을 함수 내부에서 설정하게 했습니다.
+
+  즉 선택 매개변수 b가 아무것도 전달받지 못했을 때 어떤 값으로 초기화할 것인지에 대한 처리 로직을 추가해야 합니다.
+
+  예제 `2)`는 `1)`의 코드를 더 간략하게 만든 예제 입니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 4) 함수 오버로드(function overloads)
+
+<br>
+
+함수 오버로드(function overloads)는 함수명은 같지만 매개변수와 반환 타입이 다른 함수를 여러 개 선언할 수 있는 특징을 말합니다.
+
+```
+function add(a: string, b: string): string;
+function add(a: number, b: number): number;
+function add(a: boolean, b: boolean): boolean;
+function add(a: any, b: any): any {
+  return a + b;
+}
+
+console.log(add(1, 2));                   // 3
+console.log(add(false, false));           // 0
+console.log(add("hello", " world"));      // hello world
+```
+
+컴파일 시간에 가장 적합한 오버로드를 선택해 컴파일하므로 자바스크립트 실행 시에는 런타임 비용이 발생하지 않습니다.
+
+<br>
+<br>
+
+주의할 점은 타입스크립트는 자바스크립트로 변환되고 나서도 동일한 형태를 유지해야 한다느 것입니다. 따라서 각 오버로드를 아래처럼 독립된 블록으로 선언해선 안 됩니다.
+
+```
+// X
+function add(a: string, b: string): string { ... }
+function add(a: number, b: number): number { ... }
+function add(a: any, b: any): any { ... }
+```
+
+매개변수를 any타입으로 선언한 가장 일반적인 함수의 시그니처를 가장 아래에 선언하고, 그 위로 구체적인 타입을 명시한 함수의 시그니처를 쌓는 방식으로 선언해야 합니다.
+
+그러면 선언된 함수의 시그니처에 맞게 인수를 넘겨 호출할 수 있습니다.
+
+<br>
+<br>
+
+- **Example: 매개변수의 개수가 다른 오버로드를 지정할 때**
+
+  ```
+  function add(a: number): number;
+  function add(a: number, c: number): number;
+  function add(a: any, b?: any): any {
+    if (b === undefined) {
+      return a;
+    } else {
+      return a + b;
+    }
+  }
+
+  console.log(add(1, 2));         // 3
+  console.log(add(1));            // 1
+  ```
+
+  위 예제처럼 매개변수의 개수가 다른 오버로드를 지정할 때는 선택 매개변수를 둬 매개변수 개수에 변화를 줄 수 있도록 허용할 수 있습니다.
+
+  또 `add` 함수의 두 번째 매개변수 `b`에 `?`를 사용해 선택 매개변수로 선언했습니다. 그리고 선택 매개변수는 전달받은 값이 없을 수 있으므로 `undefined`인지를 검사하는 로직을 추가해주었습니다.
+
+  이 코드는 간단하므로 오버로드에 선언한 타입별로 처리하지는 않았습니다. 다음 예제는 오버로드를 선언하고 매개변수의 타입별로 서로 다른 처리를 하도록 오버로드 함수 내부에 로직을 추가해보겠습니다.
+
+<br>
+<br>
+
+- **Example: 함수 오버로드의 선언과 처리**
+
+  ```
+
+  ```
