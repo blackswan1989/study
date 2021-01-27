@@ -451,5 +451,129 @@ function add(a: any, b: any): any { ... }
 - **Example: 함수 오버로드의 선언과 처리**
 
   ```
+  let constellations = [
+    { name: "Capricorn", month: 1 },
+    { name: "Aquarius", month: 2 },
+    { name: "Pisces", month: 3 },
+    { name: "Aries", month: 4 },
+    { name: "Taurus", month: 5 },
+    { name: "Gemini", month: 6 },
+    { name: "Cancer", month: 7 },
+    { name: "Leo", month: 8 },
+    { name: "Virgo", month: 9 },
+    { name: "Libra", month: 10 },
+    { name: "Scorpio", month: 11 },
+    { name: "Sagittarius", month: 12 }
+  ];
+
+  function pick(x: { name: string }): number;
+  function pick(x: { month: number }): string;
+  function pick(x: number): number;
+  function pick(x: any): any {
+    if (typeof x === "object") {
+
+      if (x.month === undefined && x.name !== undefined) {
+        for (let constellation of constellations) {
+          if (x.name === constellation.name) {
+            return constellation.month;               // month를 전달받으면 5번의 별자리 이름 반환
+          }
+        }
+        return -1;
+      }
+
+      else if (x.month !== undefined && x.name === undefined) {
+        if (x.month < 1 || x.month > 12) {
+          return -1;
+        }
+        else {
+          // pick함수가 name 속성을 포함한 객체를 전달받으면 그 name에 대응하는 month 숫자값 반환
+          return constellations[x.month - 1].name;
+        }
+      }
+
+      else {
+        return -1;
+      }
+    }
+
+    else if (typeof x === "number") {
+      if (x > 0 && x < 13) {
+        return x - 1;
+      }
+      else {
+        return -1;
+      }
+    }
+
+    else {
+      return -1;
+    }
+  }
+
+  console.log(pick({ month: 0 }));          // -1 (month에 대한 범위 1~12에 속하지 않으므로 -1 반환)
+  console.log(pick({ month: 13 }));         // -1 (month에 대한 범위 1~12에 속하지 않으므로 -1 반환)
+  console.log(pick({ month: 12}));          // Sagittarius
+  console.log(pick({ month: 5 }));          // Taurus
+  console.log(pick({ name: "Taurus" }));    // 5
+  console.log(constellations[pick(5)]);     // { name: 'Taurus', month: 5 }
+  console.log(constellations[pick(13)]);    // undefined
+  ```
+
+  위 예제에서 `pick` 함수가 함수 오버로드로 선언돼 있습니다. 이 함수는 다양한 타입의 인수를 받고 반환 타입도 여러개 입니다. 오버로드에서 타입을 나열할 때 일반적인 타입(any)을 가장 먼저 선언하고 그 위로 세부적인 타입(number, object)을 선언했습니다.
+
+  object 타입은 속성명과 속성명의 타입에 따라 여러 형태가 올 수 있는데 예제에서는 `{ month: number }`, `{name: string}`과 같은 형태의 object 타입을 선언했습니다.
+
+  예제에서 `pick`함수의 매개변수와 반환 타입이 다양한데 `function pick(x: number | {month: number} | {name: string}): string | number`와 같은 유니언 타입 형태로 표현할 수 있습니다.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# 3. 익명 함수의 이해와 활용
+
+<br>
+<br>
+
+## 1) 익명 함수와 화살표 함수
+
+<br>
+
+화살표 함수(arrow function)은 ES6 표준에 포함된 익명 함수를 좀 더 간략하게 표현할 수 있는 방법입니다.
+
+가장 축약된 화살표 함수는 익명 함수로서 표현식은 `() => { };`와 같습니다. 여기서 `()`는 매개변수 목록이며, `{ }`는 함수 블록을 의미합니다.
+
+매개변수 목록에서는 함수 블록에서 사용할 매개변수를 선언합니다. 매개변수가 하나도 없을 때는 `()`로 표현합니다.
+
+함수 블록에서는 화살표 함수의 로직이 위치하며 위 표현식에서의 화살표 함수는 매개변수가 0개인 화살표 함수로, 화살표 함수를 호출하려면 변수에 할당해야 합니다.
+
+<br>
+<br>
+
+- **Example: 매개변수가 1개인 화살표 함수의 표현**
+
+  ```
+  let y1 = (x:any) => { return x; };
+  let y2 = (x:any) => { return x; };
+  let y3 = (x:any) => x;
+  let y4 = x => {x};
+
+  console.log(y1(1));       // 1
+  console.log(y2("a"));     // a
+  console.log(y3(true));    // true
+  console.log(y4(true));    // undefined
+  ```
+
+  매개변수가 1개일 때는 `y4`의 `x`처럼 소괄호를 생략할 수도 있습니다. 화살표 함수를 호출할 때는 화살표 함수가 할당된 변수를 이용해 호출합니다. 화살표 함수에 1개의 매개변수가 있다면 `y1(1)`, `y2(1)`와 같은 방식으로 호출합니다.
+
+  유의할 점은 중괄호`{}`를 사용한 경우 반환값이 있으면 `return` 키워드를 이용해 반환해야 합니다. 만약 `y4` 처럼 중괄호를 사용할 때 `return` 키워드를 생략하면 화살표 함수의 반환값이 존재하지 않게(`undefined`) 됩니다.
+
+<br>
+<br>
+
+- **Example: 매개변수가 2개인 화살표 함수의 표현**
+
+  ```
 
   ```
