@@ -636,7 +636,7 @@ function add(a: any, b: any): any { ... }
 
 객체 리터럴의 속성은 키(`key`)가 되고 값(`value`)은 숫자나 문자열 뿐만 아니라 사용자가 정의한 객체도 할당할 수 있습니다.
 
-예를 들어 객체 리터럴의 hello 속성에 익명 함수를 할당해 보겠습니다. 값을 선언하면서 객체 프로퍼티를 참조하려면 this 키워드를 이용하면 됩니다.
+예를 들어 객체 리터럴의 hello 속성에 익명 함수를 할당해 보겠습니다. 값을 선언하면서 객체 프로퍼티를 참조하려면 `this` 키워드를 이용하면 됩니다.
 
 <br>
 
@@ -646,32 +646,47 @@ function add(a: any, b: any): any { ... }
   let person = {
     name: "Jane",
     hello: function (name2: string) {
-      console.log(`Hello, ${this.name + name2}`)
+      console.log(`Hello, ${this.name + name2}`)  // 여기서 내부 참조 this.name은 코드어시스트 동작 안 됨
     }
   };
 
-  person.hello(" Doe")
+  person.hello(" Doe")     // "Hello, Jane Doe"
   ```
 
   객체 리터럴의 `hello` 속성에 선언된 함수는 함수 내부의 스코프에서 다른 객체 속성에 접근하려 할 때 '코드 어시스트'가 동작하지 않습니다.
 
   <br>
-  <br>
 
-  만약 정의한 객체 리터럴 내부에서 다른 프로퍼티를 참조할 일이 많다면 객체 리터럴의 타입을 선언해 내부 참조를 함으로서 코드 어시스트가 동작하게 할 수 있습니다.
+  위 코드의 동작방식은 아래와 같습니다.
+
+  ```
+  let person = {
+    firstName: "Jane",
+    hello: function (lastName: string) {
+      return `Hello, ${this.firstName + lastName}`;
+    }
+  };
+
+  console.log(person.hello(" Doe"));      // "Hello, Jane Doe"
+  ```
+
+  만약 정의한 객체 리터럴 내부에서 다른 프로퍼티를 참조할 일이 많다면 '객체 리터럴의 타입을 선언'해 내부 참조를 함으로서 코드 어시스트가 동작하게 할 수 있습니다.
+
+  <br>
+  <br>
 
   객체 리터럴의 타입은 '인터페이스(`interface`)'를 이용해 정의합니다. 앞서 살펴본 예제에 객체 리터럴의 타입을 추가한 코드는 아래와 같습니다.
 
   ```
   interface PersonType {
-    name: string;
-    hello(this: PersonType, name2: string): string;
+    firstName: string;
+    hello(this: PersonType, lastName: string): string;
   }
   ```
 
   `this: PersonType`은 자신의 타입을 선언(순서 유의)한 것이며, 두번째 인자인 `name2: string`는 사용할 매개변수를 선언한 것이다.
 
-  유의할 점은 `this`는 반드시 첫 번째 매개변수로 선언해야 한다는 것 입니다.
+  유의할 점은 `this`는 반드시 첫 번째 매개변수로 선언해야 한다는 것 입니다. 객체 리터럴의 타입을 적용한 예제는 아래와 같습니다.
 
 <br>
 <br>
@@ -679,5 +694,26 @@ function add(a: any, b: any): any { ... }
 - **Example: 화살표 함수에서 `this` 사용**
 
   ```
+  interface PersonType {
+    firstName: string;
+    hello(this: PersonType, lastName: string): string;
+  }
 
+  let typedPerson: PersonType = {
+    firstName: "Jane",
+    hello: function (this: PersonType, lastName: string): string {
+        let message = `Hello, ${this.firstName + lastName}`;
+        return message;
+    }
+  };
+
+  console.log(typedPerson.hello(" Doe!"))         // "Hello, Jane Doe!"
   ```
+
+  `this` 키워드를 활용했기 때문에 객체 리터럴의 프로퍼티를 참조하는 내부 참조 시에 코드 어시스트가 작동하고, 외부에서 hello 함수에 접근할 때도 코드 어시스트가 작동합니다.
+
+  <br>
+
+  위 예제를 컴파일하면 타입스크립트에 선언됐던 모든 타입이 사라집니다. `interface`는 컴파일 단계에서만 타입 검사 목적으로 사용되고 컴파일 결과에서는 사라집니다.
+
+  그리고 주목할 점은 객체 리터럴을 참조하기 위해 선언했던 첫 번째 매개변수 `this`도 사라진다는 점입니다. 매개변수 `this`는 컴파일러에서 타입을 검사하는 용도로 사용됐고 실제 자바스크립트로 컴파일 된 뒤에는 역할이 다하므로 제거됩니다.
