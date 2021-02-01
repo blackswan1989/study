@@ -717,3 +717,156 @@ function add(a: any, b: any): any { ... }
   위 예제를 컴파일하면 타입스크립트에 선언됐던 모든 타입이 사라집니다. `interface`는 컴파일 단계에서만 타입 검사 목적으로 사용되고 컴파일 결과에서는 사라집니다.
 
   그리고 주목할 점은 객체 리터럴을 참조하기 위해 선언했던 첫 번째 매개변수 `this`도 사라진다는 점입니다. 매개변수 `this`는 컴파일러에서 타입을 검사하는 용도로 사용됐고 실제 자바스크립트로 컴파일 된 뒤에는 역할이 다하므로 제거됩니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 2) 익명 함수의 함수 타입(function type)
+
+<br>
+<br>
+
+### 2.1 익명 함수의 타입 선언
+
+<br>
+
+익명 함수는 변수에 할당할 수 있습니다. 익명 함수가 할당된 변수는 타입을 추가할 수 있기 때문에 함수 자체에도 타입이 존재한다는 것을 짐작할 수 있습니다.
+
+<br>
+
+타입스크립트에서는 함수 자체에 대한 타입을 함수 타입(function type)이라고 합니다. 예를 들어 아래 처럼 매개변수와 반환값을 `string`으로 지정한 `concat` 함수가 있다고 가정하면 다음과 같습니다.
+
+```
+function concat(str1: string, str2: string): string {
+  return str1 + str2;
+}
+```
+
+<br>
+
+만약 위에서 정의한 `concat`함수를 변수에 할당하려면 아래 처럼 익명 함수 형태로 변수에 할당할 수 있습니다. 이때 할당한 익명 함수에 매개변수 타입과 반환 타입을 추가할 수 있습니다.
+
+```
+let myConcat = function (str1: string, str2: string): string {
+  return str1 + str2;
+}
+```
+
+<br>
+<br>
+<br>
+
+### 2.2 익명 함수 할당시 변수에 함수 타입을 지정하면 좋은 점
+
+<br>
+
+익명 함수에 선언된 타입을 별도로 분리해 함수 타입으로 선언하면 타입 안전성을 보장하면서도 익명 함수의 타입이 무엇인지 쉽게 파악할 수 있습니다.
+
+함수 타입(function type)은 다음과 같은 형태로 선언합니다.
+
+```
+let myConcat: (str1: string, str2: string) => string = (str1, str2) => {
+  return str1 + str2;
+}
+```
+
+먼저 `(str1: string, str2: string) => string`은 함수 타입을 의미하며, `(str1, str2) => {return str1 + str2;}`는 익명 함수로 화살표 함수를 이용했습니다.
+
+따라서 위 코드는 변수에 익명함수에 대응하는 함수 타입을 할당하여 선언한 것입니다.
+
+<br>
+<br>
+
+위처럼 함수 타입을 선언하면 다음과 같은 점이 좋습니다.
+
+<br>
+
+- 익명 함수의 매개변수나 반환값에 타입을 별도로 분리할 수 있다.
+- 익명 함수에 타입을 추가하지 않아도 함수 타입만으로 익명 함수의 타입 안전성이 보장된다.
+- 익명 함수의 타입이 무엇인지는 익명 함수을 통해 확인할 수 있으므로 가독성이 좋아진다.
+
+<br>
+<br>
+
+익명 함수의 타입을 함수 타입(function type)으로 분리하면 새로 정의한 타입은 반복적으로 재활용해서 사용할 수 있습니다.
+
+익명 함수를 할당받는 변수에 type 앨리어스로 정의한 함수 타입을 지정하면 다음과 같습니다.
+
+```
+type calcType = (a: number, b: number) => number;     // 함수 타입: calcType
+
+let addCalc: calcType = (a, b) => a + b;              // addCalc에 함수타입(calcType) 선언
+let minusCalc calcType = (a, b) => a - b;             // minusCalc에 함수타입(calcType) 선언
+```
+
+<br>
+
+위 예제에서 `addCalc` 변수에 할당된 익명함수와 `minusCalc`에 할당된 익명 함수가, 함수 타입과 형태(매개변수 목록, 반환 타입)가 동일하므로 같은 함수 타입을 선언했습니다.
+
+각 변수에 함수 타입을 선언했으므로 익명 함수의 매개변수 타입이나 반환 타입을 선언하지 않더라도 타입 안전성을 확보할 수 있습니다.
+
+<br>
+<br>
+<br>
+
+### 2.3 콜백 함수의 타입 선언과 활용
+
+<br>
+
+콜백 함수(callback function)는 또 다른 함수의 매개변수로 전달될 수 있는 함수입니다.
+
+여기서 콜백 함수를 전달 받는 함수는 콜백 함수보다 상위 처리를 담당하며 고차 함수(higher-order function)라고 불립니다. 고차 함수는 하나 이상의 콜백 함수를 전달받거나 하나 이상의 함수를 결과로 반환해주는 특성이 있습니다.
+
+고차 함수에서 콜백 함수를 인수로 받아 사용하면 고차 함수 실행(이벤트)이 끝난 다음의 후속 처리를 콜백 함수에서 실행할 수 있습니다.
+
+<br>
+
+콜백 함수의 예로 `setTimeout` 함수와 `jQuery`의 click이벤트 설정이 있습니다. `setTimeout` 함수는 지정된 시간이 지난 이후의 작업을 처리하기 위해 콜백함수를 전달받고, `jQuery`에서는 클릭 이벤트를 추가할 때 콜백 함수를 click 매서드로 전달합니다.
+
+<br>
+<br>
+
+다음으로는 첫 번째 인수로 문자열을 전달하고, 두 번째 인수로 콜백 함수를 전달하면 문자열을 되돌려주는 에코(echo) 함수를 정의해 사용해보겠습니다.
+
+```
+function echoFunction(message: string, callback) {
+  return callback(message);
+}
+
+let responseMessage = echoFunction("hello world!", message => message);
+console.log(responseMessage);         // hello world!
+```
+
+위 예제의 전달된 콜백 함수는 문자열을 반환하는 비교적 단순한 동작을 수행하기 때문에 타입이 없는 화살표 형태로 선언했습니다.
+
+하지만 이 콜백함수는 타입을 지정하지 않아 타입 안전성이 없습니다. 콜백 함수에 로직을 추가해야 하고 역할이 중요하다면 콜백 함수의 선언을 분리해 타입을 추가하는것이 좋습니다.
+
+<br>
+
+콜백 함수의 선언을 외부로 분리하면 함수를 좀 더 간결하게 호출할 수 있습니다. 콜백 함수의 타입을 먼저 선언하고, 콜백 함수의 선언과 사용을 분리해 개선한 예제는 다음과 같습니다.
+
+<br>
+<br>
+
+- **Example: 화살표 함수 타입을 변수에 추가한 후 콜백 함수 호출하기**
+
+```
+//공통으로 사용할 콜백 함수 타입의 정의
+type EchoCallbackType = (message: string) => void;
+
+
+let callbackEcho: EchoCallbackType = message => message;
+let callbackEchoWithLength: EchoCallback Type = message => `${message}(${message.length})`;
+
+function echoFunction(message: string, callback) {
+  return callback(message);
+}
+
+let responseEcho = echoFunction("hello", callbackEcho);
+let responseEchoWithLength = echoFunction("hello", callbackEchoWithLength);
+
+console.log(responseEcho);
+console.log(responseEchoWithLength);
+```
