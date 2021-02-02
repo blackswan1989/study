@@ -852,21 +852,31 @@ console.log(responseMessage);         // hello world!
 
 - **Example: 화살표 함수 타입을 변수에 추가한 후 콜백 함수 호출하기**
 
-```
-//공통으로 사용할 콜백 함수 타입의 정의
-type EchoCallbackType = (message: string) => void;
+  ```
+  //공통으로 사용할 콜백 함수 타입의 정의
+  type EchoCallbackType = (message: string) => void;
 
 
-let callbackEcho: EchoCallbackType = message => message;
-let callbackEchoWithLength: EchoCallback Type = message => `${message}(${message.length})`;
+  let callbackEcho: EchoCallbackType = message => message;        // 1)
+  let callbackEchoWithLength: EchoCallback Type = message => `${message}(${message.length})`;     // 2)
 
-function echoFunction(message: string, callback) {
-  return callback(message);
-}
+  function echoFunction(message: string, callback) {
+    return callback(message);
+  }
 
-let responseEcho = echoFunction("hello", callbackEcho);
-let responseEchoWithLength = echoFunction("hello", callbackEchoWithLength);
+  let responseEcho = echoFunction("hello", callbackEcho);         // 3)
+  let responseEchoWithLength = echoFunction("hello", callbackEchoWithLength);   // 4)
 
-console.log(responseEcho);
-console.log(responseEchoWithLength);
-```
+  console.log(responseEcho);                // "hello"
+  console.log(responseEchoWithLength);      // "hello(5)"
+  ```
+
+  위 예제에서는 익명 함수 타입을 미리 정의(`type EchoCallbackType = (message: string) => void;`)해서 여러 익명 함수를 정의할 수 있게 했습니다.
+
+  이렇게 하면 비슷한 유형의 여러 콜백 함수에 적용할 수 있어서 타입 선언과 관련된 코드가 간결해집니다.
+
+  `1)`번 코드에서 `callbackEcho` 콜백 함수는 매개변수인 `message`를 반환합니다. `callbackEchoWithLength`는 매개변수인 `message`와 `message` 문자열의 길이를 함께 반환해주는 콜백 함수입니다. 두 콜백 함수는 타입이 같으므로 동일한 `EchoCallbackType`을 이용해 타입을 지정할 수 있습니다.
+
+  함수 호출 시 콜백 함수 타입이나 구체적인 처리 방식을 정의하지 않고도 미리 콜백 함수가 할당된 변수를 이용해 호출 합니다.
+
+  미리 정의된 콜백 함수를 변수를 통해 전달(`3)` `4)`)함으로써 호출 코드가 간결해집니다.
