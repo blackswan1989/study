@@ -42,7 +42,7 @@
 <br>
 <br>
 
-## 1) 타입스크립트의 객체지향 프로그래밍(OOP) 지원
+## 2) 클래스 선언과 객체 생성
 
 <br>
 
@@ -82,7 +82,7 @@ interface Ractangle {
 <br>
 <br>
 
-### 1.1 객체 생성
+### 2.1 객체 생성
 
 <br>
 
@@ -168,3 +168,211 @@ console.log(rectangle);            // Rectangle {x: 1, y: 5, getArea: ƒ (), con
   모듈 패턴은 클로저(closures)를 이용해 비공개된 내부 메서드를 캡슐화(encapsulation)하는데, 전역 이름 공간을 더럽히지 않는다는 장점이 있습니다.
 
   변환된 코드를 보면 내부 메서드는 생성자 역할을 하는 `Rectangle` 함수에 `prototype` 속성과 연결(chaining)된 형태로 선언됩니다.
+
+  _용어 참조 : https://ryusae.tistory.com/9_
+
+<br>
+<br>
+<br>
+<br>
+
+## 3) 상속 관계와 포함 관계
+
+<br>
+
+객체지향 프로그래밍에서 클래스 간의 관계는 크게 '상속 관계'와 '포함 관계' 이렇게 두 가지로 나눠 볼 수 있습니다.
+
+먼저 '상속(inheritance)'은 코드의 재사용성을 높입니다. 예를 들어 자식 클래스가 부모 클래스를 상속하면 자식은 부모에 선언된 멤버 변수나 멤버 메서드를 상속받아 사용할 수 있습니다.
+
+<br>
+
+상속 관계를 다른 말로 'IS-A관계'라고도 합니다. '포함'은 한 클래스에 다른 클래스를 멤버 변수로 선언하는 것으로 'HAS-A 관계'로 표현됩니다.
+
+> 클래스를 구성하는(클래스 내에 선언된) 변수를 가리켜 ‘멤버 변수’라 하고, 클래스를 구성하는(클래스 내에 정의된)함수를 가리켜 ‘멤버 함수’라 한다. 멤버 변수는 특정 객체와 연결된 변수의 하나이며, 해당 변수의 모든 메소드(멤버 함수)에 접근이 가능하다.
+
+<br>
+<br>
+<br>
+
+### 3.1 상속 관계
+
+<br>
+
+상속은 클래스 계층을 만들어서 코드 중복을 줄이는 객체지향 프로그래밍 방법입니다. 상속에서 부모 클래스를 '기반 클래스(Base Class)' 또는 '슈퍼 클래스(Super Class)'라 하며 이를 상속 받는 자식 클래스를 '파생 클래스(Derived Class)' 또는 '서브 클래스(Sub Class)'라 부릅니다.
+
+<br>
+
+```
+class 동물 { ... }
+class 공룡 extends 동물 { ... }
+```
+
+자식 클래스는 부모 클래스에 공개된 메서드나 변수를 상속받아 IS-A 관계가 생깁니다. 위의 두 클래스 간의 관계를 'IS-A 관계'로 문장을 만들면 "공룡은 동물이다"라고 읽을 수 있는데, 문장이 어색하지 않다면 부모와 자식 클래스는 'IS-A 관계'에 있다고 봅니다.
+
+<br>
+<br>
+
+타입스크립트는 상속을 위해 `extends` 키워드를 지원하며, 예를 들어 부모 클래스를 자식 클래스가 상속하려면 다음과 같이 선언합니다.
+
+```
+class <자식 클래스명> extends <부모 클래스명> {
+  constructor() {
+    super();
+  }
+}
+```
+
+주의할 점은 타입스크립트는 클래스에 대해 단일 상속만 지원하므로 자식 클래스는 하나의 부모 클래스만 상속받을 수 있습니다.
+
+자식 클래스가 부모 클래스를 상속받을 때는 자식 클래스의 생성자에서 `super()` 메서드를 호출해 부모 클래스의 생성자를 호출해 줘야 합니다.
+
+<br>
+<br>
+<br>
+
+### 3.2 포함 관계
+
+<br>
+
+포함 관계는 클래스가 다른 클래스를 포함하는 'HAS-A 관계'입니다. 클래스 내부에 다른 클래스를 포함하는 관계는 대표적으로 '합성(composition)관계'와 '집합(aggregation)관계'로 나뉩니다.
+
+<br>
+
+먼저 합성 관계는 전체가 부분을 포함하며 강한 관계입니다.
+
+```
+class Engine { }
+class Car {
+  private engine;
+  constructor() {
+    this.engine = new Engine();
+  }
+}
+
+let myCar = new Car();
+myCar = null;
+```
+
+`Car`클래스에 선언된 `engine`객체는 `Car`객체(`myCar`)가 `new`로 생성될 때 함께 생성되고, 객체(`myCar`)가 `null`이 되면 함께 제거됩니다. 즉 수명주기를 함께 하므로 강한 관계가 됩니다.
+
+<br>
+<br>
+
+집합 관계는 전체가 부분을 포함하며 약한 관계입니다.
+
+```
+class Engine { }
+class Car {
+  private engine: Engine;
+  constructor(engine: Engine) {
+    this.engine = engine;
+  }
+}
+
+let engine = new Engine();
+let car = new Car(engine);
+```
+
+`Car`클래스의 `car`객체가 생성될 때 외부에서 생성된 `engine`객체를 전달하고 있습니다.
+
+따라서 `car`객체에 `null`이 할당돼 제거되더라도 `engine`객체는 `Car`클래스 외부에 선언돼있으므로 제거되지 않습니다. 즉, `engine`객체와 `car`객체가 수명주기를 함께 하지 않으므로 약한 관계가 됩니다.
+
+<br>
+<br>
+<br>
+
+### 3.3 상속 관계와 포함 관계를 모두 고려해 구현하기
+
+<br>
+
+부모 클래스에서는 공통 기능에 해당하는 일반적인 메서드를 추가하고 자식 클래스에는 부모 클래스에서 구현하지 못한 세부적인 메서드를 추가해 구현합니다.
+
+<br>
+<br>
+
+상속 관계는 부모 클래스와 부모 클래스를 상속받는 자식 클래스의 관계로 정의할 수 있습니다.
+
+부모 클래스를 `Bicycle`(자전거)이라 하고 자식 클래스는 부모 클래스를 상속받은 `MountainBike`(산악용 자전거)클래스라 하겠습니다.
+
+```
+class Bicycle { ... }
+class MountainBike extends Bicycle { ... }
+```
+
+<br>
+
+`MountainBike` 클래스는 `extends` 키워드를 이용해 `Bicycle` 클래스를 상속받습니다.
+
+이러한 상속 관계에서 부모인 `Bicycle` 클래스는 자식 클래스보다 일반적인 기능을 제공하고, 자식 클래스인 `MountainBike`는 부모 클래스보다 구체적인 기능을 제공하게 됩니다.
+
+<br>
+<br>
+
+포함 관계는 하나의 클래스가 내부에 다른 클래스를 포함하는 관계입니다. 산악용 자전거가 손전등(flashlight)을 포함하고 있을 때 HAS-A 관계는 다음처럼 나타납니다.
+
+```
+class Flashlight {
+  ...
+  constructor(public lightIntensity) {
+  }
+}
+
+class MountainBike extends Bicycle {
+  ...
+  flashlight: Flashlight;
+}
+```
+
+`Flashlight` 클래스의 생성자 매개변수 `lightIntensity`는 빛의 밝은 정도를 숫자로 나타냅니다.
+
+<br>
+<br>
+
+- **Example: IS-A 관계와 HAS-A 관계를 동시에 구현**
+
+  ```
+  // Flashlight 클래스
+  class Flashlight {
+    constructor(public lightIntensity: number) {}
+  }
+
+
+  // Bicycle 클래스
+  class Bicycle {
+    constructor(public numberOfWheel: number) {}
+
+    getNumberOfWheel(): number {
+      return this.numberOfWheel;
+    }
+  }
+
+
+  // Bicycle 클래스를 상속함(IS-A)관계
+  class MountainBike extends Bicycle {
+    flashlight: Flashlight;
+
+    constructor(public numberOfWheel: number, public saddle: boolean) {
+      super(numberOfWheel);
+
+      // Bicycle이 Flashlight를 포함함(HAS-A 관계)
+      this.flashlight = new Flashlight(90);
+    }
+
+    getSaddle() {
+      return this.saddle;
+    }
+
+    getNumberOfWheel() {
+      return this.numberOfWheel;
+    }
+  }
+
+  let saddle = true;
+  let numberOfWheel = 2;
+  let mountainBike = new MountainBike(numberOfWheel, saddle);
+
+  console.log(`Bicycle의 안장 유무 : ${mountainBike.getSaddle()}`);           // true
+  console.log(`Bicycle의 바퀴 개수 : ${mountainBike.getNumberOfWheel()}`);    // 2
+  ```
+
+  위 예제는 총 3개의 클래스가 정의되어 있습니다. 이 중 `MountainBike` 클래스가 `Bicycle` 클래스를 상속받으므로 IS-A 관계가 존재하며, `MountainBike` 클래스가 `Flashlight` 객체를 생성해 포함하므로 HAS-A 관계도 존재합니다.
