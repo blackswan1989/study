@@ -375,4 +375,72 @@ class MountainBike extends Bicycle {
   console.log(`Bicycle의 바퀴 개수 : ${mountainBike.getNumberOfWheel()}`);    // 2
   ```
 
+  <br>
+
   위 예제는 총 3개의 클래스가 정의되어 있습니다. 이 중 `MountainBike` 클래스가 `Bicycle` 클래스를 상속받으므로 IS-A 관계가 존재하며, `MountainBike` 클래스가 `Flashlight` 객체를 생성해 포함하므로 HAS-A 관계도 존재합니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 4) 접근 제한자의 사용법
+
+<br>
+
+자바스크립트(ES6)에서는 `private`, `public`, `protected`와 같은 접근 제한자(access modifier)를 제공하지 않습니다.
+
+반면 타입스크립트에서는 객체지향 프로그래밍을 제대로 구현할 수 있도록 접근 제한자의 대부분을 제공합니다. 타입스크립트에서 사용할 수 있는 접근 제한자는 다음과 같습니다.
+
+<br>
+
+- `public` : `public`으로 설정된 멤버(멤버 변수, 멤버 메서드 등)는 자식 클래스에서 접근할 수 있다. 상속과 외부객체를 통한 접근도 가능하다.
+
+- `protected`: `protected`로 설정된 멤버는 자식 클래스에서 접근 가능하다. 하지만 외부 객체를 통한 접근은 불가능하다.
+
+- `private`: `private`로 설정된 멤버는 현재 클래스에서만 접근할 수 있고 자식클래스에서 접근할 수 없다. 물론 상속과 외부 객체를 통한 접근도 불가능하다.
+
+<br>
+
+위에서 알 수 있듯 접근 제한자 중에서 `public`으로 선언된 요소는 상속과 객체를 통한 외부 접근이 가능해 개방 정도가 가장 크며, `private`은 가장 패쇄적입니다.
+
+`protected`는 중간정도의 개방성이 있습니다. `protected`와 `private`은 은닉성이 있어 객체를 통한 외부 접근을 제한하여 객체 내부를 캡슐화 합니다.
+
+<br>
+<br>
+<br>
+
+### 4.1 `public` & `private`
+
+<br>
+
+`public`제한자는 클래스 내부와 외부에서 모두 접근할 수 있게 공개하는 접근 제한자입니다. 객체 내부에서 접근할 수 있을 뿐만 아니라 객체 외부에서도 접근할 수 있으며, 부모 클래스로부터 상속도 가능합니다.
+
+<br>
+
+- **Example: public 접근 제한자로 선언된 멤버의 접근**
+
+  ```
+  class Base {
+    public defaultAge = 0;                  // Base 부모 클래스의 멤버 변수 defaultAge
+  }
+
+  class Member extends Base {
+    age = 0;                                // Member 자식 클래스의 내부 코드
+
+    public getAge() {                       // 외부에서도 접근 가능한 public 제한자사용
+      return this.age + this.defaultAge;    // 1)age, 2)defaultAge
+    }
+  }
+
+  let member = new Member();
+  console.log(member.getAge());       // 3)getAge(), 출력값:0
+  ```
+
+  - 1)의 `age`는 Member 클래스 내부에 접근 가능하다
+
+  - 2)의 `defaultAge`는 상속받은 부모 클래스의 멤버 변수에 접근 가능하다.
+
+  - 3)의 `getAge()`는 외부 `public getAge()`에 접근가능하다.
+
+  - 만약 클래스에 선언된 메서드나 멤버 변수의 외부 접근을 차단하려면 private 제한자를 지정해주어야 합니다.
