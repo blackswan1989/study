@@ -416,11 +416,13 @@ class MountainBike extends Bicycle {
 
 <br>
 
-`public`제한자는 클래스 내부와 외부에서 모두 접근할 수 있게 공개하는 접근 제한자입니다. 객체 내부에서 접근할 수 있을 뿐만 아니라 객체 외부에서도 접근할 수 있으며, 부모 클래스로부터 상속도 가능합니다.
+먼저 **`public` 제한자**는 클래스 내부와 외부에서 모두 접근할 수 있게 공개하는 접근 제한자입니다.
+
+객체 내부에서 접근할 수 있을 뿐만 아니라 객체 외부에서도 접근할 수 있으며, 부모 클래스로부터 상속도 가능합니다.
 
 <br>
 
-- **Example: public 접근 제한자로 선언된 멤버의 접근**
+- **Example: `public` 접근 제한자로 선언된 멤버의 접근**
 
   ```
   class Base {
@@ -446,3 +448,142 @@ class MountainBike extends Bicycle {
   - 3)의 `getAge()`는 외부 `public getAge()`에 접근가능하다.
 
   - 만약 클래스에 선언된 메서드나 멤버 변수의 외부 접근을 차단하려면 `private` 제한자를 지정해주어야 합니다.
+
+<br>
+<br>
+<br>
+
+**`private` 제한자**는 클래스 내부에서는 접근할 수 있지만 외부에서는 접근할 수 없게 하는 접근 제한자입니다.
+
+만약 클래스에 선언된 메서드나 멤버 변수의 외부 접근을 차단하려면 `private`을 지정해줍니다.
+
+<br>
+
+- **Example: `private` 접근 제한자로 선언된 멤버의 접근(외부 접근시 error 발생)**
+
+  ```
+  class Base {
+    private birthYear = 2017;
+  }
+
+  class Member extends Base {
+    private age = 0;
+
+    private getBirthYear() {
+      return this.birthYear;             // 부모 클래스의 멤버 변수(birthYear)에 접근 불가
+    }
+
+    private getAge() {
+        return this.age;                 // 내부 접근 가능(age)
+    }
+  }
+
+  let member = new Member();
+
+  console.log(member.age);               // 외부 접근 불가(age)
+  console.log(member.getBirthYear());    // 외부 접근 불가(getBirthYear())
+  console.log(member.getAge());          // 외부 접근 불가(getAge())
+
+  // Error: Property 'age, getBirthYear, getAge'는 비공개이며 'Member'클래스 내에서만 액세스 할 수 있습니다.
+  ```
+
+  클래스 멤버 변수나 메서드에 `private`을 지정하면 객체를 통한 접근이 비공개로 설정되며, 오직 `class` 내부 접근만 허용합니다.
+
+  자식 클래스에서도 부모 클래스에 `private`으로 선언된 멤버 변수(또는 멤버 메서드)에 접근할 수 없고, 객체를 통한 외부 접근도 할 수 없습니다.
+
+<br>
+<br>
+<br>
+
+### 4.2 생성자 매개변수에 접근 제한자 추가
+
+<br>
+
+생성자의 매개변수에 접근 제한자를 추가하면 매개변수 속성(parameter properties)이 되어 멤버 변수가 되는 효과가 있습니다.
+
+<br>
+
+아래 예제를 보면 생성자 매개변수에 접근 제한자를 추가한 것만으로도 생성자 매개변수가 클래스의 멤버 변수가 되는 효과가 있습니다.
+
+```
+class Cube {
+  constructor(public width: number, private length: number, protected height: number) {
+    ...
+  }
+}
+```
+
+<br>
+<br>
+
+- **Example: 생성자 매개변수에 접근 제한자를 추가해 멤버 변수처럼 사용하기**
+
+  ```
+  class Cube {
+    constructor(public width: number, private length: number, protected height: number) {
+    }
+
+    getVolume() {
+      return this.width * this.length * this.height;
+    }
+  }
+
+  let [cubeWidth, cubeLength, cubeHeight] = [1, 2, 3];
+  let cube = new Cube(cubeWidth, cubeLength, cubeHeight);
+
+  console.log(`Length : ${cube.length}cm`);        // Error 1)
+  console.log(`Height : ${cube.height}cm`);        // Error 2)
+
+  console.log(`Width : ${cube.width}cm`);          // Width : 1cm
+  console.log(`Volume : ${cube.getVolume()}ml`);   // Volume : 6ml
+
+  // 1) Error: 속성 'length'는 비공개이며 'Cube'클래스 내에서만 액세스 할 수 있습니다.
+  // 2) Error: 속성 'height'는 보호되며 'Cube'클래스와 하위 클래스 내에서만 액세스 할 수 있습니다.
+  ```
+
+  `Cube` 클래스는 생성자 매개변수(`constructor`)에 접근 제한자를 지정하여, 내부 메서드(`getVolume()`)에서 `this` 키워드를 이용해 모두 접근할 수 있습니다.
+
+  그러나 외부에서 생성된 객체 (`cube`변수)는 `public`으로 공개된 생성자 매개변수인 `width`의 접근은 허용하지만, `private`과 `protected`가 설정된 `length`와 `height`에 대한 접근은 하용하지 않습니다.
+
+<br>
+<br>
+<br>
+
+### 4.3 `protected` 제한자의 사용법
+
+<br>
+
+`protected` 제한자는 타입스크립트 1.3 버전에 추가된 특징으로, 객체를 통한 외부 접근을 허용하지 않지만 상속 관계에서는 부모 클래스에 `protected`로 선언된 메서드나 멤버 변수의 접근을 허용합니다.
+
+<br>
+
+- **Example: `protected` 제한자의 사용법**
+
+  ```
+  class Base {
+    protected birthYear = "2000"
+  }
+
+  class Member extends Base {
+    protected getBirthYear() {
+      return this.birthYear;            // 자식 클래스에서 접근 가능(getBirthYear)
+    }
+  }
+
+  let member = new Member();
+  console.log(member.getBirthYear());   // 외부 접근 불가(getBirthYear)
+
+  // Error: 속성 'getBirthYear'는 보호되며 'Member'클래스 및 해당 하위 클래스 내에서만 액세스 할 수 있습니다.
+  ```
+
+  자식클래스 `Member`의 `getBirthYear()` 메서드에서 부모로부터 상속받은 멤버 변수 `birthYear`를 `this`로 접근해 반환하고 있습니다.
+
+  이때 `getBirthYear()` 메서드는 `protected`가 선언돼 있으므로 외부 객체 `member`를 통해 접근 할 수 없습니다.
+
+<br>
+<br>
+<br>
+
+### 4.4 부모 클래스의 멤버를 이용하기
+
+<br>
