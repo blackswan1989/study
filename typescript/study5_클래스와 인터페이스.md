@@ -587,3 +587,264 @@ class Cube {
 ### 4.4 부모 클래스의 멤버를 이용하기
 
 <br>
+
+상속 관계가 있을 때 자식 클래스에서 부모 클래스에 선언된 멤버 메서드나 멤버 변수 등을 이용할 수 있는 방법은 '`super`' 키워드와 '`this`' 키워드를 이용하는 것입니다.
+
+`super` 키워드는 부모 클래스의 공개 멤버에만 접근할 수 있으며, `this` 키워드는 부모 클래스에서 상속받은 멤버와 현재 클래스의 멤버 모두에 접근할 수 있습니다.
+
+<br>
+
+- **Example: `super`와 `this` 키워드를 이용하여 부모 클래스의 멤버에 접근하기**
+
+  ```
+  class PC {
+    constructor(public hddCapacity: string) { }
+
+    private ram: string = "0GB";
+    set ramCapacity(value: string) {      // set 프로퍼티
+      this.ram = value;
+    }
+    get ramCapacity() {                   // get 프로퍼티
+      return this.ram;
+    }
+
+    protected getHddCapacity() {
+      return this.hddCapacity;
+    }
+  }
+
+
+  class Desktop extends PC {
+    constructor(public hddCapacity: string) {
+      // 부모 클래스의 생성자 호출
+      super(hddCapacity);
+    }
+
+    getInfo() {
+      console.log(`1) HDD 용량: ${super.getHddCapacity()}, ${super.hddCapacity}`);
+      console.log(`2) HDD 용량: ${this.getHddCapacity()}, ${this.hddCapacity}`);
+
+      this.hddCapacity = "2TB";
+      console.log(`3) HDD 용량: ${super.getHddCapacity()}, ${super.hddCapacity}`);
+      console.log(`4) HDD 용량: ${this.getHddCapacity()}, ${this.hddCapacity}`);
+
+      super.ramCapacity = "16GB";
+      console.log(`5) RAM 용량: ${this.ramCapacity}, ${super.ramCapacity}`);
+
+      this.ramCapacity = "8GB";
+      console.log(`6) RAM 용량: ${this.ramCapacity}, ${super.ramCapacity}`);
+    }
+  }
+
+  let myDesktop = new Desktop("1TB");
+  myDesktop.getInfo();
+
+
+  [LOG]: "1) HDD 용량: 1TB, undefined"
+  [LOG]: "2) HDD 용량: 1TB, 1TB"
+  [LOG]: "3) HDD 용량: 2TB, undefined"
+  [LOG]: "4) HDD 용량: 2TB, 2TB"
+  [LOG]: "5) RAM 용량: 16GB, 16GB"
+  [LOG]: "6) RAM 용량: 8GB, 8GB"
+  ```
+
+  - 실행 결과에서 1번, 3번은 `super` 키워드로 부모 클래스의 멤버에 접근한 결과를 출력했습니다.
+
+  - 2번, 4번은 `this` 키워드로 현재 클래스의 멤버에 접근한 결과를 출력했습니다.
+
+  <br>
+
+  위 예제에서 유의 해서 볼 점은 1, 3번에서 `super.hddCapacity`의 출력 결과가 `undefined`라는 점입니다. 이는 `super`키워드가 부모 클래스의 멤버 변수를 직접 호출해 가져올 수 없음을 의미합니다.
+
+  부모 클래스의 멤버 변수 `hddCapacity` 값을 가져오려면 부모 클래스의 멤버 메서드나 getter를 통해 가져와야 합니다.
+
+  <br>
+
+  실제 부모 클래스의 메서드 `getHddCapacity()`의 호출 결과(1번, 3번)은 정상적으로 1TB로 출력됐음을 확인할 수 있고, getter를 이용한 `super.ramCapacity`의 호출 결과(5번, 6번)도 정상적으로 이루어 집니다.
+
+<br>
+<br>
+<br>
+
+### 4.5 기본 접근 제한자(p.199)
+
+<br>
+
+기본 접근 제한자(Default Access Modifier)는 접근 제한자 선언을 생략할 때 적용됩니다. 기본 접근 제한자가 적용될 수 있는 대상은 '클래스 멤버 변수', '멤버 메서드', '클래스 Get/Set 프로퍼티', '생성자의 매개변수' 입니다.
+
+<br>
+
+다음 예시는 Account 클래스에 선언된 멤버들이 접근 제한자를 생략했을 때 기본 접근 제한자가 무엇인지를 나타냅니다.
+
+```
+class Account {
+  public balance: number;
+
+  public get getBalance() { }
+
+  public set setBalance(amount: number) { }
+
+  deposite(depositeAmount: number) { }
+
+  constructor (
+    // 접근 제한자를 생략하면 기본 접근 제한자가 없기 때문에 생성자 내부에서만 사용 가능하다.
+    defaultBalance:number = 1000,               // 여기서 'defaultBalance'는 생성자 매개변수이다.
+    protected bankName: string = "happy bank",  // 접근 제한자가 선언되면 매개변수 속성이 되어 '멤버 변수'가 된다.
+    readonly interestRate: number = 0.1         // readonly가 선언되면 매개변수 속성이 되어 '멤버 변수'가 된다.
+  ) { }
+
+  getInterestRate() {
+      return this.interestRate;
+    }
+
+  getDefaultBalance() {
+      return this.defaultBalance;   // 'defaultBalance'에 접근 불가
+    }
+}
+```
+
+- 기본 접근 제한자는 대체로 `public`으로, 위에서도 `public`은 접근 제한자의 선언을 생략할 때 적용되는 기본 접근 제한자를 의미합니다.
+
+- 예외로 생성자 매개변수 `constructor parameter`에 접근 제한자가 생략되면 생성자 내부에서만 접근할 수 있게 됩니다. 그러나 접근 제한자(`public`, `protected`, `private`)나 `readonly`가 붙으면 매개변수 속성이 되어 멤버 변수가 됩니다.
+
+<br>
+<br>
+
+매개변수는 생성자 내부에서도 접근할 수 있지만, 현재 클래스의 다른 메서드에서도 `this` 키워드를 이용해 접근할 수 있게 공개됩니다.
+
+`public`은 상속 관계 뿐만 아니라 객체를 통한 외부 접근을 허용하지만, `protected`는 상속 관계에서만 접근을 허용합니다.
+
+`readonly`는 선언한 변수를 읽기 전용 속성으로 만들며 상속이나 객체를 통한 외부 접근도 허용합니다.
+
+<br>
+<br>
+
+- **Example: 기본 접근 제한자인 `public`**
+
+  ```
+  class Account {
+    balance: number;
+
+    // get 프로퍼티를 이용하여 적금액 얻기
+    get getBalance() {
+      return this.balance;
+    }
+
+    // set 프로퍼티를 이용하여 적금 하기
+    set setBalance(amount: number) {
+      this.balance += amount;
+    }
+
+    // 메서드를 이용하여 적금 하기
+    deposite(depositeAmount: number) {
+      this.setBalance = depositeAmount;
+    }
+
+    // 기본 적금(balance)액을 설정하기
+    constructor(
+      defaultBalance: number = 0,
+      protected bankName: string = "Hana bank",
+      readonly interestRate: number = 0.1
+    ) {
+      this.balance = defaultBalance;
+    }
+
+    // 생성자 매개변수 interestRate는 public으로 설정됐으므로 호출 가능하다.
+    getInterestRate() {
+      return this.interestRate;
+    }
+
+    // 생성자 매개변수 defaultBalance는 private(기본 접근 제한자) 이므로 호출 불가
+    getDefaultBalance() {
+      return this.defaultBalance;       // Error: 'Account' 유형에 'defaultBalance' 속성이 없습니다.
+    }
+  }
+
+  class MyAccount extends Account {
+    // Test
+    constructor() {
+      super();
+      this.deposite(1000);
+      this.setBalance = 1000;
+
+      console.log(
+        `2번) 적금 : ${this.balance}원, ${this.getBalance}원 | 이율 : ${
+          this.interestRate
+        }, ${this.getInterestRate()}% | ${this.bankName}`
+      );
+    }
+  }
+
+
+  let account = new Account();
+  console.log(
+    `1번) 적금 : ${account.balance}원, ${account.getBalance}원 | 이율 : ${
+      account.interestRate
+    }, ${account.getInterestRate()}%`
+  );
+
+  let myAccount = new MyAccount();
+  }
+
+
+  class MyAccount extends Account {
+    // Test
+    constructor() {
+      super();
+      this.deposite(1000);
+      this.setBalance = 1000;
+
+      console.log(`2번) 적금 : ${this.balance}원, ${this.getBalance}원 | 이율 : ${this.interestRate}, ${this.getInterestRate()}% | ${this.bankName}`);
+    }
+  }
+
+
+  let account = new Account();
+  console.log(`1번) 적금 : ${account.balance}원, ${account.getBalance}원 | 이율 : ${account.interestRate}, ${account.getInterestRate()}%`);
+
+  let myAccount = new MyAccount();
+
+
+  [LOG]: "1번) 적금 : 0원, 0원 | 이율 : 0.1, 0.1%"
+  [LOG]: "2번) 적금 : 2000원, 2000원 | 이율 : 0.1, 0.1% | Hana bank"
+  ```
+
+  실행 결과를 토대로 정리해보면 접근 제한자를 생략할 경우 생성자 외부에서 생성자 매개변수에 접근할 수 없습니다.
+
+  위 예제에서 `Account` 클래스의 생성자 매개변수인 `defaultBalance`는 접근 제한자를 생략해 기본 접근 제한자인 `private`가 적용됩니다. 따라서 생성자 외부에서 접근할 수 없게 되고 생성자 내부 접근만을 허용합니다.
+
+  (매개변수에서 접근 제한자를 생략하면 `private`가 적용되고, 매개변수를 제외한 나머지 요소에서 접근 제한자를 생략할 경우 기본 접근 제한자는 `public`입니다.)
+
+  `bankName`은 `protected`접근 제한자가 설정돼 있으므로 자식 클래스에서 접근할 수 있지만, 객체를 통한 외부 접근을 허용하지 않습니다.
+
+  `interestRate`는 읽기 전용으로 자식 클래스에서 접근할 수 있고 객체를 통한 외부 접근도 허용됩니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 5) 추상 클래스(abstract class)를 이용한 공통 기능 정의
+
+<br>
+
+추상 클래스(abstract class)는 '구현 메서드'와 '추상 메서드'가 동시에 존재할 수 있습니다. 구현 메서드는 실제 구현 내용을 포함한 메서드이고 추상 메서드는 선언만 된 메서드입니다.
+
+이처럼 추상 클래스(abstract class)는 구현 내용이 없는 추상 메서드를 포함하기 때문에 불완전한 클래스입니다. 따라서 추상 클래스는 단독으로 객체를 생성할 수 없고, 추상 클래스를 상속하고 구현 내용을 추가하는 자식 클래스를 통해 객체를 생성해야 합니다.
+
+<br>
+
+추상 클래스는 `abstract` 키워드를 `class` 선언 앞에 붙여 선언해주며, 추상 메서드를 선언할 때도 사용할 수 있습니다.
+
+```
+// 형식
+abstract class 추상클래스 {
+  abstract 추상메서드();
+  abstract 추상멤버변수: string;
+  public 구현메서드(): void {
+    // 공통적으로 사용할 로직을 추가
+    // 로직에서 필요 시 추상 메서드를 호출해 구현 클래스의 메서드가 호출되도록 한다
+    this.추상메서드();
+  }
+}
+```
