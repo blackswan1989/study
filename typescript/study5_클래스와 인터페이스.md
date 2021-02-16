@@ -906,3 +906,57 @@ class 자식클래스 extends 추상클래스 {
 추상 클래스는 구현이 완료되지 않은 클래스이므로 구현 클래스를 통해 추상 클래스에 선언된 추상 메서드를 구현해 줘야 합니다.
 
 > 구현 클래스(Concrete Class)란 추상 클래스가 아닌 클래스라 할 수있는데, 정의한 모든 연산에 대한 구현을 가지고 있는 완전한 클래스로 인스턴스를 만들 수 있다.
+
+이와 같은 추상 클래스에 기반을 둔 구현 방식은 '템플릿 메서드 패턴(Template Method Pattern)'으로 많이 알려져 있습니다.
+
+이 패턴은 추상클래스의 구현메서드에서 추상멤버변수나 추상메서드를 활용해 가상의 공통 로직을 구현 해 두고 추상멤버변수나 추상메서드에 대한 세부 로직은 '구현클래스'에서 구현합니다.
+
+<br>
+<br>
+
+- **Example: `abstract` 키워드를 이용해 템플릿 메서드 패턴(Template Method Pattern)을 구현**
+
+  ```
+  abstract class AbstractBird {
+    // 추상멤버변수
+    abstract birdName: string;
+    abstract habitat: string;
+
+    // 추상메서드
+    abstract flySound(sound: string);
+
+    // 구현메서드
+    fly(): void {
+        this.flySound("파닥 파닥");
+    }
+
+    // 구현메서드
+    getHabitat(): void {
+        console.log(`<${this.birdName}>의 서식지는 <${this.habitat}>입니다.`)
+    }
+  }
+
+  class WildGoose extends AbstractBird {
+    // 추상멤버변수를 상속함
+    constructor(public birdName: string, public habitat: string) {
+        super();
+    }
+
+    // 추상메서드를 오버라이딩
+    flySound(sound: string) {
+        console.log(`<${this.birdName}>가 <${sound}> 날아갑니다.`);
+    }
+  }
+
+  let wildGoose = new WildGoose("기러기", "순천만 갈대밭");
+  wildGoose.fly();
+  wildGoose.getHabitat();
+
+
+  [LOG]: "<기러기>가 <파닥 파닥> 날아갑니다."
+  [LOG]: "<기러기>의 서식지는 <순천만 갈대밭>입니다."
+  ```
+
+  위 예제는 추상클래스 `AbstractBird`에 공통 기능을 담은 구현메서드 `fly()`를 추가하고 추상메서드 `flySound()`는 자식클래스 `WildGoose`가 상속하여 구현합니다.
+
+  이때 추상클래스 `AbstractBird`에서는 추상메서드 `abstract flySound()`를 호출하는 방식으로 구현하며 추상메서드의 실제 동작은 구현클래스인 `WildGoose`에 추가한 구현 메서드 `flySound()`를 통해 이루어 집니다.
