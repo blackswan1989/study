@@ -960,3 +960,108 @@ class 자식클래스 extends 추상클래스 {
   위 예제는 추상클래스 `AbstractBird`에 공통 기능을 담은 구현메서드 `fly()`를 추가하고 추상메서드 `flySound()`는 자식클래스 `WildGoose`가 상속하여 구현합니다.
 
   이때 추상클래스 `AbstractBird`에서는 추상메서드 `abstract flySound()`를 호출하는 방식으로 구현하며 추상메서드의 실제 동작은 구현클래스인 `WildGoose`에 추가한 구현 메서드 `flySound()`를 통해 이루어 집니다.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# 2. 인터페이스(interface)에 대한 이해
+
+<br>
+<br>
+
+## 1) 인터페이스(interface) 소개
+
+<br>
+
+인터페이스는 자바스크립트(ES6)에서 지원하지 않는 타입스크립트만의 특징입니다. 따라서 `interface`는 컴파일 후 사라지게 됩니다.
+
+추상클래스는 선언과 구현이 모두 존재하지만 `interface`는 선언만 존재하며, 멤버변수와 멤버메서드를 선언할 수 있지만 접근 제한자는 설정할 수 없습니다.
+
+<br>
+
+```
+interface Car {
+  speed: number;
+}
+```
+
+> 자식 인터페이스는 `extends` 키워드를 이용해 부모 인터페이스 `Car`를 상속해 확장할 수 있습니다.
+
+```
+interface <자식 인터페이스 이름> extends Car { }
+```
+
+<br>
+<br>
+
+자식 인터페이스는 여러 부모 인터페이스를 다중 상속할 수 있습니다. 예를 들어 `Car` 인터페이스와 `SportsCar` 인터페이스를 `MyOptimizedCar` 인터페이스에 다중 상속해 보겠습니다.
+
+```
+interface Car { speed: number; }
+interface SportsCar { acceleration: number; }
+
+interface MyOptimizedCar extends Car, SportsCar {
+    waterproof: boolean;
+}
+
+let myCar = <MyOptimizedCar>{};       // ??
+myCar.acceleration = 100;
+myCar.waterproof = true;
+
+console.log(myCar.speed);             // 100
+console.log(myCar.acceleration);      // 100
+console.log(myCar.waterproof);        // true
+```
+
+> `MyOptimizedCar` 인터페이스는 `Car`와 `SportsCar` 인터페이스를 다중 상속 받습니다.
+>
+> 이때 `MyOptimizedCar`로 어설션(Assertion)한 `myCar` 객체는 `speed`, `acceleration`, `waterproof` 속성을 포함하는 인터페이스 타입이 됩니다.
+
+<br>
+<br>
+
+만약 다중 상속을 받을 때 같은 이름의 메서드를 상속받으면, 상속받는 인터페이스에서 같은 이름의 메서드를 모두 재정의 해야 합니다.
+
+예를 들어 같은 이름의 메서드인 `getStatus()`를 선언한 `Dog`과 `Bird` 인터페이스를 1)과 같이 선언해 봅시다.
+
+```
+// 1)
+interface Dog {
+  run(): void;
+  getStatus(): { runningSpeed: number; };
+}
+
+interface Bird {
+  fly(): void;
+  getStatus(): { flightSpeed: number; };
+}
+
+
+// 2)
+interface DogBird extends Dog, Bird {
+  getStatus(): { runningSpeed: number, flightSpeed: number; }
+}
+
+
+// 3)
+class NewAnimal implements DogBird {
+  run(): void { }
+  fly(): void { }
+  getStatus(): { runningSpeed: number, flightSpeed: number; } {
+    return { runningSpeed: 10, flightSpeed: 20 }
+  }
+}
+```
+
+> 1)에서 선언된 `Dog`와 `Bird`인터페이스는 하위 인터페이스에서 `extends Dog, Bird`의 형태로 다중 상속이 가능합니다.
+>
+> 다중 상속이 이뤄지면 하위 인터페이스는 상속받은 두 인터페이스의 모든 메서드 선언인 `run, fly, getStatus`를 가져옵니다.
+>
+> 이때 `getStatus`메서드는 두 인터페이스에 공통으로 선언된 메서드지만 반환 타입이 다르므로 이럴 때는 모든 반환 타입을 합쳐 메서드를 재정의 해줘야 합니다.
+>
+> 2)의 `DogBird` 인터페이스는 `Dog, Bird` 인터페이스의 서브 타입이 됩니다. 그리고 인터페이스 정의를 마치면 3)처럼 `implements` 키워드를 이용해 인터페이스를 구현하는 클래스를 작성합니다.
+>
+> 위 코드에서 확인할 수 있듯이 인터페이스의 구현클래스인 `NewAnimal`은 `DogBird`인터페이스에 선언된 속성 `run, fly, getStatus`를 모두 구현해줘야 합니다.
