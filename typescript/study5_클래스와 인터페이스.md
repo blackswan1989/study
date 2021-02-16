@@ -847,4 +847,62 @@ abstract class 추상클래스 {
     this.추상메서드();
   }
 }
+
+
+class 자식클래스 extends 추상클래스 {
+    public 추상멤버변수: string;
+    public 구현메서드(): void {
+        // '추상메서드'의 실제 구현 내용
+    }
+}
 ```
+
+구현하지 않은 추상 메서드가 선언됐으므로 자식 클래스에서는 추상 메서드를 받아 구현해줘야 합니다. 추상 클래스에 추상 멤버 변수가 선언돼 있으면 자식 클래스에서도 선언해야 합니다.
+
+<br>
+
+구현 메서드에서는 '추상 멤버 변수'나 '추상 메서드'를 호출할 수 있습니다. 추상 클래스를 작성할 때 유의 사항으로 `abstract` 키워드는 `static`이나 `private`과 함께 선언할 수 없습니다.
+
+<br>
+
+- (X) `static abstract a: string` : `abstract` 키워드는 `static`과 함께 선언할 수 없다.
+- (X) `private abstract a: string` : `abstract` 키워드는 `private`과 함께 선언할 수 없다.
+- (O) `abstract a: string`
+- (O) `public abstract a: string`
+
+<br>
+
+따라서 `abstract`가 추가된 추상 메서드나 추상 멤버 변수는 자식 클래스에서 구현할 수 있게 모두 `public`으로 선언해야 합니다.
+
+추상 클래스에 선언한 추상 메서드는 '오버라이딩(Overriding)'해서 자식 클래스에 반드시 구현해서 사용해야 합니다.
+
+<br>
+
+> 오버라이딩(Overriding)이란 부모 class에 정의된 method를 자식 class에서 재정의 하는 개념이다.
+>
+> 이를 사용하는 이유는 상속받은 부모 method를 무시하고 새로운 method를 정의하고, 추상 class를 구현하기 위해 사용한다.
+>
+> ```
+> // 부모클래스
+> class Gun {
+>   shot(time: number) {...}      // Overridden method
+> }
+>
+> // 자식클래스
+> class RailGun extends Gun {
+>   shot(time2: number) {...}     // Overriding method
+> }
+>
+> let railgun = new RailGun();
+> railgun.shot(3);
+> ```
+>
+> - 주의 할 점으로 Overridden method끼리 서로 같은 타입이거나 하위 타입이어야 한다.
+> - 위 조건이 성립된다는 전제 하에 overriden method의 매개변수 개수가 overrding method의 매개변수 개수와 같거나 많아야 한다
+
+<br>
+<br>
+
+추상 클래스는 구현이 완료되지 않은 클래스이므로 구현 클래스를 통해 추상 클래스에 선언된 추상 메서드를 구현해 줘야 합니다.
+
+> 구현 클래스(Concrete Class)란 추상 클래스가 아닌 클래스라 할 수있는데, 정의한 모든 연산에 대한 구현을 가지고 있는 완전한 클래스로 인스턴스를 만들 수 있다.
