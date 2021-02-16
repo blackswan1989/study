@@ -830,6 +830,8 @@ class Account {
 
 추상 클래스(abstract class)는 '구현 메서드'와 '추상 메서드'가 동시에 존재할 수 있습니다. 구현 메서드는 실제 구현 내용을 포함한 메서드이고 추상 메서드는 선언만 된 메서드입니다.
 
+<br>
+
 이처럼 추상 클래스(abstract class)는 구현 내용이 없는 추상 메서드를 포함하기 때문에 불완전한 클래스입니다. 따라서 추상 클래스는 단독으로 객체를 생성할 수 없고, 추상 클래스를 상속하고 구현 내용을 추가하는 자식 클래스를 통해 객체를 생성해야 합니다.
 
 <br>
@@ -1065,3 +1067,46 @@ class NewAnimal implements DogBird {
 > 2)의 `DogBird` 인터페이스는 `Dog, Bird` 인터페이스의 서브 타입이 됩니다. 그리고 인터페이스 정의를 마치면 3)처럼 `implements` 키워드를 이용해 인터페이스를 구현하는 클래스를 작성합니다.
 >
 > 위 코드에서 확인할 수 있듯이 인터페이스의 구현클래스인 `NewAnimal`은 `DogBird`인터페이스에 선언된 속성 `run, fly, getStatus`를 모두 구현해줘야 합니다.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# 3. 클래스와 인터페이스의 활용
+
+<br>
+<br>
+
+## 1) 클래스에서의 getter와 setter
+
+자바스크립트에서는 객체의 멤버에 접근할 수 있는 방법으로 getter와 setter를 지원합니다(ES6). `getter`는 일반적으로 접근자(Accessor)라 하고 `setter`는 설정자(Mutator)라 합니다.
+
+ES5에서는 접근자와 설정자는 보통 객체 리터럴에 추가하여 사용했습니다.
+
+```
+var obj = {
+  set name(name) {
+    this.myName = name;
+  },
+
+  get name() {
+    return this.myName;
+  },
+
+  myName: ""
+}
+
+obj.name = "hello";           // setter
+console.log(obj.name);        // getter
+
+
+[LOG]: "hello"
+```
+
+타입스크립트에서는 클래스 내에 `get`과 `set`키워드를 이용해 `getter`와 `setter`를 선언할 수 있습니다.
+
+```
+
+```
