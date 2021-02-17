@@ -1081,6 +1081,8 @@ class NewAnimal implements DogBird {
 
 ## 1) 클래스에서의 getter와 setter
 
+<br>
+
 자바스크립트에서는 객체의 멤버에 접근할 수 있는 방법으로 getter와 setter를 지원합니다(ES6). `getter`는 일반적으로 접근자(Accessor)라 하고 `setter`는 설정자(Mutator)라 합니다.
 
 ES5에서는 접근자와 설정자는 보통 객체 리터럴에 추가하여 사용했습니다.
@@ -1105,8 +1107,248 @@ console.log(obj.name);        // getter
 [LOG]: "hello"
 ```
 
-타입스크립트에서는 클래스 내에 `get`과 `set`키워드를 이용해 `getter`와 `setter`를 선언할 수 있습니다.
+<br>
+<br>
+
+타입스크립트에서는 클래스 내에 `get`과 `set`키워드를 이용해 `getter`와 `setter`를 선언할 수 있습니다. 먼저 `getter`와 `setter`를 사용하지 않는 예제를 보면 아래와 같습니다.
 
 ```
+class Student {
+  name: string;
+  birthYear: number;
+}
+
+let student = new Student();
+
+// 속성값 설정 (setter의 역할)
+student.name = "Kate";               // name 속성은 name에 해당하는 어떤 문자열이든 허용
+student.birthYear = 2000;            // birthYear 속성은 birthYear에 해당하는 어떤 숫자든 허용
+
+// 속성값 읽기 (getter의 역할)
+console.log(student.name);           // "Kate"
+console.log(student.birthYear);      // 2000
+```
+
+> 위 예제에서 `name`과 `birthYear` 속성은 값 설정과 설정값을 읽을 때도 사용할 수 있습니다. 하지만 값을 설정하거나 읽을 때 어떤한 처리를 할 수는 없습니다.
+>
+> 예를 들어 이름은 모두 소문자여야 한다거나 생년이 2000년 이하라는 등의 로직을 추가할 수 없습니다. 반면 `get`과 `set` 키워드를 사용하면 접근자와 설정자를 추가해 원하는 로직을 추가할 수 있습니다.
+
+<br>
+<br>
+
+- **Example: 클래스에 `get`, `set` 키워드로 접근자와 설정자를 선언하고 사용하기**
+
+  ```
+  class Student {
+      private studentName: string;
+      private studentBirthYear: number;
+
+      get name(): string {
+          return this.studentName;
+      }
+
+      set name(name: string) {
+          // 포함되면 0, 포함되지 않으면 -1
+          if (name.indexOf("happy") !== 0) {
+              this.studentName = name;
+          }
+      }
+
+      get birthYear(): number {
+          return this.studentBirthYear;
+      }
+
+      set birthYear(year: number) {
+          if (year <= 2000) {
+              this.studentBirthYear = year;
+          }
+      }
+  }
+
+  let student =  new Student();
+
+  student.birthYear = 2001;                         // set
+  console.log(`학생1: ${student.birthYear}`);       // get  "학생1: undefined"
+
+  student.birthYear = 2000;                         // set
+  console.log(`학생2: ${student.birthYear}`);       // get  "학생2: 2000"
+
+  student.name = "happy";                           // set
+  console.log(`학생3: ${student.name}`);            // get  "학생3: undefined"
+
+  student.name = "kate"                             // set
+  console.log(`학생4: ${student.name}`);            // get  "학생4: kate"
+  ```
+
+  - 위 예제를 보면 클래스 멤버 변수는 객체를 통해 접근할 수 없도록 private로 선언돼 있습니다. 이들 멤버 변수에 접근하려면 `Get`접근자(`name`, `birthYear`)와, `Set`설정자를 이용해야합니다.
+
+  - 학생1의 출력결과가 undefined인 이유는 `birthYear` 설정자에 허용하지 않는 범위의 숫자인 "2001"이 할당되었기 때문입니다.
+
+  - 학생3의 출력결과가 undefined인 이유는 `name` 설정자에서 허용하지않는 "happy" 키워드가 설정값에 포함되어 값 설정이 거부되었기 때문입니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 2) 정적 변수와 정적 메서드
+
+<br>
+
+타입스크립트에서 지원하는 `static` 키워드는 클래스에 정적 멤버 변수나 정적 메서드 등을 선언할 때 사용할 수 있습니다. 또한 `static`은 객체 생성 없이 접근 가능하므로 메모리 절약 효과가 있습니다.
 
 ```
+class Circle {
+    static pi = 3.14;
+}
+
+console.log(Circle.pi);       // 3.14
+```
+
+위처럼 정적 멤버 변수를 `static`으로 선언하면 객체 생성 없이 클래스명으로 곧 바로 접근하여 3.14가 출력됩니다. 만약 위와 같은 외부 접근을 차단하려면 `private` 접근 제한자를 붙일 수도 있습니다.
+
+```
+class Circle {
+  private static pi = 3.14;
+}
+
+console.log(Circle.pi);       // Error: Property 'pi' is private and only accessible within class 'Circle'.
+```
+
+<br>
+<br>
+
+- **Example: 클래스에 static 사용**
+
+  ```
+  class Circle {
+      private static pi: number = 3.14;
+      static circleArea: number = 0;
+
+      static getArea(radius: number) {
+          this.circleArea = radius * radius * Circle.pi;
+          return this.circleArea
+      }
+
+      static set area(pArea: number) {
+          Circle.circleArea = pArea;
+      }
+
+      get area(): number {
+          return Circle.circleArea;
+      }
+  }
+
+  // console.log(Circle.pi);
+  console.log(`1) ${Circle.getArea(3)}`);     // "1) 28.26"
+
+  // 정적 멤버 변수인 Circle에 값 설정
+  Circle.area= 100;
+
+  let circle = new Circle();
+  // 정적 멤버 변수인 circle을 통해 클래스와 객체 간에 값을 공유함
+  console.log(`2) ${circle.area}`);           // "2) 100"
+  ```
+
+  - 이 예제에서는 반지름인 `radius`를 입력받아 `getArea()` 메서드가 원의 넓이를 출력해줍니다.
+
+  - 1)의 출력 결과는 정적 멤버 메서드인 `getArea()`의 반환값이며, `getArea()` 메서드의 내부는 원의 넓이 계산 후 결괏값을 정적 멤버 변수인 `circleArea`에 할당하고 있습니다.
+
+  - 2)의 출력 결과는 정적 멤버 변수인 `circleArea`를 통해 클래스와 객체 간에 값을 공유할 수 있음을 보여줍니다.
+
+  - `area` 설정자(set)는 내부적으로 정적 멤버 변수인 `circleArea`에 100을 할당하는데 `Circle`객체인 `circle`을 생성하고 `circle.area`와 같이 접근해 `circleArea`에 설정된 100을 가져와 출력할 수 있습니다.
+
+    이처럼 클래스와 객체 간에 공통으로 사용되어야 할 멤버가 있다면 `static`으로 선언할 수 있습니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 3) readonly 제한자의 활용
+
+<br>
+
+`readonly`는 타입스크립트 2.0부터 지원되는 제한자로 `readonly`가 선언된 변수는 초기화되면 재할당이 불가능합니다.
+
+`const`처럼 상수를 선언할 때 사용할 수 있어 비슷한데 차이점은 `readonly`는 초기화는 선택적으로 선언만 가능하며(버전에 따라 상이할 수 있음), 값 재할당이 가능하지만 `const`는 초기화가 필수이며 값 재할당이 불가능합니다.
+
+<br>
+
+또 `readonly`는 '전역 변수, 메서드의 변수, 함수의 변수'에 선언이 불가능하지만 `const`는 '인터페이스의 멤버변수, 클래스 멤버변수, 객체 리터럴의 속성'에 선언이 불가능합니다.
+
+사용 용도로는 `const`는 상수로 사용되며 `readonly`는 읽기 전용 속성으로 사용됩니다. 또 `readonly`는 컴파일 후 선언이 유지되지 않고 사라집니다.
+
+<br>
+<br>
+
+`readonly`는 아래처럼 '인터페이스의 멤버변수, 클래스 멤버변수'에 사용할 수 있으며
+
+```
+interface Icount {
+    readonly count: number;
+}
+
+class TestReadonly implements Icount {
+    readonly count:number;
+}
+```
+
+객체 리터럴 타입의 특정 속성값을 일긱 전용으로 만들 때 선언할 수 있습니다.
+
+```
+let literalObj: { readonly alias: string } = { alias: "happy" };
+```
+
+<br>
+
+`readonly`가 어떻게 선언되고 사용되는지는 아래 예제를 통해 자세히 살펴봅시다.
+
+<br>
+<br>
+
+- **Example: 클래스와 인터페이스의 멤버에 선언할 수 있는 `readonly`**
+
+  ```
+  interface Icount {
+    readonly count: number;
+  }
+
+  class TestReadonly implements Icount {
+    readonly count:number;
+    static readonly count2: number;
+    private readonly count3: number;
+    readonly count4: number = 0;
+
+    getCount() {
+      this.count4 = 0;                 // readonly로 선언된 멤버 변수는 재할당 불가
+      readonly count5: number = 0;     // readonly는 메서드에 선언할 수 없다.
+    }
+  }
+
+
+  function getCount() {
+    readonly count: number;              // readonly는 함수에 선언할 수 없다.
+  }
+
+  // readonly는 객체 리터럴의 속성 앞에 지정 가능
+  let literalObj: { readonly alias: string } = { alias: "happy" };
+
+  // readonly로 지정된 타입으로 인해 할당 불가
+  let literalObj.name = "happy";      // Cannot redeclare block-scoped variable 'literalObj'
+  let literalObj = "test"             // Cannot redeclare block-scoped variable 'literalObj'
+  ```
+
+  readonly의 가장 중요한 특징 중 하나는 초기화를 강제하지 않는다는 점입니다(버전에 따라 상이할 수 있음). 그러나 어떠한 값을 할당해 변수가 초기화되면 재할당이 불가능해집니다.
+
+<br>
+<br>
+<br>
+<br>
+
+### # 참조 할만 한 사이트
+
+- https://pathas.tistory.com/223
+- https://heropy.blog/2020/01/27/typescript/
+- https://poiemaweb.com/typescript-interface
+- https://hyunseob.github.io/2016/10/17/typescript-interface/
