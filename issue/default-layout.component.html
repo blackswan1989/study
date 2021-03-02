@@ -1,0 +1,237 @@
+<app-header
+  [fixed]="true"
+  [navbarBrandRouterLink]="navbarBrandRouterLink"
+  [navbarBrandFull]="navbarBrandFull"
+  [navbarBrandMinimized]="navbarBrandMinimized"
+  [sidebarToggler]="false"
+  [asideMenuToggler]="false"
+  [mobileAsideMenuToggler]="false"
+  [mobileSidebarToggler]="false"
+  [class.agent]="!sharedDataService.AdminName"
+  [ngStyle]="{ 'background-color': backGroundColor }"
+  (click)="OnHeaderClick($event)"
+>
+  <button
+    class="navbar-toggler sidebar-toggler"
+    type="button"
+    (click)="sidebarToggle()"
+  >
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <div class="value-detail" *ngIf="!sharedDataService.AdminName">
+    <dl>
+      <dt class="name">{{ "HEADER_BALANCE" | translate }}</dt>
+      <dd class="value">
+        //NOTE numberformat
+        <code [class.text-danger]="sharedDataService.AgentBalance < 0">{{
+          sharedDataService.AgentBalance | numberformat
+        }}</code>
+      </dd>
+    </dl>
+    <dl>
+      <dt class="name">{{ "HEADER_C_DOLLAR" | translate }}</dt>
+      <dd class="value">
+        <code [class.text-danger]="sharedDataService.AgentCDollar < 0">{{
+          sharedDataService.AgentCDollar | numberformat
+        }}</code>
+      </dd>
+    </dl>
+    <dl>
+      <dt class="name">{{ "HEADER_T_DOLLAR" | translate }}</dt>
+      <dd class="value">
+        <code [class.text-danger]="sharedDataService.AgentTDollar < 0">{{
+          sharedDataService.AgentTDollar | numberformat: "1.2-2"
+        }}</code>
+      </dd>
+    </dl>
+    <dl>
+      <dt class="name">{{ "HEADER_TICKET" | translate }}</dt>
+      <dd class="value">
+        <span class="badge badge-pill badge-secondary mr-2">
+          {{ sharedDataService.AgentTicketCount | number }}
+        </span>
+        <button
+          type="button"
+          class="btn btn-link"
+          [class.text-danger]="sharedDataService.AgentTicketValue < 0"
+          (click)="OpenModal(Modals.TicketList, ModalColors.Primary)"
+        >
+          {{ sharedDataService.AgentTicketValue | numberformat }}
+        </button>
+      </dd>
+    </dl>
+  </div>
+
+  <div class="header-nav-right">
+    <button
+      type="button"
+      class="btn btn-announcement"
+      (click)="AnnouncementToggle()"
+      (mouseenter)="IsAnnouncementInClick = true"
+      (touchstart)="IsAnnouncementInClick = true"
+      (mouseleave)="IsAnnouncementInClick = false"
+    >
+      <i class="fa fa-envelope"></i>
+      <span
+        class="badge badge-pill badge-danger"
+        *ngIf="announcementModel.UnreadCount > 0"
+      ></span>
+    </button>
+    <div class="head-detail">
+      <div
+        class="target-name head-set-dropdown"
+        dropdown
+        [insideClick]="HeadSetDropdownInsideClick"
+        (onShown)="DropdownOnShown()"
+      >
+        <div class="dropdown-select-area" dropdownToggle>
+          <span class="icon"><i class="fa fa-user"></i></span>
+          <div class="user-name-area">
+            <ng-container *ngIf="sharedDataService.AdminName">
+              <span class="name">{{ sharedDataService.AdminName }}</span>
+            </ng-container>
+            <ng-container *ngIf="!sharedDataService.AdminName">
+              <span class="name">{{ sharedDataService.AgentName }}</span>
+            </ng-container>
+          </div>
+        </div>
+
+        <div *dropdownMenu class="dropdown-menu">
+          <div>
+            <button
+              type="button"
+              class="dropdown-item language"
+              [class.on]="ShowLanguageList"
+              (click)="OpenLanguageList()"
+            >
+              <i class="fa fa-globe"></i>
+              <span
+                >{{ "HEADER_LANGUAGE" | translate }} ({{
+                  currentLanguage.replace("zh-", "").toUpperCase()
+                }})</span
+              >
+            </button>
+            <ng-container *ngIf="ShowLanguageList">
+              <ul class="language-list">
+                <li *ngFor="let language of languages">
+                  <a
+                    class="btn btn-link"
+                    [class.active]="language === currentLanguage"
+                    (click)="changeLanguage(language)"
+                  >
+                    {{
+                      "LANGUAGES_" + language.replace("-", "").toUpperCase()
+                        | translate
+                    }}
+                  </a>
+                </li>
+              </ul>
+            </ng-container>
+          </div>
+          <div class="divider dropdown-divider"></div>
+          <div>
+            <button
+              type="button"
+              class="dropdown-item"
+              (click)="OpenModal(Modals.ChangePassword, ModalColors.Primary)"
+            >
+              <i class="fa fa-key"></i>
+              <span>{{ "HEADER_EDIT_PASSWORD" | translate }}</span>
+            </button>
+          </div>
+          <div *ngIf="CurrentAgentInfo.IsBrandAgent === false">
+            <button
+              type="button"
+              class="dropdown-item"
+              (click)="
+                OpenModal(Modals.AdvancedSecurity, ModalColors.PrimaryLarge)
+              "
+            >
+              <i class="fa fa-shield"></i>
+              <span>{{ "HEADER_ADVANCED_ACCESS_CONTROL" | translate }}</span>
+            </button>
+          </div>
+          <div
+            *ngIf="
+              CurrentAgentInfo.IsBrandAgent === false &&
+              CurrentAgentInfo.HasCreateAnnouncement
+            "
+          >
+            <button
+              type="button"
+              class="dropdown-item"
+              (click)="ContactBrand()"
+            >
+              <i class="fa fa-envelope"></i>
+              <span>{{ "COMMON_CONTACT" | translate }} {{ BrandName }}</span>
+            </button>
+          </div>
+          <service-mode Include="7xl">
+            <div *ngIf="CurrentAgentInfo.IsBrandAgent">
+              <button
+                type="button"
+                class="dropdown-item"
+                (click)="OpenModal(Modals.SecretKey, ModalColors.Primary)"
+              >
+                <i class="fa fa-code"></i>
+                <span>API</span>
+              </button>
+            </div>
+          </service-mode>
+          <div class="divider dropdown-divider"></div>
+          <div>
+            <button type="button" class="dropdown-item" (click)="Logout()">
+              <i class="fa fa-sign-out"></i>
+              <span>{{ "HEADER_LOGOUT" | translate }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-head-detail">
+    <div class="value-detail" *ngIf="!sharedDataService.AdminName">
+      <dl>
+        <dt class="name">{{ "HEADER_BALANCE" | translate }}</dt>
+        <dd class="value">
+          <code [class.text-danger]="sharedDataService.AgentBalance < 0">{{
+            sharedDataService.AgentBalance | incurrency
+          }}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ "HEADER_C_DOLLAR" | translate }}</dt>
+        <dd class="value">
+          <code [class.text-danger]="sharedDataService.AgentCDollar < 0">{{
+            sharedDataService.AgentCDollar | incurrency
+          }}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ "HEADER_T_DOLLAR" | translate }}</dt>
+        <dd class="value">
+          <code [class.text-danger]="sharedDataService.AgentTDollar < 0">{{
+            sharedDataService.AgentTDollar | incurrency
+          }}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ "HEADER_TICKET" | translate }}</dt>
+        <dd class="value">
+          <span class="badge badge-pill badge-secondary mr-2">
+            {{ sharedDataService.AgentTicketCount | number }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-link"
+            [class.text-danger]="sharedDataService.AgentTicketValue < 0"
+            (click)="OpenModal(Modals.TicketList, ModalColors.Primary)"
+          >
+            {{ sharedDataService.AgentTicketValue | incurrency }}
+          </button>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</app-header>
