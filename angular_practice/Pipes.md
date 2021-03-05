@@ -266,15 +266,21 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
 
 # issue
 
+![1](https://user-images.githubusercontent.com/67410919/110090231-6671ab00-7dda-11eb-8b1d-3df9fbe48b4b.png)
+
+각 타이틀(ex.Balacne)옆의 화폐단위는 국가별로 표시되도록 GetCurrencySymbol() 함수를 만들어 바인딩 해주었고,
+
+아래의 금액(게임머니)은 소수점 2자리까지 표시되도록 numberformat 파이프를 사용하였다.
+
 - default-layout.component.html
 
   ```
   <div class="value-detail" *ngIf="!sharedDataService.AdminName">
       <dl>
-        //NOTE 타이틀에 국가별에 해당하는 화폐단위를 넣기위해 GetCurrencySymbol() 함수를 만들어 바인딩.
+        //NOTE: 타이틀에 국가별에 해당하는 화폐단위를 넣기위해 GetCurrencySymbol() 함수를 만들어 바인딩.
         <dt class="name">{{ 'HEADER_BALANCE' | translate }} {{sharedDataService.GetCurrencySymbol()}}</dt>
         <dd class="value">
-          //NOTE numberformat파이프를 사용하여 바인딩 (:'1.2-2'는 두번째 인수로 ts파일의 decimal에 값을 전달해준다.)
+          //NOTE: numberformat파이프를 사용하여 바인딩 (:'1.2-2'는 두번째 인수로 ts파일의 decimal에 값을 전달해준다.)
           <code [class.text-danger]="sharedDataService.AgentBalance < 0">{{sharedDataService.AgentBalance | numberformat:'1.2-2'}}</code>
         </dd>
       </dl>
@@ -304,7 +310,9 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
     </div>
   ```
 
-- numberformat.pipe.ts
+<br>
+
+- numberformat.pipe.ts (numberformat 파이프 정의 파일)
 
   ```
   import { Injectable } from '@angular/core';
@@ -322,14 +330,34 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
     {
     }
 
-    //NOTE html에서 두번째 인수 값을 받아올 decimal은 옵셔널(?:)로 지정하여 값이 없는 경우 null을 받아올수있도록 한다.
+    //NOTE: html에서 두번째 인수 값을 받아올 decimal은 옵셔널(?:)로 지정하여 값이 없는 경우 null을 받아올수있도록 한다.
     transform(value: number, decimal?: string): string
     {
-      //NOTE decimalPoint변수를 추가하여 decimal값이 있으면? decimal을 사용하거나 : 없으면 1.0-2 값을 디폴트로 사용하도록 작성
+      //NOTE: decimalPoint변수를 추가하여 decimal값이 있으면? decimal을 사용하거나 : 없으면 1.0-2 값을 디폴트로 사용하도록 작성
       const decimalPoint: string = (decimal) ? decimal : '1.0-2';
 
-      //NOTE (value, decimalPoint)를 decimalPipe.transform시켜주고 반환되도록 작성
+      //NOTE: (value, decimalPoint)를 decimalPipe.transform시켜주고 반환되도록 작성
       return this.decimalPipe.transform(value, decimalPoint);
     }
   }
   ```
+
+<br>
+
+- shared-data.service.ts
+
+  ```
+  import { getCurrencySymbol } from '@angular/common';
+
+  export abstract class AbstractSharedDataService
+  {
+    ...
+
+      GetCurrencySymbol(): string
+    {
+      return getCurrencySymbol(this.GetCurrency(), 'narrow');
+    }
+  ```
+
+  - url getCurrencySymbol: https://v9.angular.io/api/common/getCurrencySymbol#description
+  - url CurrencyPipe: https://angular.io/api/common/CurrencyPipe
