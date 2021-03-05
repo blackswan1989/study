@@ -98,7 +98,7 @@
 <br>
 <br>
 
-## 2. built-in pipes (내장 파이프)
+### 1) built-in pipes (내장 파이프)
 
 <br>
 
@@ -127,7 +127,7 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
 <br>
 <br>
 
-## 3. Prerequisites (전제 조건)
+### 2) Prerequisites (전제 조건)
 
 <br>
 
@@ -145,7 +145,7 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
 <br>
 <br>
 
-## 4. Using a pipe in a template (템플릿에서 파이프 사용)
+### 3) Using a pipe in a template (템플릿에서 파이프 사용)
 
 <br>
 
@@ -173,7 +173,7 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
 <br>
 <br>
 
-## Transforming data with parameters and chained pipes (매개 변수 및 체인 파이프로 데이터 변환)
+## 2. Transforming data with parameters and chained pipes (매개 변수 및 체인 파이프로 데이터 변환)
 
 <br>
 
@@ -193,3 +193,143 @@ Angular는 로케일 정보를 사용하여 데이터 형식을 지정하는 국
 예를 들어 `{{amount | currency : 'EUR': 'Euros'}}` 는 두 번째 매개 변수 인 문자열 리터럴(string literal) `'Euros'`를 출력 문자열에 추가합니다.
 
 문자열 리터럴 또는 구성요소 속성(component property)과 같은 유효한 템플릿 식(template expression)을 매개 변수로 사용할 수 있습니다.
+
+<br>
+
+일부 파이프에는 하나 이상의 매개 변수가 필요하며 `SlicePipe`와 같은 더 많은 선택적 매개 변수를 허용합니다.
+
+예를 들어 `{{slice : 1 : 5}}`는 요소 1로 시작하고 요소 5로 끝나는 요소의 하위 집합을 포함하는 새 배열 또는 문자열을 만듭니다.
+
+<br>
+<br>
+<br>
+<br>
+
+### 1) Example: Formatting a date (날짜 서식 지정)
+
+<br>
+
+다음 예제의 탭은 서로 다른 두 형식 (`shortDate`및 `fullDate`) 간 전환을 보여줍니다.
+
+- app.component.html 템플릿은 `DatePipe`(이름 지정된 날짜)에 대한 형식 매개 변수를 사용하여 날짜를 `04/15/88`로 표시합니다.
+
+- 아래 hero-birthday2.component.ts 구성 요소는 파이프의 형식 매개 변수를 템플릿 섹션(template section)에있는 구성 요소의 형식 속성에 바인딩하고 구성 요소의 `toggleFormat()` 메서드에 바인딩 된 클릭 이벤트에 대한 버튼을 추가합니다.
+
+  ```
+  template:
+    <p>The hero's birthday is {{ birthday | date:format }}</p>
+    <button (click)="toggleFormat()">Toggle Format</button>
+  ```
+
+- hero-birthday2.component.ts 구성 요소의 `toggleFormat()` 메서드는 구성 요소의 형식 속성을 짧은 형식 ( `shortDate`)과 긴 형식 (`fullDate`)간에 전환합니다.
+
+  ```
+  export class HeroBirthday2Component {
+    birthday = new Date(1988, 3, 15);     // April 15, 1988 -- since month parameter is zero-based
+    toggle = true;                        // start with true == shortDate
+
+    get format() {
+      return this.toggle ? 'shortDate' : 'fullDate';
+    }
+
+    toggleFormat() {
+      this.toggle = !this.toggle;
+    }
+  }
+  ```
+
+- Toggle Format 버튼을 클릭하면 그림 1과 같이 1988 년 4 월 15 일과 1988 년 4 월 15 일 금요일 사이의 날짜 형식이 바뀝니다. <small>(URL: https://angular.io/guide/pipes#example-formatting-a-date)</small>
+
+<br>
+<br>
+<br>
+<br>
+
+## 3. DecimalPipe
+
+<br>
+
+숫자 옵션 및 로케일 규칙에 따라 값을 형식화합니다. 로케일은 그룹 크기 및 구분 기호, 소수점 문자 및 기타 로케일 별 구성을 결정합니다.
+
+<br>
+
+`{{ value_expression | number [ : digitsInfo [ : locale ] ] }}`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# issue
+
+- default-layout.component.html
+
+  ```
+  <div class="value-detail" *ngIf="!sharedDataService.AdminName">
+      <dl>
+        //NOTE 타이틀에 국가별에 해당하는 화폐단위를 넣기위해 GetCurrencySymbol() 함수를 만들어 바인딩.
+        <dt class="name">{{ 'HEADER_BALANCE' | translate }} {{sharedDataService.GetCurrencySymbol()}}</dt>
+        <dd class="value">
+          //NOTE numberformat파이프를 사용하여 바인딩 (:'1.2-2'는 두번째 인수로 ts파일의 decimal에 값을 전달해준다.)
+          <code [class.text-danger]="sharedDataService.AgentBalance < 0">{{sharedDataService.AgentBalance | numberformat:'1.2-2'}}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ 'HEADER_C_DOLLAR' | translate }}</dt>
+        <dd class="value">
+          <code [class.text-danger]="sharedDataService.AgentCDollar < 0">{{sharedDataService.AgentCDollar | numberformat:'1.2-2'}}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ 'HEADER_T_DOLLAR' | translate }}</dt>
+        <dd class="value">
+          <code [class.text-danger]="sharedDataService.AgentTDollar < 0">{{sharedDataService.AgentTDollar | numberformat:'1.2-2'}}</code>
+        </dd>
+      </dl>
+      <dl>
+        <dt class="name">{{ 'HEADER_TICKET' | translate }} {{sharedDataService.GetCurrencySymbol()}}</dt>
+        <dd class="value">
+          <span class="badge badge-pill badge-secondary mr-2">
+            {{sharedDataService.AgentTicketCount | number}}
+          </span>
+          <button type="button" class="btn btn-link" [class.text-danger]="sharedDataService.AgentTicketValue < 0" (click)="OpenModal(Modals.TicketList, ModalColors.Primary)">
+            {{sharedDataService.AgentTicketValue | numberformat:'1.2-2'}}
+          </button>
+        </dd>
+      </dl>
+    </div>
+  ```
+
+- numberformat.pipe.ts
+
+  ```
+  import { Injectable } from '@angular/core';
+  import { Pipe, PipeTransform } from '@angular/core';
+  import { DecimalPipe } from '@angular/common';
+
+  @Injectable()
+  @Pipe({
+    name: 'numberformat',
+    pure: true
+  })
+  export class NumberFormatPipe implements PipeTransform
+  {
+    constructor(private decimalPipe: DecimalPipe)
+    {
+    }
+
+    //NOTE html에서 두번째 인수 값을 받아올 decimal은 옵셔널(?:)로 지정하여 값이 없는 경우 null을 받아올수있도록 한다.
+    transform(value: number, decimal?: string): string
+    {
+      //NOTE decimalPoint변수를 추가하여 decimal값이 있으면? decimal을 사용하거나 : 없으면 1.0-2 값을 디폴트로 사용하도록 작성
+      const decimalPoint: string = (decimal) ? decimal : '1.0-2';
+
+      //NOTE (value, decimalPoint)를 decimalPipe.transform시켜주고 반환되도록 작성
+      return this.decimalPipe.transform(value, decimalPoint);
+    }
+  }
+  ```
