@@ -16,8 +16,33 @@ url : https://angular.kr/api/forms/NgModel
 `NgModel`은 도메인 모델에서 FormControl 인스턴스를 만들고 양식 컨트롤 요소에 바인딩합니다.
 
 <br>
+<br>
 
-## Description
+## # Selectors
+
+<br>
+
+### &nbsp; `[ngModel]:not([formControlName]):not([formControl])`
+
+<br>
+<br>
+
+## # Properties
+
+<br>
+
+- `@Input()` : `name: string` 지시문에 바인딩 된 이름을 추적합니다. 부모 폼이 있으면 이 이름을 키로 사용하여이 컨트롤의 값을 검색합니다.
+
+- `@Input('disabled')` : `isDisabled: boolean` 컨트롤이 비활성화되었는지 여부를 추적합니다.
+
+- `@Input('ngModel')` : `model: any` 이 지시문에 바인딩 된 값을 추적합니다.
+
+<br>
+<br>
+<br>
+<br>
+
+## # Description
 
 <br>
 
@@ -80,6 +105,9 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   ```
 
   - ngModel을 사용하여 CashierSetRgDepositLimit를 읽어온다 : `([ngModel])="CashierSetRgDepositLimit"`
+
   - `(click)="ChangePlayerRgDepositLimit()"`로 클릭 이벤트를 연결
+
   - ts파일에서 ChangePlayerRgDepositLimit() 함수안에 `CashierSetRgDepositLimit`을 boolean 값으로 체크박스를 체크하는 기능으로 사용
+
   - `Edit()`에서 `if (this.CashierSetRgDepositLimit)`(CashierSetRgDepositLimit가 체크되어있다면)일때 동작하도록 구현
