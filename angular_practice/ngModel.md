@@ -132,7 +132,7 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   <div class="rg-card-daily-login" *ngIf="hasEditPlayerRGSetting && IsEditable">
   	<div class="card-header">
   		<div class="card-title">{{'RG_CARD_TITLE_DAILYLOGIN' | translate}}</div>
-      //NOTE toggle botton 추가 -> [(ngModel)]="IsNoLimit"를 사용 -> 토글버튼의 boolean 값이 바인딩되도록.
+      // *** toggle botton 추가 -> [(ngModel)]="IsNoLimit"를 사용 -> 토글버튼의 boolean 값이 바인딩되도록.
   		<div class="card-title font-weight-normal float-right mr-0">
   			{{'COMMON_NO_LIMIT' | translate}}
   			<label class="switch switch-label switch-pill switch-success">
@@ -160,7 +160,7 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   								   [searchable]="false"
   								   [clearable]="false"
   								   [(ngModel)]="Request.DailyLoginTimeLimit"
-                     //NOTE 위의 [(ngModel)]과 바인딩되어 토글버튼이 On인 경우(true) disabled 되도록 함.
+                     // *** 위의 [(ngModel)]과 바인딩되어 토글버튼이 On인 경우(true) disabled 되도록 함.
   								   [disabled]="IsNoLimit"
   								   placeholder="{{'FILTER_SELECT' | translate}}">
   						</ng-select>
@@ -171,27 +171,29 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   	</div>
   	<div class="card-bottom pt-3" *ngIf="IsLoading === false">
   		<button type="button" class="btn btn-secondary" (click)="ChangeMode(false)" [disabled]="IsLoading">{{'PLAYER_DETAIL_PROFILE_CANCEL' | translate}}</button>
-      //NOTE || (!IsNoLimit && Request.DailyLoginTimeLimit === undefined) 추가 -> IsNoLimit 상태가 아니면서 && undefined 값(nolimit상태)일때 save 버튼이 비활성화 되도록
+      //  || (!IsNoLimit && Request.DailyLoginTimeLimit === undefined) 추가 -> IsNoLimit 상태가 아니면서 && undefined 값(nolimit상태)일때 save 버튼이 비활성화 되도록
   		<button type="button" class="btn btn-primary" (click)="SetPlayerRGDailyLoginTimeLimit()" [disabled]="IsLoading || (!IsNoLimit && Request.DailyLoginTimeLimit === undefined)">{{'PLAYER_DETAIL_PROFILE_SAVE' | translate}}</button>
   	</div>
   </div>
   ```
 
   ```
+  // affiliate-player-responsible-gaming-daily-login-time-limit.component.ts
+
   export class AffiliatePlayerResponsibleGamingDailyLoginTimeLimitComponent implements OnInit
   {
     IsLoading: boolean;
     Request: DTO.SetPlayerRGDailyLoginTimeLimitRequest;
-    IsNoLimit: boolean;   //NOTE 토글버튼 IsNoLimit 타입 정의
+    IsNoLimit: boolean;   // *** 토글버튼 IsNoLimit 타입 정의
 
     ...
 
     async ngOnInit(): Promise<void>
     {
-      //NOTE 드롭다운 박스 부분으로 this.DailyLoginTimeLimitList = [] 로 변경
+      // *** 드롭다운 박스 부분으로 this.DailyLoginTimeLimitList = [] 로 변경
       this.DailyLoginTimeLimitList = [{
-        // label: this.translate.instant('EDIT_DEPOSITLIMIT_MODAL_NO_LIMIT'),  //NOTE {label과 value}를 삭제해서 Dropdown Box 내, No Limit Option 제거
-  		  // value: null,                                                        //NOTE 삭제
+        // label: this.translate.instant('EDIT_DEPOSITLIMIT_MODAL_NO_LIMIT'),  // *** {label과 value}를 삭제해서 Dropdown Box 내, No Limit Option 제거
+  		  // value: null,                                                        // *** 삭제
       }];
 
       for (let i = 1; i < 24; i++)
@@ -207,7 +209,7 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
 
     ...
 
-    //NOTE save 시켜주는 부분
+    // *** save 시켜주는 부분
     async SetPlayerRGDailyLoginTimeLimit(): Promise<void>
     {
       if (this.hasEditPlayerRGSetting === false)
@@ -221,9 +223,9 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
 
       try
       {
-        //NOTE this.IsNoLimit 상태(toggle On)일때 저장시
+        // *** this.IsNoLimit 상태(toggle On)일때 저장시
         if (this.IsNoLimit)
-          this.Request.DailyLoginTimeLimit = null;  //NOTE Request.DailyLoginTimeLimit값을 null로(NoLimit)만들어준다.
+          this.Request.DailyLoginTimeLimit = null;  // *** Request.DailyLoginTimeLimit값을 null로(NoLimit)만들어준다.
 
         this.IsLoading = true;
 
