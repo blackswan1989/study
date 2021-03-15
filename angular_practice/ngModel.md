@@ -132,11 +132,11 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   <div class="rg-card-daily-login" *ngIf="hasEditPlayerRGSetting && IsEditable">
   	<div class="card-header">
   		<div class="card-title">{{'RG_CARD_TITLE_DAILYLOGIN' | translate}}</div>
-      // *** toggle botton 추가 -> [(ngModel)]="IsNoLimit"를 사용 -> 토글버튼의 boolean 값이 바인딩되도록.
+      // *** toggle botton 추가
   		<div class="card-title font-weight-normal float-right mr-0">
   			{{'COMMON_NO_LIMIT' | translate}}
   			<label class="switch switch-label switch-pill switch-success">
-  				<input class="switch-input" type="checkbox" [(ngModel)]="IsNoLimit" >
+  				<input class="switch-input" type="checkbox" [(ngModel)]="IsNoLimit" >   // *** [(ngModel)]="IsNoLimit"를 사용 -> 토글버튼의 boolean 값이 바인딩되도록.
   				<span class="switch-slider" [attr.data-checked]="'SWITCH_SLIDER_ON' | translate" [attr.data-unchecked]="'SWITCH_SLIDER_OFF' | translate"></span>
   			</label>
   		</div>
@@ -154,15 +154,14 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   					<label class="col-4 col-form-label">{{'RG_CARD_LABEL_SETTIME' | translate}}</label>
   					<div class="col-8">
   						<ng-select class="custom"
-  								   [items]="DailyLoginTimeLimitList"
-  								   bindLabel="label"
-  								   bindValue="value"
-  								   [searchable]="false"
-  								   [clearable]="false"
-  								   [(ngModel)]="Request.DailyLoginTimeLimit"
-                     // *** 위의 [(ngModel)]과 바인딩되어 토글버튼이 On인 경우(true) disabled 되도록 함.
-  								   [disabled]="IsNoLimit"
-  								   placeholder="{{'FILTER_SELECT' | translate}}">
+  								  [items]="DailyLoginTimeLimitList"
+  								  bindLabel="label"
+  								  bindValue="value"
+  								  [searchable]="false"
+  								  [clearable]="false"
+  								  [(ngModel)]="Request.DailyLoginTimeLimit"
+  								  [disabled]="IsNoLimit"   // *** 위의 [(ngModel)]과 바인딩되어 토글버튼이 On인 경우(true) disabled 되도록 함.
+  								  placeholder="{{'FILTER_SELECT' | translate}}">
   						</ng-select>
   					</div>
   				</div>
@@ -171,7 +170,7 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
   	</div>
   	<div class="card-bottom pt-3" *ngIf="IsLoading === false">
   		<button type="button" class="btn btn-secondary" (click)="ChangeMode(false)" [disabled]="IsLoading">{{'PLAYER_DETAIL_PROFILE_CANCEL' | translate}}</button>
-      //  || (!IsNoLimit && Request.DailyLoginTimeLimit === undefined) 추가 -> IsNoLimit 상태가 아니면서 && undefined 값(nolimit상태)일때 save 버튼이 비활성화 되도록
+      // *** (!IsNoLimit && Request.DailyLoginTimeLimit === undefined) 추가 -> IsNoLimit 상태가 아니면서 && undefined 값(nolimit상태)일때 save 버튼이 비활성화 되도록
   		<button type="button" class="btn btn-primary" (click)="SetPlayerRGDailyLoginTimeLimit()" [disabled]="IsLoading || (!IsNoLimit && Request.DailyLoginTimeLimit === undefined)">{{'PLAYER_DETAIL_PROFILE_SAVE' | translate}}</button>
   	</div>
   </div>
@@ -192,8 +191,8 @@ FormControl 인스턴스는 컨트롤의 값, 사용자 상호 작용 및 유효
     {
       // *** 드롭다운 박스 부분으로 this.DailyLoginTimeLimitList = [] 로 변경
       this.DailyLoginTimeLimitList = [{
-        // label: this.translate.instant('EDIT_DEPOSITLIMIT_MODAL_NO_LIMIT'),  // *** {label과 value}를 삭제해서 Dropdown Box 내, No Limit Option 제거
-  		  // value: null,                                                        // *** 삭제
+        label: this.translate.instant('EDIT_DEPOSITLIMIT_MODAL_NO_LIMIT'),  // *** {label과 value}를 삭제해서 Dropdown Box 내, No Limit Option 제거
+  		  value: null,                                                        // *** 삭제
       }];
 
       for (let i = 1; i < 24; i++)
