@@ -1,0 +1,52 @@
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@addTagHelper *, GGCore.Web.Widget
+<div class="content myinfo" ng-controller="AccountStatementController as AccountStatement">
+	<h3>{{'Settings.AccountStatement' | translate}}</h3>
+
+	<div class="alert_box success">
+		<span class="material-icons ico">done</span>
+		<p>{{'AccountStatement.ReportDownload.Success' | translate}}</p>
+		<button ng-click="AccountStatement.alertClose()" class="btn_alertclose">X</button>
+	</div>
+	<div class="alert_box failed">
+		<span class="material-icons ico">report_problem</span>
+		<p>{{'AccountStatement.ReportDownload.Proceeding' | translate}}</p>
+		<button ng-click="AccountStatement.alertClose()" class="btn_alertclose">X</button>
+	</div>
+
+	<div class="content_box account_statement">
+		<div class="notifications_box no-icon">
+			<h4 class="title">{{'Common.Description' | translate}} <i class="ico ico_info_xs" aria-hidden="true"></i></h4>
+			<div class="description">
+				<p class="mb-2">{{'AccountStatement.ReportDownload.Success' | translate}}</p>
+			</div>
+		</div>
+	</div>
+
+	<h4 class="sub_title mb-3">
+		<span class="inline_align">{{'AccountStatement.DownloadStatement' | translate}}</span>
+	</h4>
+
+	<div class="content_box account_statement">
+		<article class="timelimit_box mb-20 pt-0">
+			<label class="select_an_year">{{'AccountStatement.SelectAnYear' | translate}}</label>
+			<div class="dropdown">
+				<button class="dropdown-toggle account_statement" data-toggle="dropdown">
+					<span>{{AccountStatement.SelectedAnYear.label}}</span>
+					<span ng-show="AccountStatement.selectShow === true">{{'Common.Select' | translate}}</span>
+				</button>
+				<ul class="dropdown-menu max-height-300">
+					<li ng-repeat="row in AccountStatement.YearList">
+						<button type="button" class="dropdown-item" ng-class="{'active' : AccountStatement.RequestAccountStatement === row.value}" ng-click="AccountStatement.changeYearList(row)">{{row.label}}</button>
+					</li>
+				</ul>
+			</div>
+		</article>
+
+		<div class="flex_field mt-4">
+			<div class="col_12 account_statement">
+				<button type="button" class="btn btn_confirm w-100" ng-disabled="AccountStatement.selectShow === true || AccountStatement.SelectedAnYear.label === 'Select' || AccountStatement.clickDisabled === true" ng-click="AccountStatement.downloadAccountStatement()">{{'Common.Download' | translate}}</button>
+			</div>
+		</div>
+	</div>
+</div>
