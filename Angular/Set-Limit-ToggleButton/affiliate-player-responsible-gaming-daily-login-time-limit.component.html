@@ -1,0 +1,223 @@
+<div class="card">
+  <div class="rg-card-daily-login" *ngIf="IsEditable === false">
+    <div class="card-header">
+      <div class="card-title">{{ "RG_CARD_TITLE_DAILYLOGIN" | translate }}</div>
+    </div>
+    <div class="card-body" *ngIf="IsLoading === true">
+      <div class="loading-box">
+        <i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+        <span class="sr-only">{{ "COMMON_PROGRESS_TEXT" | translate }}</span>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="IsLoading === false">
+      <div class="grid-form">
+        <div class="grid-bundle">
+          <div class="form-group row">
+            <div class="col-6">
+              <div
+                class="deposit-limit-amount"
+                *ngIf="PlayerCurrentDailyLoginTimeLimit.DailyLoginTimeLimit"
+              >
+                {{ PlayerCurrentDailyLoginTimeLimit.DailyLoginTimeLimit }}
+                {{ "RG_CONFIGURATION_LABEL_HR" | translate }}
+              </div>
+              <div
+                class="deposit-limit-amount"
+                *ngIf="!PlayerCurrentDailyLoginTimeLimit.DailyLoginTimeLimit"
+              >
+                {{ "COMMON_NO_LIMIT" | translate }}
+              </div>
+              <div class="deposit-limit-used">
+                {{ "FILTER_USED" | translate }} :
+                {{
+                  PlayerCurrentDailyLoginTimeLimit.DailyLoginTimeTotal
+                    ? PlayerCurrentDailyLoginTimeLimit.DailyLoginTimeTotal
+                    : 0
+                }}
+                {{ "RG_CONFIGURATION_LABEL_HR" | translate }}
+              </div>
+            </div>
+            <div
+              class="col-6 text-right"
+              *ngIf="hasEditPlayerRGSetting && IsLoading === false"
+            >
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="ChangeMode(true)"
+              >
+                {{ "EDIT_DEPOSITLIMIT_MODAL_SET_LIMIT" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rg-card-daily-login" *ngIf="hasEditPlayerRGSetting && IsEditable">
+    <div class="card-header">
+      <div class="card-title">{{ "RG_CARD_TITLE_DAILYLOGIN" | translate }}</div>
+
+      <!-- CORE-1467 [Core] Player Details > Responsible Gaming Set Limit 시, toggle 버튼 추가 -->
+      <div
+        class="card-title font-weight-normal float-right mr-0"
+        [formGroup]="FormGroup"
+      >
+        {{ "COMMON_NO_LIMIT" | translate }}
+        <label class="switch switch-label switch-pill switch-success">
+          <input
+            class="switch-input"
+            type="checkbox"
+            formControlName="IsNoLimit"
+          />
+          <span
+            class="switch-slider"
+            [attr.data-checked]="'SWITCH_SLIDER_ON' | translate"
+            [attr.data-unchecked]="'SWITCH_SLIDER_OFF' | translate"
+          ></span>
+        </label>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="IsLoading === true">
+      <div class="loading-box">
+        <i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+        <span class="sr-only">{{ "COMMON_PROGRESS_TEXT" | translate }}</span>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="IsLoading === false">
+      <div class="grid-form" [formGroup]="FormGroup">
+        <div class="grid-bundle">
+          <div class="form-group row">
+            <label class="col-4 col-form-label">{{
+              "RG_CARD_LABEL_SETTIME" | translate
+            }}</label>
+            <div class="col-8">
+              <!-- [(ngModel)]="Request.DailyLoginTimeLimit"을  formControlName="DailyLoginTimeLimit"으로 변경해주었다.-->
+              <ng-select
+                class="custom"
+                [items]="DailyLoginTimeLimitList"
+                bindLabel="label"
+                bindValue="value"
+                [searchable]="false"
+                [clearable]="false"
+                formControlName="DailyLoginTimeLimit"
+                placeholder="{{ 'FILTER_SELECT' | translate }}"
+              >
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-bottom pt-3" *ngIf="IsLoading === false">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="ChangeMode(false)"
+        [disabled]="IsLoading"
+      >
+        {{ "PLAYER_DETAIL_PROFILE_CANCEL" | translate }}
+      </button>
+
+      <!-- 수정전 <button type="button" class="btn btn-primary" (click)="SetPlayerRGDailyLoginTimeLimit()" [disabled]="IsLoading">{{'PLAYER_DETAIL_PROFILE_SAVE' | translate}}</button> -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="SetPlayerRGDailyLoginTimeLimit()"
+        [disabled]="IsLoading || FormGroup.invalid"
+      >
+        {{ "PLAYER_DETAIL_PROFILE_SAVE" | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="details-view-box"
+    *ngIf="PlayerPendingDailyLoginTimeLimit && IsLoading === false"
+    [class.on]="isDailyLoginTimeLimitPendingOn"
+  >
+    <button
+      class="btn"
+      *ngIf="PlayerPendingDailyLoginTimeLimit.IsVerifyFreeze === false"
+      (click)="isDailyLoginTimeLimitPendingOn = !isDailyLoginTimeLimitPendingOn"
+    >
+      {{ "PLAYER_DETAIL_RESPONSIBLE_GAMING_REQUEST_DETAILS" | translate }}
+      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+    </button>
+    <button
+      class="btn"
+      *ngIf="PlayerPendingDailyLoginTimeLimit.IsVerifyFreeze"
+      (click)="isDailyLoginTimeLimitPendingOn = !isDailyLoginTimeLimitPendingOn"
+    >
+      {{
+        "PLAYER_DETAIL_RESPONSIBLE_GAMING_REQUEST_VERIFIED_FREEZE" | translate
+      }}
+      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+    </button>
+    <div class="details-view">
+      <div class="details-view-area">
+        <div class="in-box">
+          <h5>{{ "DEPOSITDETAILMODAL_REQUESTDATE" | translate }}</h5>
+          <div class="row">
+            <div class="col-4 text-left">{{ "RG_LABEL_DATE" | translate }}</div>
+            <div class="col-8 text-right">
+              {{ PlayerPendingDailyLoginTimeLimit.RequestTime | fulldate }}
+              <div
+                class="reaffirm-date"
+                *ngIf="
+                  PlayerPendingDailyLoginTimeLimit.IsVerifyFreeze === false
+                "
+              >
+                {{
+                  "PLAYER_DETAIL_RESPONSIBLE_GAMING_REAFFIRM_DATE" | translate
+                }}
+                :
+                {{
+                  PlayerPendingDailyLoginTimeLimit.ApplyTime
+                    | fulldate: "":"YYYY-MM-DD HH:mm"
+                }}
+              </div>
+            </div>
+          </div>
+          <h5>{{ "RG_CARD_TITLE_REQUESTSUMMARY" | translate }}</h5>
+          <div class="row">
+            <div class="col-6">{{ "RG_CARD_LABEL_SETTIME" | translate }}</div>
+            <div class="col-6 text-right">
+              {{
+                PlayerPendingDailyLoginTimeLimit.DailyLoginTimeLimit
+                  ? PlayerPendingDailyLoginTimeLimit.DailyLoginTimeLimit +
+                    " " +
+                    ("RG_CONFIGURATION_LABEL_HR" | translate)
+                  : ("COMMON_NO_LIMIT" | translate)
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="card-bottom pt-3 buttons-deposit-limit-control"
+        *ngIf="
+          IsLoading === false &&
+          hasEditPlayerRGSetting &&
+          PlayerPendingDailyLoginTimeLimit.IsVerifyFreeze
+        "
+      >
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="openConfirmModal(false)"
+        >
+          {{ "BUTTON_RESPONSIBLE_GAMING_REJECT" | translate }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="openConfirmModal(true)"
+        >
+          {{ "BUTTON_RESPONSIBLE_GAMING_ACCEPT" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
