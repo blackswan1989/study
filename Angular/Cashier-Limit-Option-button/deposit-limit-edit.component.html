@@ -1,0 +1,582 @@
+<div class="modal-header">
+  <h4 id="dialog-child-name" class="modal-title pull-left">
+    {{ "EDIT_DEPOSITLIMIT_MODAL_TITLE" | translate }}
+  </h4>
+  <button
+    type="button"
+    class="close pull-right"
+    aria-label="Close"
+    (click)="Hide()"
+  >
+    <i class="fa fa-close" aria-hidden="true"></i>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="loading-box" [class.hide]="IsLoading === false">
+    <i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+    <span class="sr-only">{{ "COMMON_PROGRESS_TEXT" | translate }}</span>
+  </div>
+  <div class="edit-deposit-limit" [class.hide]="IsLoading">
+    <div class="select-type cell-2">
+      <button
+        type="button"
+        class="btn"
+        [class.active]="Request.IsUsedCustom === false"
+        (click)="ChangeDepositLimitType(false)"
+      >
+        {{ "PLAYERS_CASHIER_LIMIT_MODAL_MESSAGE" | translate }}
+        <span>{{ DepositTemplate.TemplateName }}</span>
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [class.active]="Request.IsUsedCustom"
+        (click)="ChangeDepositLimitType(true)"
+      >
+        {{ "EDIT_DEPOSITLIMIT_MODAL_TYPE_CUSTOM_DEPOSIT_LIMIT" | translate }}
+        <span></span>
+      </button>
+    </div>
+
+    <div class="radio-box">
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="noLimit"
+          name="depositLimitStatus"
+          class="custom-control-input"
+          [value]="true"
+          [(ngModel)]="IsNoLimit"
+          [disabled]="Request.IsUsedCustom === false"
+        />
+        <label class="custom-control-label" for="noLimit">{{
+          "EDIT_DEPOSITLIMIT_MODAL_NO_LIMIT" | translate
+        }}</label>
+      </div>
+      <div class="custom-control custom-radio">
+        <input
+          type="radio"
+          id="setLimit"
+          name="depositLimitStatus"
+          class="custom-control-input"
+          [value]="false"
+          [(ngModel)]="IsNoLimit"
+          [disabled]="Request.IsUsedCustom === false"
+        />
+        <label class="custom-control-label" for="setLimit">{{
+          "EDIT_DEPOSITLIMIT_MODAL_SET_LIMIT" | translate
+        }}</label>
+      </div>
+    </div>
+
+    <!-- table line -->
+    <form
+      class="deposit-limit-form"
+      [class.hide]="IsNoLimit && Request.IsUsedCustom"
+      [formGroup]="EditForm"
+    >
+      <div class="deposit-limit-table table-outline">
+        <table>
+          <colgroup>
+            <col width="94" />
+            <col width="*" />
+            <col width="*" />
+            <col width="*" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th></th>
+              <th>
+                1{{
+                  "AFFILIATE_DEPOSIT_LIMIT_TABLE_DAY" | translate | lowercase
+                }}
+              </th>
+              <th>
+                7{{
+                  "AFFILIATE_DEPOSIT_LIMIT_TABLE_DAYS" | translate | lowercase
+                }}
+              </th>
+              <th>
+                30{{
+                  "AFFILIATE_DEPOSIT_LIMIT_TABLE_DAYS" | translate | lowercase
+                }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {{ "AFFILIATE_TRANSACTION_LIMIT_TABLE_DEPOSIT" | translate }}
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day1Limit
+                      ? (DepositTemplate.Day1Limit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day1Limit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day1LimitControl.invalid &&
+                      (Day1LimitControl.touched || Day1LimitControl.dirty),
+                    'is-valid':
+                      Day1LimitControl.touched && Day1LimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="AmountInputCheck($event, Day1LimitControl)"
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day7Limit
+                      ? (DepositTemplate.Day7Limit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day7Limit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day7LimitControl.invalid &&
+                      (Day7LimitControl.touched || Day7LimitControl.dirty),
+                    'is-valid':
+                      Day7LimitControl.touched && Day7LimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="AmountInputCheck($event, Day7LimitControl)"
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day30Limit
+                      ? (DepositTemplate.Day30Limit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day30Limit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day30LimitControl.invalid &&
+                      (Day30LimitControl.touched || Day30LimitControl.dirty),
+                    'is-valid':
+                      Day30LimitControl.touched && Day30LimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="AmountInputCheck($event, Day30LimitControl)"
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+            </tr>
+            <tr class="no-line">
+              <td colspan="4">
+                <div
+                  class="invalid-feedback d-block text-md mb-2"
+                  *ngIf="EditForm.getError('InValidLimit')"
+                >
+                  {{ EditForm.getError("InValidLimit") }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                {{ "AFFILIATE_TRANSACTION_LIMIT_TABLE_WITHDRAWAL" | translate }}
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day1WithdrawalLimit
+                      ? (DepositTemplate.Day1WithdrawalLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day1WithdrawalLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day1WithdrawalLimitControl.invalid &&
+                      (Day1WithdrawalLimitControl.touched ||
+                        Day1WithdrawalLimitControl.dirty),
+                    'is-valid':
+                      Day1WithdrawalLimitControl.touched &&
+                      Day1WithdrawalLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day1WithdrawalLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day7WithdrawalLimit
+                      ? (DepositTemplate.Day7WithdrawalLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day7WithdrawalLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day7WithdrawalLimitControl.invalid &&
+                      (Day7WithdrawalLimitControl.touched ||
+                        Day7WithdrawalLimitControl.dirty),
+                    'is-valid':
+                      Day7WithdrawalLimitControl.touched &&
+                      Day7WithdrawalLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day7WithdrawalLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day30WithdrawalLimit
+                      ? (DepositTemplate.Day30WithdrawalLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day30WithdrawalLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day30WithdrawalLimitControl.invalid &&
+                      (Day30WithdrawalLimitControl.touched ||
+                        Day30WithdrawalLimitControl.dirty),
+                    'is-valid':
+                      Day30WithdrawalLimitControl.touched &&
+                      Day30WithdrawalLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day30WithdrawalLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+            </tr>
+            <tr class="no-line">
+              <td colspan="4">
+                <div
+                  class="invalid-feedback d-block text-md mb-2"
+                  *ngIf="EditForm.getError('InValidWithdrawalLimit')"
+                >
+                  {{ EditForm.getError("InValidWithdrawalLimit") }}
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td>{{ "PLAYERS_CASHIER_LIMIT_TABLE_TITLE" | translate }}</td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day1P2PTransferLimit
+                      ? (DepositTemplate.Day1P2PTransferLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day1P2PTransferLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day1P2PTransferLimitControl.invalid &&
+                      (Day1P2PTransferLimitControl.touched ||
+                        Day1P2PTransferLimitControl.dirty),
+                    'is-valid':
+                      Day1P2PTransferLimitControl.touched &&
+                      Day1P2PTransferLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day1P2PTransferLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day7P2PTransferLimit
+                      ? (DepositTemplate.Day7P2PTransferLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day7P2PTransferLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day7P2PTransferLimitControl.invalid &&
+                      (Day7P2PTransferLimitControl.touched ||
+                        Day7P2PTransferLimitControl.dirty),
+                    'is-valid':
+                      Day7P2PTransferLimitControl.touched &&
+                      Day7P2PTransferLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day7P2PTransferLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+              <td>
+                <span class="text" [class.hide]="Request.IsUsedCustom">
+                  {{
+                    IsNoLimit
+                      ? ("EDIT_DEPOSITLIMIT_MODAL_VALUE_UNLIMITED" | translate)
+                      : DepositTemplate?.Day30P2PTransferLimit
+                      ? (DepositTemplate.Day30P2PTransferLimit | incurrency)
+                      : "-"
+                  }}
+                </span>
+                <input
+                  type="number"
+                  class="form-control"
+                  placeholder="{{
+                    'EDIT_DEPOSITLIMIT_MODAL_PLACEHOLDER_AMOUNT' | translate
+                  }}"
+                  formControlName="Day30P2PTransferLimit"
+                  [ngClass]="{
+                    'is-invalid':
+                      Day30P2PTransferLimitControl.invalid &&
+                      (Day30P2PTransferLimitControl.touched ||
+                        Day30P2PTransferLimitControl.dirty),
+                    'is-valid':
+                      Day30P2PTransferLimitControl.touched &&
+                      Day30P2PTransferLimitControl.valid,
+                    hide: Request.IsUsedCustom === false
+                  }"
+                  (keydown)="
+                    AmountInputCheck($event, Day30P2PTransferLimitControl)
+                  "
+                  (focus)="$event.target.select()"
+                />
+                <div class="invalid-feedback">
+                  {{ "LABEL_ERRORMESSAGE_INVALID_AMOUNT" | translate }}
+                </div>
+              </td>
+            </tr>
+            <tr class="no-line">
+              <td colspan="4">
+                <div
+                  class="invalid-feedback d-block text-md mb-2"
+                  *ngIf="EditForm.getError('InValidP2PTransferLimit')"
+                >
+                  {{ EditForm.getError("InValidP2PTransferLimit") }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+
+    <div
+      class="tag-box"
+      [class.hide]="
+        Request.IsUsedCustom ||
+        DepositTemplate.IsDefault === true ||
+        (DepositTemplate.TagGroups && DepositTemplate.TagGroups.length === 0)
+      "
+    >
+      <div class="tag-row">
+        <span class="label"
+          >{{ "PLAYER_DETAIL_TRANSACTION_LIMIT_TAGS" | translate }} :</span
+        >
+        <span
+          class="label pl-2"
+          *ngIf="
+            !PlayerTagList || (PlayerTagList && PlayerTagList.length === 0)
+          "
+          >-</span
+        >
+        <div class="tags" *ngIf="PlayerTagList && PlayerTagList.length > 0">
+          <ng-container
+            *ngFor="
+              let tagItem of PlayerTagList;
+              first as isFirst;
+              let i = index
+            "
+          >
+            <span
+              class="text-muted trigger-devide-label"
+              *ngIf="!isFirst && i < MaxTagDisplay"
+              >{{ "COMMON_LABEL_OR" | translate }}</span
+            >
+            <span class="tag" *ngIf="i < MaxTagDisplay">
+              <ng-container
+                *ngFor="let tag of tagItem.Tags; first as isFirstTag"
+              >
+                <span class="ml-2 mr-2" *ngIf="!isFirstTag">&</span>
+                <span>{{ tag.Name }}</span>
+              </ng-container>
+            </span>
+          </ng-container>
+          <div class="col-popover" *ngIf="PlayerTagList.length > MaxTagDisplay">
+            ...
+            <span
+              class="badge badge-secondary"
+              [popover]="templatePopover"
+              placement="auto"
+              triggers="click"
+              [outsideClick]="true"
+              container="body"
+              >{{ PlayerTagList.length }}</span
+            >
+            <ng-template #templatePopover>
+              <div class="tags">
+                <ng-container
+                  *ngFor="
+                    let tagItem of PlayerTagList;
+                    first as isFirst;
+                    let i = index
+                  "
+                >
+                  <span
+                    class="text-muted trigger-devide-label"
+                    *ngIf="!isFirst"
+                    >{{ "COMMON_LABEL_OR" | translate }}</span
+                  >
+                  <span class="tag">
+                    <ng-container
+                      *ngFor="let tag of tagItem.Tags; first as isFirstTag"
+                    >
+                      <span class="ml-2 mr-2" *ngIf="!isFirstTag">&</span>
+                      <span>{{ tag.Name }}</span>
+                    </ng-container>
+                  </span>
+                </ng-container>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 체크박스 추가 -->
+    <div class="custom-control custom-checkbox mt-4 mb-2 w-100">
+      <input
+        type="checkbox"
+        class="custom-control-input"
+        id="ChangePlayerRgDepositLimit"
+        [(ngModel)]="CashierSetRgDepositLimit"
+        (click)="ChangePlayerRgDepositLimit()"
+      />
+      <label class="custom-control-label" for="ChangePlayerRgDepositLimit">{{
+        "PLAYER_DETAIL_LABEL_CASHIER_LIMIT" | translate
+      }}</label>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="Hide()"
+    [disabled]="IsOnProcessing"
+  >
+    {{ "BUTTON_CANCEL" | translate }}
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="Edit()"
+    [disabled]="IsOnProcessing || EditForm.invalid"
+  >
+    {{ "EDIT_DEPOSITLIMIT_MODAL_BUTTON_EDIT" | translate }}
+  </button>
+</div>
