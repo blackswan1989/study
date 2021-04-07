@@ -2,7 +2,8 @@ var AccountStatementController = app.controller("AccountStatementController", [
   "$scope",
   "$translate",
   "accountService",
-  function ($scope, $translate, accountService) {
+  "commonModel",
+  function ($scope, $translate, accountService, commonModel) {
     var AccountStatement = this;
 
     AccountStatement.SelectedAnYear = {};
@@ -13,6 +14,8 @@ var AccountStatementController = app.controller("AccountStatementController", [
     AccountStatement.BaseYear = new Date().getFullYear() + 1;
     AccountStatement.LastFiveYears = AccountStatement.BaseYear - 6;
     AccountStatement.clickDisabled = false;
+    AccountStatement.supportEmail = commonModel.supportEmail;
+    AccountStatement.support = commonModel.support;
 
     AccountStatement.alertClose = function () {
       angular.element(".alert_box").hide();
