@@ -113,7 +113,28 @@
 
 <br>
 
-for...of 명령문은 반복가능한 객체 (Array, Map, Set, String, TypedArray, arguments 객체 등을 포함)에 대해서 반복하고 각 개별 속성값에 대해 실행되는 문이 있는 사용자 정의 반복 후크를 호출하는 루프를 생성합니다.
+for...of 문은 사용자 정의 반복 가능 객체(Array, Map, Set, String, TypedArray, arguments 객체 등을 포함 - 예 : 인수 또는 NodeList)에 대해서 반복 가능한 객체를 반복하는 루프를 생성하며, 개체의 각 고유 속성 값에 대해 실행될 구문(statements)으로 사용자 지정 반복 hook를 호출 한다.
+
+forEach와의 차이점은 원하는 지점에서 루프를 멈출 수 있다는 점이다.
+
+<br>
+
+- Example 1) 
+  <br>
+  
+    ```
+    const friends = ["Jane", "Kate", "Eva", "Kristen", "Gamja", "Mina", "Amy", "Susan"];
+
+    for (const friend of friends) {
+        if(friend === "Amy") {
+            break
+        } else {
+            console.log(friend);
+        }
+    }
+    
+    // Jane, Kate, Eva, Kristen, Gamja, Mina (if문으로 인하여 Amy에서 루프를 멈추고 Amy부터 출력되지 않는다.)
+    ```
 
 <br>
 <br>
