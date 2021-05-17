@@ -1,0 +1,173 @@
+<!-- Modal Part -->
+
+<div class="modal-header">
+  <h4 id="dialog-child-name" class="modal-title pull-left">
+    {{ "PLAYER_DETAIL_SECURITY_RESTRICT_TIME" | translate }}
+  </h4>
+  <button
+    type="button"
+    class="close pull-right"
+    aria-label="Close"
+    (click)="Hide()"
+  >
+    <i class="fa fa-close" aria-hidden="true"></i>
+  </button>
+</div>
+<div class="modal-body restrict-time-modal" [formGroup]="Model.FormGroup">
+  <div class="row">
+    <div class="col-label col-10">
+      {{ "PLAYER_DETAIL_SECURITY_RESTRICT_TIME" | translate }}
+    </div>
+    <label class="switch switch-label switch-pill switch-success">
+      <input
+        class="switch-input"
+        type="checkbox"
+        formControlName="SetRestrictTime"
+      />
+      <span
+        class="switch-slider"
+        [attr.data-checked]="'SWITCH_SLIDER_ON' | translate"
+        [attr.data-unchecked]="'SWITCH_SLIDER_OFF' | translate"
+      ></span>
+    </label>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-sm-12">
+      <div class="col-label col-8">
+        {{ "PLAYER_DETAIL_SECURITY_RESTRICT_TIME_STARTTIME" | translate }}
+      </div>
+      <div class="form-group restrict-time-input">
+        <input
+          type="number"
+          min="0"
+          max="23"
+          class="form-control number-spin-button"
+          [class.is-invalid]="
+            Model.StartHourTimeControl.invalid &&
+            (Model.StartHourTimeControl.touched ||
+              Model.StartHourTimeControl.dirty)
+          "
+          formControlName="StartHourTime"
+          (keydown)="Model.AmountInputCheck($event, Model.StartHourTimeControl)"
+        />
+        <span>:</span>
+        <input
+          type="number"
+          min="0"
+          max="59"
+          class="form-control number-spin-button"
+          [class.is-invalid]="
+            Model.StartMinuteTimeControl.invalid &&
+            (Model.StartMinuteTimeControl.touched ||
+              Model.StartMinuteTimeControl.dirty)
+          "
+          formControlName="StartMinuteTime"
+          (keydown)="
+            Model.AmountInputCheck($event, Model.StartMinuteTimeControl)
+          "
+        />
+      </div>
+    </div>
+    <div
+      class="invalid-feedback mt-0"
+      [class.d-block]="
+        Model.StartHourTimeControl.invalid &&
+        (Model.StartHourTimeControl.touched || Model.StartHourTimeControl.dirty)
+      "
+      [translate]="'PLAYER_DETAIL_SECURITY_RESTRICT_TIME_HOUR_INVAILD'"
+    ></div>
+    <div
+      class="invalid-feedback mt-0"
+      [class.d-block]="
+        Model.StartMinuteTimeControl.invalid &&
+        (Model.StartMinuteTimeControl.touched ||
+          Model.StartMinuteTimeControl.dirty)
+      "
+      [translate]="'PLAYER_DETAIL_SECURITY_RESTRICT_TIME_MINUTE_INVAILD'"
+    ></div>
+
+    <div class="form-group col-sm-12">
+      <div class="col-label col-8">
+        {{ "PLAYER_DETAIL_SECURITY_RESTRICT_TIME_ENDTIME" | translate }}
+      </div>
+      <div class="form-group restrict-time-input">
+        <input
+          type="number"
+          min="0"
+          max="23"
+          class="form-control number-spin-button"
+          [class.is-invalid]="
+            Model.EndHourTimeControl.invalid &&
+            (Model.EndHourTimeControl.touched || Model.EndHourTimeControl.dirty)
+          "
+          formControlName="EndHourTime"
+          (keydown)="Model.AmountInputCheck($event, Model.EndHourTimeControl)"
+        />
+        <span>:</span>
+        <input
+          type="number"
+          min="0"
+          max="59"
+          class="form-control number-spin-button"
+          [class.is-invalid]="
+            Model.EndMinuteTimeControl.invalid &&
+            (Model.EndMinuteTimeControl.touched ||
+              Model.EndMinuteTimeControl.dirty)
+          "
+          formControlName="EndMinuteTime"
+          (keydown)="Model.AmountInputCheck($event, Model.EndMinuteTimeControl)"
+        />
+      </div>
+    </div>
+    <div
+      class="invalid-feedback mt-0"
+      [class.d-block]="
+        Model.EndHourTimeControl.invalid &&
+        (Model.EndHourTimeControl.touched || Model.EndHourTimeControl.dirty)
+      "
+      [translate]="'PLAYER_DETAIL_SECURITY_RESTRICT_TIME_HOUR_INVAILD'"
+    ></div>
+    <div
+      class="invalid-feedback mt-0"
+      [class.d-block]="
+        Model.EndMinuteTimeControl.invalid &&
+        (Model.EndMinuteTimeControl.touched || Model.EndMinuteTimeControl.dirty)
+      "
+      [translate]="'PLAYER_DETAIL_SECURITY_RESTRICT_TIME_MINUTE_INVAILD'"
+    ></div>
+    <div
+      class="invalid-feedback mt-0"
+      [class.d-block]="
+        Model.FormGroup.invalid &&
+        (Model.StartHourTimeControl.touched ||
+          Model.StartHourTimeControl.dirty ||
+          Model.StartMinuteTimeControl.touched ||
+          Model.StartMinuteTimeControl.dirty ||
+          Model.EndHourTimeControl.touched ||
+          Model.EndHourTimeControl.dirty ||
+          Model.EndMinuteTimeControl.touched ||
+          Model.EndMinuteTimeControl.dirty)
+      "
+      [translate]="'PLAYER_DETAIL_SECURITY_RESTRICT_TIME_INVAILD'"
+    ></div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary"
+    (click)="Hide()"
+    [disabled]="Model.IsLoading"
+  >
+    {{ "BUTTON_CANCEL" | translate }}
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    (click)="Edit()"
+    [disabled]="Model.IsLoading || Model.FormGroup.invalid"
+  >
+    {{ "BUTTON_CONFIRM" | translate }}
+  </button>
+</div>

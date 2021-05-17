@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      {{ "PLAYER_DETAIL_SECURITY_TITLE" | translate }}
+    </div>
+  </div>
+  <div class="card-body" *ngIf="sharedPlayerService.IsLoadingSection === false">
+    <div class="grid-form security-form">
+      ...
+
+      <div class="grid-bundle detail-information-area">
+        ...
+
+        <div class="form-group row">
+          <label class="col-4 col-form-label">{{
+            "PLAYER_DETAIL_SECURITY_RESTRICT_TIME" | translate
+          }}</label>
+          <div class="col-8">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+              (click)="OpenModal(Modals.RestrictTime, ModalColors.Primary)"
+            >
+              {{ "PLAYER_DETAIL_SECURITY_CHANGE" | translate }}
+            </button>
+            <span class="ml-3" *ngIf="PlayerInfo.IsRestricted === true"
+              >{{ PlayerInfo.RestrictTimeStart | date: "HH:mm" }} ~
+              {{ PlayerInfo.RestrictTimeEnd | date: "HH:mm" }}</span
+            >
+          </div>
+        </div>
+
+        ...
+      </div>
+    </div>
+  </div>
+  <div class="card-body" *ngIf="sharedPlayerService.IsLoadingSection === true">
+    <p class="text-center">
+      <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+    </p>
+  </div>
+</div>
