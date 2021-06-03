@@ -1,0 +1,44 @@
+<!-- ... bank-info modal에 진입하는 component -->
+
+<div *ngIf="PlayerInfo?.CountryCode === 'NL'">
+		<div class="card-header border-top">
+			<div class="card-title">
+				{{'PLAYER_DETAIL_SECURITY_BANKINFO' | translate }}
+			</div>
+		</div>
+		<div class="card-body" *ngIf="sharedPlayerService.IsLoadingSection === false">
+			<div class="grid-form security-form">
+				<div class="grid-bundle detail-information-area">
+					<div class="form-group row">
+						<label class="col-4 col-form-label">{{'PLAYER_DETAIL_SECURITY_BANKINFO_BANK_ACCOUNT' | translate }}</label>
+						<div class="bankInfo">
+							<div class="row">
+								<button type="button" class="btn btn-outline-primary btn-sm mt-1" (click)="OpenModal(Modals.BankInfo, ModalColors.Primary)">{{'PLAYER_DETAIL_SECURITY_CHANGE' | translate }}</button>
+								<div class="bank-name" *ngIf="PlayerInfo.BankName">{{PlayerInfo.BankName}}</div>
+							</div>
+
+							<div class="bankInfo-status row" *ngIf="PlayerInfo.BankAccount">
+								<div class="status-type">({{PlayerInfo.BankAccount}})</div>
+								<div class="status-type">
+									<span *ngIf="PlayerInfo.IsBankVerified">
+										<i class="fa fa-check-circle co-success"></i>
+									</span>
+									<span *ngIf="PlayerInfo.IsBankVerified === false">
+										<i class="d-iblock mr-2 fa fa-ban text-danger"></i>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<label class="col-4 col-form-label"></label>
+						<div class="col-8" *ngIf="PlayerInfo.BankUpdatedAt">
+							<small class="bankInfo-update-date">{{'PLAYER_DETAIL_SECURITY_UPDATED' | translate }}: {{PlayerInfo?.BankUpdatedAt | fulldate}}</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- ... -->
