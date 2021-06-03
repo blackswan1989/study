@@ -1,0 +1,31 @@
+@addTagHelper *, GGCore.Web.Widget
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="alert_box success">
+	<span class="material-icons ico">done</span>
+	<p>{{'MyInfo.Account.BankInfo.SuccessMassage' | translate}}</p>
+</div>
+
+<div class="bankInfo_box mb-20 pt-0">
+	<div class="bankInfo_input_box">
+		<div class="flex_field fluid_row col_9">
+			<div class="inst_box">
+				<input type="text" class="inst_txt" placeholder="{{'Common.BankInfo' | translate}}" ng-model="Personal.Model.personal.FirstName" ng-keyup="Personal.nameCheck()" maxlength="50" ng-disabled="Personal.Model.personalEditStatus === Personal.Model.EditStatus.Ready || Personal.isEditable.firstName === false">
+				<i class="material-icons" aria-hidden="true">account_balance</i>
+			</div>
+			<div class="inst_box">
+				<input type="text" class="inst_txt" placeholder="{{'MyInfo.Account.BankInfo.AccountNumber' | translate}}" ng-model="Personal.Model.personal.LastName" ng-keyup="Personal.nameCheck()" maxlength="50" ng-disabled="Personal.Model.personalEditStatus === Personal.Model.EditStatus.Ready || Personal.isEditable.lastName === false">
+				<i class="material-icons" aria-hidden="true">account_balance</i>
+			</div>
+		</div>
+
+		<div class="col_3">
+			<button type="button" class="btn" ng-disabled="ChangeContraAccount.btnDisabled === true" ng-click="ChangeContraAccount.requestForChangeBankInfo()">{{'MyInfo.Account.BankInfo.btn' | translate}}</button>
+		</div>
+	</div>
+
+	<div class="bankInfo_notice">
+		<p class="lab" translate="MyInfo.Account.BankInfo.Notice1" translate-values="{EMAIL: 'cashier@ggpoker.com'}"></p>
+		<p class="lab" translate="MyInfo.Account.BankInfo.Notice2" translate-values="{EMAIL: 'cashier@ggpoker.com'}"></p>
+	</div>
+</div>
