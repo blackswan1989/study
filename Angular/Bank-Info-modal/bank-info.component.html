@@ -1,0 +1,37 @@
+<div class="modal-header">
+	<h4 id="dialog-child-name" class="modal-title pull-left">{{ 'PLAYER_DETAIL_SECURITY_BANKINFO' | translate }}</h4>
+	<button type="button" class="close pull-right" aria-label="Close" (click)="Hide()">
+		<i class="fa fa-close" aria-hidden="true"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="form-group row bankInfo-toggleBox">
+		<div class="col-form-label col-4">{{ 'PLAYER_DETAIL_SECURITY_BANKINFO' | translate }}</div>
+		<div class="swich-verify col-8 bankInfo-toggle">
+			<label class="switch switch-label switch-pill switch-success">
+				<input type="checkbox" class="switch-input" [(ngModel)]="Model.Request.IsVerified">
+				<span class="switch-slider" data-checked="Verified" data-unchecked="Not Verified"></span>
+			</label>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<label class="col-md-4 align-self-center m-0">{{ 'PLAYER_DETAIL_SECURITY_BANKINFO_MODAL_BANKNAME' | translate }}</label>
+		<div class="col-md-8">
+			<ng-select class="multi-line-select" placeholder="{{ 'PLAYER_DETAIL_SECURITY_BANKINFO_MODAL_BANKSELECT' | translate }}" [items]="Model.BankNameOptionList" bindLabel="label" bindValue="value" [(ngModel)]="Model.Request.BankCode" [clearable]="false"></ng-select>
+		</div>
+	</div>
+
+	<div class="form-group bankInfo-inputBox">
+		<div *ngFor="let item of Model.FormOptions.Items">
+			<app-form-item [Item]="item"
+						   [Options]="Model.FormOptions"
+						   [Request]="Model.Request">
+			</app-form-item>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" [disabled]="Model.IsLoading" (click)="Hide()">{{ 'BUTTON_CANCEL' | translate }}</button>
+	<button type="button" class="btn btn-primary" [disabled]="Model.FormOptions.Form.invalid || !Model.Request.BankCode || Model.IsLoading" (click)="Confirm()">{{ 'BUTTON_CONFIRM' | translate }}</button>
+</div>
