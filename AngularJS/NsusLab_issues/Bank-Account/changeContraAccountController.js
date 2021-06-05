@@ -1,24 +1,43 @@
 var ChangeContraAccountController = app.controller('ChangeContraAccountController', [
-	'$rootScope', '$timeout', 'myInfoModel', 'commonModel',
-	function ($rootScope, $timeout, myInfoModel, commonModel)
+	'$rootScope', '$timeout', 'myInfoModel', 'commonModel', 'myInfoModel', '$window',
+	function ($rootScope, $timeout, myInfoModel, commonModel, myInfoModel, $window)
 	{
 		var ChangeContraAccount = this;
 
+		ChangeContraAccount.isNL = false;
 		ChangeContraAccount.btnDisabled = false;
 
-		ChangeContraAccount.requestForChangeBankInfo = function ()
+		ChangeContraAccount.openVerifyKycSignicatModal = function ()
 		{
-			ChangeContraAccount.btnDisabled = true;
+			if ($rootScope.isRGSelfExclusion === true)
+			{
+				return;
+			}
 
-			angular.element('.alert_box.success').fadeIn().delay(3000).fadeOut();
+			if (isUsedVerifyFlow())
+			{
+				commonModel.getRequirementStepList().then(function ()
+				{
+					$rootScope.openVerificationStep = true;
+				});
+			}
+			else {
+				$rootScope.openVerification = true;
+			}
+		};
 
-			//ChangeContraAccount.requestForChangeBankInfo().then(function (response)
-			//{
-			//});
-		}
-
-		ChangeContraAccount.onInit = function () {
-
+		ChangeContraAccount.onInit = function ()
+		{
+			if ($window.environment === 'dev')
+			{
+				myInfoModel.getPlayerInfo(function ()
+				{
+					if (myInfoModel.myInfo.Country.toLowerCase() === 'nl')
+					{
+						ChangeContraAccount.isNL = true;
+					}
+				});
+			}
 		};
 
 		ChangeContraAccount.onInit();
