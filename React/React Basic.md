@@ -1,6 +1,6 @@
 <br>
 
-## 1. 리액트란
+# 1. 리액트란
 
 <br>
 <br>
@@ -75,4 +75,140 @@ Virtual DOM을 사용하면 실제 DOM에 접근하여 조작하는 대신, 이�
 
 ### 1.3.1 create-react-app으로 프로젝트 생성하기
 
-`create-react-app`은 리액트 프로젝트를 생성할 때 필요한 웹팩, 바벨의 설치 및 설정 과정을 생략하고 바로 간편하게 프로젝트 작업 환경을 구축해 주는 도구입니다.
+`create-react-app`은 리액트 프로젝트를 생성할 때 필요한 웹팩, 바벨의 설치 및 설정 과정을 생략하고 바로 간편하게 프로젝트 작업 환경을 구축해 주는 도구이다. 
+
+`yarn create react-app 프로젝트명`을 입력하면 react 프로젝트가 생성되고 `$cd 프로젝트명`으로 진입한 후 `$yarn start`를 입력하여 리액트 개발 전용 서버를 구동 할 수 있다. (npm 사용시 `npm init react-app 프로젝트명` & `npm start`)
+
+<br>
+<br>
+<br>
+<br>
+
+# 2. JSX
+
+<br>
+
+## 2.1 JSX 이해하기
+
+<br>
+
+JSX는 자바스크립트의 확장 문법이며 XML과 매우 비슷하게 생겼다. 이 코드는 브라우저에서 실행되기 전에 코드가 번들링되는 과정에서 바벨을 사용하여 일반 자바스크립트 형태의 코드로 변환된다.
+
+<br>
+
+```
+// 1) JSX 코드 예시
+
+function App() {
+  return (
+    <div>
+      Hello <b>react</b>
+    </div>
+  );
+}
+
+
+//2) 위와 같이 작성된 코드는 아래와 같이 변환된다.
+
+function App() {
+  return React.createElement("div", null, "Hello", React.createElement("b", null, "react"));
+}
+```
+
+<br>
+
+예제 2)의 코드처럼 매번 React.createElement 함수를 사용해야한다면 매우 불편하겠지만 JSX를 사용하면 매우 편하게 UI를 렌더링할 수 있다. 이러한 JSX는 보기 쉽고 익숙하다는 장점이 있다. 자바스크립트 코드와 비교했을 때 훨씬 가독성도 높고 HTML코드를 작성하는 것과 비슷하다.
+
+그리고 JSX는 더욱 높은 활용도를 가지고 있는데 div나 span과 같은 HTML 태그를 사용할 수 있을 뿐만 아니라, 앞으로 만들 컴포넌트도 JXS 안에서 작성할 수 있다. App.js에서 만든 App 컴포넌트를 index.js에서 마치 HTML 태그 쓰듯이 그냥 작성할 수 있다.
+
+<br>
+
+```
+// index.js
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+```
+
+<br>
+
+위에서 `ReactDOM.render()`은 컴포넌트를 페이지에 렌더링하는 역할을 하며, react-dom 모듈을 불러와 사용할 수 있다. 이 함수의 첫번째 파라미터에는 페이지에 렌더링 할 내용을 JSX 형태로 작성하고, 두 번째 파라미터에는 해당 JSX를 렌더링할 document 내부 요소를 설정한다. 여기서 id가 root인 요소 안에 렌더링 하도록 설정되어 있는데, 이 요소는 public/index.html에서 확인 가능하다.
+
+<br>
+
+`React.StrictMod`는 리액트 프로젝트에서 리액트의 레거시 기능들을 사용하지 못하게 하는 기능으로, 이를 사용하면 문자열 ref, componentWillMount 등 나중에는 완전히 사라지게 될 옛날 기능을 사용했을때 경고를 출력하게 해준다. (해당 프로젝트에서는 StrictMod를 적용하지 않았다.)
+
+<br>
+<br>
+<br>
+
+## 2.2 JSX 문법
+
+<br>
+
+### 2.2.1 감싸인 요소
+
+<br>
+
+컴포넌트에 여러 요소가 있다면 반드시 부모 요소 하나로 감싸야 한다. 그 이유는 Virtual DOM에서 컴포넌트 변화를 감지해 낼 때 효율적으로 비교할 수 있도록 컴포넌트 내부는 하나의 DOM 트리 구조로 이루어져야한다는 규칙이 있기 때문이다.
+
+<br>
+
+```
+// 1) Error
+function App() {
+  return (
+      <h1>hello react</h1>
+      <h2>test test</h2>
+  );
+
+
+// 2) 부모 요소로 감싸주어야 error가 발생하지 않는다.
+
+import React, {Fragment} from 'react';
+
+function App() {
+  return (
+    <>
+      <h1>hello react</h1>
+      <h2>Fragment test</h2>
+    </>
+  );
+```
+
+<br>
+
+그런데 꼭 `div`를 사용하지 않고도 `Fragment` 라는 기능을 사용해도 된다. 코드 상단에 `import React, {Fragment} from 'react';` 컴포넌트를 불러오면 `<></>`와 같이 간단하게 표현할 수 있다.
+
+<br>
+<br>
+
+### 2.2.2 자바스크립트 표현
+
+<br>
+
+JSX 내부에서 자바스크립트 표현식을 쓸 수 있는데, 작성하려면 JSX 내부에서 코드를 `{}`로 감싸면 된다. 
+
+<br>
+
+```
+function App() {
+  const name = 'react';
+  return (
+    <>
+      <h1>{name} Hello!</h1>
+      <h2>Javascript test</h2>
+    </>
+  )
+}
+```
