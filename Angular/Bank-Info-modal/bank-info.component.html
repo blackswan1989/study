@@ -4,13 +4,19 @@
 		<i class="fa fa-close" aria-hidden="true"></i>
 	</button>
 </div>
-<div class="modal-body">
+<div class="modal-body" *ngIf="IsLoading">
+	<div class="loading-box">
+		<i class="fa fa-spinner fa-pulse fa-5x fa-fw" aria-hidden="true"></i>
+		<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+	</div>
+</div>
+<div class="modal-body" *ngIf="IsLoading === false">
 	<div class="form-group row bankInfo-toggleBox">
 		<div class="col-form-label col-4">{{ 'PLAYER_DETAIL_SECURITY_BANKINFO' | translate }}</div>
 		<div class="swich-verify col-8 bankInfo-toggle">
 			<label class="switch switch-label switch-pill switch-success">
 				<input type="checkbox" class="switch-input" [(ngModel)]="Model.Request.IsVerified">
-				<span class="switch-slider" data-checked="Verified" data-unchecked="Not Verified"></span>
+				<span class="switch-slider" [attr.data-checked]="'COMMON_VERIFIED' | translate" [attr.data-unchecked]="'COMMON_NOT_VERIFIED' | translate"></span>
 			</label>
 		</div>
 	</div>
@@ -25,13 +31,13 @@
 	<div class="form-group bankInfo-inputBox">
 		<div *ngFor="let item of Model.FormOptions.Items">
 			<app-form-item [Item]="item"
-						   [Options]="Model.FormOptions"
-						   [Request]="Model.Request">
+				       [Options]="Model.FormOptions"
+				       [Request]="Model.Request">
 			</app-form-item>
 		</div>
 	</div>
 </div>
-<div class="modal-footer">
+<div class="modal-footer" *ngIf="IsLoading === false">
 	<button type="button" class="btn btn-secondary" [disabled]="Model.IsLoading" (click)="Hide()">{{ 'BUTTON_CANCEL' | translate }}</button>
 	<button type="button" class="btn btn-primary" [disabled]="Model.FormOptions.Form.invalid || !Model.Request.BankCode || Model.IsLoading" (click)="Confirm()">{{ 'BUTTON_CONFIRM' | translate }}</button>
 </div>
