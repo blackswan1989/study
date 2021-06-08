@@ -12,16 +12,14 @@ import { AbstractModalModel } from '@core/models/abstract-modal.model';
 })
 export class BankInfoModel extends AbstractModalModel
 {
-	FormOptions: DForm.DynamicFormOption = new DForm.DynamicFormOption
-		([
+	FormOptions: DForm.DynamicFormOption = new DForm.DynamicFormOption(
+		[
 			DForm.BankAccountNumber,
-			], DForm.DynamicFormGroupTypes.Horizon
-		);
+		], DForm.DynamicFormGroupTypes.Horizon);
 	PlayerInfo: DTO.AffiliatePlayer;
 	Request: DTO.EditAffiliatePlayerBankInformationRequest;
 	PlayerCountryCode: String;
 	IsLoading: boolean;
-	BankNameList: DTO.GetAffiliateBankListResponse[];
 	BankNameOptionList: NgOption[];
 
 	constructor
@@ -33,7 +31,7 @@ export class BankInfoModel extends AbstractModalModel
 		super();
 	}
 
-	Reset(playerInfo: DTO.AffiliatePlayer): void
+	async Reset(playerInfo: DTO.AffiliatePlayer): Promise<void>
 	{
 		this.IsLoading = false;
 		this.PlayerInfo = playerInfo;
@@ -42,12 +40,17 @@ export class BankInfoModel extends AbstractModalModel
 		this.Request.AgentName = this.PlayerInfo.Agent;
 		this.Request.UserId = this.PlayerInfo.UserId;
 		this.Request.IsVerified = this.PlayerInfo.IsBankVerified;
-		this.Request.BankAccount = this.PlayerInfo.BankAccount;
-		this.Request.BankCode = this.PlayerInfo.BankCode;
+
+		this.FormOptions.Form.reset();
 
 		try
 		{
-			this.GetBankNameList();
+			await this.GetBankNameList();
+
+			this.Request.BankCode = this.PlayerInfo.BankCode;
+			this.FormOptions.Form.patchValue({
+				BankAccount: this.PlayerInfo.BankAccount,
+			});
 		}
 		catch (e)
 		{
@@ -57,34 +60,37 @@ export class BankInfoModel extends AbstractModalModel
 
 	private async GetBankNameList(): Promise<void>
 	{
-		if (!this.BankNameList || this.BankNameList.length <= 0)
+		if (this.IsLoading)
+			return;
+
+		try
 		{
-			try
+			this.IsLoading = true;
+			this.BankNameOptionList = [];
+
+			const request = new DTO.GetAffiliateBankListRequest();
+			request.CountryCode = this.PlayerInfo.CountryCode;
+
+			const response: DTO.GetAffiliateBankListResponse = await this.playerService.GetAffiliateBankList(request);
+
+			if (response && response.BankList && response.BankList.length > 0)
 			{
-				const request = new DTO.GetAffiliateBankListRequest();
-				request.CountryCode = this.sharedPlayerService.PlayerInfo.CountryCode;
-
-				const response: DTO.GetAffiliateBankListResponse = await this.playerService.GetAffiliateBankList(request);
-				const bankList = response.BankList;
-
-				if (bankList)
+				response.BankList.forEach((row: DTO.BankInfo) =>
 				{
-					this.BankNameOptionList = [];
-
-					bankList.forEach((row: DTO.BankInfo) =>
-					{
-						const option: NgOption = {
-							label: row.BankName,
-							value: row.BankCode,
-						}
-						this.BankNameOptionList.push(option);
+					this.BankNameOptionList.push({
+						label: row.BankName,
+						value: row.BankCode,
 					});
-				}
+				});
 			}
-			catch (e)
-			{
-				throw e;
-			}
+		}
+		catch (e)
+		{
+			throw e;
+		}
+		finally
+		{
+			this.IsLoading = false;
 		}
 	}
 
@@ -96,6 +102,7 @@ export class BankInfoModel extends AbstractModalModel
 		try
 		{
 			this.IsLoading = true;
+
 			await this.playerService.EditPlayerBankInformation(this.Request);
 			await this.sharedPlayerService.GetPlayerInfo();
 		}
