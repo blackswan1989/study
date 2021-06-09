@@ -170,8 +170,8 @@ ReactDOM.render(
 // 1) Error
 function App() {
   return (
-      <h1>hello react</h1>
-      <h2>test test</h2>
+    <h1>hello react</h1>
+    <h2>test test</h2>
   );
 }
 
