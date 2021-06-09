@@ -231,12 +231,12 @@ JSX 내부의 자바스크립트 포현식에서 if문을 사용할 수 없는�
 import React from 'react';
 
 function App() {
-	const name = 'React';
-	return (
-		<div>
-			{name === 'React' ? (<h1>It's React</h1>) : (<h2>Not React</h2>)}
-		</div>
-	)
+  const name = 'React';
+  return (
+    <div>
+      {name === 'React' ? (<h1>It's React</h1>) : (<h2>Not React</h2>)}
+    </div>
+  )
 }
 
 export default App;
@@ -259,8 +259,8 @@ export default App;
 // 1) 조건부 연산자로 구현 - null을 입력해 아무것도 보여 주지 않을 수 있다
 
 function App() {
-	const name = 'Reacttt';
-	return <div> {name === 'React' ? <h1>It's React</h1> : null} </div>;
+  const name = 'Reacttt';
+  return <div> {name === 'React' ? <h1>It's React</h1> : null} </div>;
 }
 
 ---
@@ -268,8 +268,8 @@ function App() {
 // 2) && 연산자로 구현 - 이렇게 작성하면 false 상태이기 때문에 아무것도 보여주지 않을 수 있다.
 
 function App() {
-	const name = 'Reacttt';
-	return <div> {name === 'React' && <h1>It's React</h1>} </div>;
+  const name = 'Reacttt';
+  return <div> {name === 'React' && <h1>It's React</h1>} </div>;
 }
 ```
 
@@ -292,8 +292,8 @@ function App() {
 // 1) Error: App(...): Nothing was returned from render. This usually means a return statement is missing Or, to render nothing, return null.
 
 function App() {
-	const name = undefined;
-	return name;
+  const name = undefined;
+  return name;
 }
 
 ---
@@ -301,8 +301,8 @@ function App() {
 // 2) Error 방지
 
 function App() {
-	const name = undefined;
-	return name || '값이 undefined 이다.';
+  const name = undefined;
+  return name || '값이 undefined 이다.';
 }
 ```
 
@@ -314,8 +314,8 @@ function App() {
 // 3) JSX 내부에서 undefined를 렌더링
 
 function App() {
-	const name = undefined;
-	return <div>{name}</div>
+  const name = undefined;
+  return <div>{name}</div>
 }
 
 ---
@@ -323,8 +323,8 @@ function App() {
 // 4) 값이 undefined일 때 보여주고 싶은 문구가 있을 때
 
 function App() {
-	const name = undefined;
-	return <div>{name || 'React'}</div>
+  const name = undefined;
+  return <div>{name || 'React'}</div>
 }
 ```
 
@@ -343,16 +343,16 @@ function App() {
 // 1) style 객체를 미리 선언하고 div에 값을 지정
 
 function App() {
-	const name = 'React';
-	const style = {
-		backgroundColor: 'black', 	// 카멜 표기법으로 작성
-		color: 'aqua'
-		fontSize: '48px',
-		fontWeight: 'bold',
-		padding: 16 								// 단위를 생략하면 px로 지정된다.
-	}
+  const name = 'React';
+  const style = {
+    backgroundColor: 'black', 	// 카멜 표기법으로 작성
+    color: 'aqua'
+    fontSize: '48px',
+    fontWeight: 'bold',
+    padding: 16 		// 단위를 생략하면 px로 지정된다.
+  }
 
-	return <div style={style}>{name}</div>
+  return <div style={style}>{name}</div>
 }
 
 ---
@@ -360,21 +360,21 @@ function App() {
 // 2) style값을 해당 태그에 바로 지정하는 것도 가능
 
 function App() {
-	const name = 'React';
+  const name = 'React';
 
-	return (
-		<div 
-			style={{
-				backgroundColor: 'black', 	
-				color: 'aqua'
-				fontSize: '48px',
-				fontWeight: 'bold',
-				padding: 16
-			}}
-		>
-			{name}
-		</div>
-	);
+  return (
+    <div 
+      style={{
+	backgroundColor: 'black', 	
+	color: 'aqua'
+	fontSize: '48px',
+	fontWeight: 'bold',
+	padding: 16
+      }}
+    >
+      {name}
+    </div>
+  );
 }
 ```
 
@@ -390,17 +390,17 @@ HTML에서 CSS 클래스를 사용할 때 `class` 속성을 사용하지만, JSX
 ```
 //App.js 파일
 function App() {
-	const name = 'React';
-	return <div className="react">{name}</div>;
+  const name = 'React';
+  return <div className="react">{name}</div>;
 }
 
 // App.css 파일
 .react {
-	backgroundColor: 'aqua', 	
-	color: 'black'
-	fontSize: '48px',
-	fontWeight: 'bold',
-	padding: 16px;
+  backgroundColor: 'aqua', 	
+  color: 'black'
+  fontSize: '48px',
+  fontWeight: 'bold',
+  padding: 16px;
 }
 ```
 
@@ -417,22 +417,22 @@ HTML에서 `<input>`이나 `<br>`태그는 닫는 태그를 입력하지 않아�
 
 ```
 function App() {
-	const name = 'React';
-	return (
-		<>
-			<input></>
-			<input/>
+  const name = 'React';
+  return (
+      <>
+	<input></>
+	<input/>
 
-			// 이렇게 작성하면 페이지에 나타나게 된다.
-			/* 이렇게 작성하면 페이지에 나타나게 된다. */
+	// 이렇게 작성하면 페이지에 나타나게 된다.
+	/* 이렇게 작성하면 페이지에 나타나게 된다. */
 
-			{/* 주석은 이렇게 작성 */}
+	{/* 주석은 이렇게 작성 */}
 
-			<div
-				className="react"  // 시작 태그를 여러 줄로 작성하게 된다면 이렇게 주석 작성도 가능하다.
-			>
-			</div>
-		</>
-	);
+	<div
+	  className="react"  // 시작 태그를 여러 줄로 작성하게 된다면 이렇게 주석 작성도 가능하다.
+	>
+	</div>
+      </>
+   );
 }
 ```
