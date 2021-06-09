@@ -436,3 +436,99 @@ function App() {
    );
 }
 ```
+
+
+<br>
+<br>
+<br>
+<br>
+
+# 3. 컴포넌트
+
+<br>
+
+## 3.1 클래스형 컴포넌트
+
+<br>
+
+지금까지 보았던 App 컴포넌트는 함수형 컴포넌트 방식이었고 다음은 클래스형 컴포넌트이다. 클래스형 컴포넌트에서는 `render`함수가 꼭 있어야 하고, 그 안에서 보여 줘야 할 JSX를 반환해야 한다.
+
+<br>
+
+```
+// 1) 함수형 컴포넌트
+import React from 'react';
+import './App.css';
+
+function App() {
+  const name = 'react';
+  return <div className="react">{name}</div>;
+}
+
+export default App;
+
+---
+
+// 2) 클래스형 컴포넌트
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    const name = 'react';
+    return <div className="react">{name}</div>;
+  }
+}
+
+export default App;
+```
+
+<br>
+
+역할은 함수형 컴포넌트와 똑같지만 차이점은 클래스형 컴포넌트의 경우 `state` 기능 및 라이프사이클 기능을 사용할 수 있다는 것과 임시 메서드를 정의할 수 있다는 것입니다.
+
+함수형 컴포넌트의 장점은, 클래스형 컴포넌트보다 선언하기가 훨씬 편하고 메모리 자원도 클래스형 컴포넌트보다 덜 사용한다. 또 배포할 때도 함수형 컴포넌트를 사용하는 것이 크기가 더 작다는 장점도 있다. 단점으로는, `state` 기능 및 라이프사이클 API의 사용이 불가능하다는 점으로 v16.8 버전 이후 `Hooks`라는 기능이 도입되며 해결되었다.
+
+리액트 공식 매뉴얼에서는 함수형 컴포넌트와 Hooks를 사용하도록 권장하고 있다. 하지만 클래스형 컴포넌트가 사라지는 것은 아니기 때문에 함께 알아두도록 하자.
+
+<br>
+
+  - **EES6의 클래스 문법**
+
+  ```
+  // 1) ES6 이전 문법으로는 class 대신에 prototype 문법을 사용하여 아래처럼 작업해야 했다.
+
+  function Dog(name) {
+    this.name = name;
+  }
+
+  Dog.prototype.say = function() {
+    console.log(this.name + ': 멍멍')
+  }
+
+  var dog = new Dog('흰둥이');
+  dog.say()
+
+  [LOG] 흰둥이: 멍멍
+
+  ---
+
+  // 2) ES6 class 문법은 아래와 같이 작성할 수 있다.
+
+  class Dog {
+    constructor(name) {
+	  this.name = name;
+    }
+    say() {
+      console.log(this.name + ': 멍멍')
+    }
+  }
+
+  const dog = new Dog('검둥이');
+  dog.say();
+
+  [LOG] 검둥이: 멍멍
+  ```
+	
+<br>
+
+
