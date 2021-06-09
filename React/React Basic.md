@@ -173,7 +173,7 @@ function App() {
       <h1>hello react</h1>
       <h2>test test</h2>
   );
-
+}
 
 // 2) 부모 요소로 감싸주어야 error가 발생하지 않는다.
 
@@ -186,6 +186,7 @@ function App() {
       <h2>Fragment test</h2>
     </>
   );
+} 
 ```
 
 <br>
