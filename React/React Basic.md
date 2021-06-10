@@ -528,7 +528,460 @@ export default App;
 
   [LOG] 검둥이: 멍멍
   ```
-	
+  
+<br>
 <br>
 
+- **EES6의 화살표 함수**
 
+화살표 함수는 주로 함수를 파라미터로 전달할 때 유용하게 쓰이며 function과 서로 가리키는 this 값이 다르다. `function()`을 사용했을 때는 푸들이 나타나고 `()=>`를 사용했을 때는 리트리버가 나타난다. 
+
+즉, 일반 함수는 자신이 종속된 객체를 `this`로 가리키며 화살표 함수는 자신이 종속된 인스턴스를 `this`로 가리킨다.
+
+```
+// 1) 화살표 함수는 function과 서로 가리키는 this 값이 다르다.
+
+function BlackDog() {
+  this.name = '리트리버';
+  return{
+    name: '푸들',
+    bark: function() {
+      console.log(this.name + ': 멍멍');
+    }
+  }
+}
+const blackDog = new BlackDog();
+blackDog.bark();   // [LOG] 푸들 멍멍
+
+
+function WhiteDog() {
+  this.name = '리트리버';
+  return{
+    name: '푸들',
+    bark: () => {
+      console.log(this.name + ': 멍멍');
+    }
+  }
+}
+const whiteDog = new WhiteDog();
+whiteDog.bark();    // [LOG] 리트리버 멍멍
+
+
+---
+
+
+// 2) 화살표 함수는 값을 연산하여 바로 반환해야 할 때 사용하면 가독성을 높일 수 있다.
+
+function twice(value) {
+  return value * 2;
+}
+
+const triple = (value) => value * 3;
+```
+
+<br>
+<br>
+<br>
+
+## 3.2 First Component
+
+<br>
+
+props 값은 `const MyComponent = (props) => {...}`처럼 컴포넌트 함수의 파라미터로 받아와서 사용할 수 있다.
+
+`const {name, children} = props;`와 같은 비구조화 할당(destructuring assignment) 문법은 함수의 파라미터 부분에서도 사용할 수 있다. 아래의 경우 처럼 만약 함수의 파라미터가 객체라면 그 값을 바로 비구조화 해서 사용할 수 있다. 
+
+이를 통해 내부 값을 바로 추출하여 `{props.name}`처럼 `props` 키워드를 앞에 붙이지 않고 `{name}`만으로 사용 가능하다.
+
+```
+// MyComponent.js
+
+import React from 'react';
+import PropTypes from 'prop-types';   // 컴포넌트의 필수 props를 지정하거나 props 타입을 지정할 때 사용
+
+const MyComponent = ({name, children, favoriteNumber}) => {
+  return (
+    <div style={{fontSize:'48px', backgroundColor: 'black', color: 'aqua', padding: 16}}>
+      Hello, My name is {name} <br/>
+      children value is {children} <br/>
+      My favorite Number is {favoriteNumber}
+    </div>
+  );
+};
+
+// App 컴포넌트에 name 값이 없을때 보여줄 default props 설정이 가능하다.
+MyComponent.defaultProps = {
+  name: 'Default Name'
+}
+
+MyComponent.propTypes = {
+  name: PropTypes.string,
+  favoriteNumber: PropTypes.number.isRequired
+}
+
+export default MyComponent;
+
+---
+
+// App.js
+
+import React from 'react';
+import MyComponent from './MyComponent';
+
+const App = () => {
+  return <MyComponent name={"Kate"} favoriteNumber={2}> React </MyComponent>;
+}
+
+export default App;
+```
+
+- props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 사용하는 요소이다.
+
+- props 값은 해당 컴포넌트를 불러와 사용하는 부모 컴포넌트(현재 App 컴포넌트)에서 설정할 수 있다. 
+
+<br>
+<br>
+<br>
+
+## 3.3 PropTypes
+
+<br>
+
+리액트에서는 아래 처럼 `propTypes` 사용하여 타입을 지정하여 코드 안전성을 높일 수 있다. `isRequired`를 사용하면 필수 항목으로 설정된다.
+
+<br>
+
+```
+// MyComponent.js
+
+...
+
+MyComponent.propTypes = {
+  name: PropTypes.string,
+  favoriteNumber: PropTypes.number.isRequired
+}
+```
+
+<br>
+<br>
+
+### 3.3.1 더 많은 PropTypes 종류 (url: https://github.com/facebook/prop-types)
+
+<br>
+
+- array: 배열
+- arrayOf(다른 PropType): 특정 PropType으로 이루어진 배열을 의미한다. 예를 들어 arrayOf(PropType.number)는 숫자로 이루어진 배열이다.
+- bool: true & false 값
+- func: 함수
+- number: 숫자
+- object: 객체
+- string: 문자열
+- symbol: ES6의 Symbol
+- node: 렌더링 할 수 있는 모든 것(숫자, 문자열, JSX, children도 node PropType이다.)
+- instanceOf(클래스): 특정 클래스의 인스턴스로 예를 들면 instanceOf(MyClass)
+- oneOf(['dog', 'cat']): 주어진 배열 요소 중 값 하나
+- oneOfType([React.PropTypes.string, PropTypes.number]): 주어진 배열 안의 종류 중 하나
+- objectOf(React.PropTypes.number): 객체의 모든 키 값이 인자로 주어진 PropType인 객체
+- shape({ name: PropTypes.string, num: PropTypes.number}): 주어진 스키마를 가진 객체
+- any: 아무 종류
+
+<br>
+<br>
+
+### 3.3.2 클래스형 컴포넌트에서 props 사용하기
+
+<br>
+
+클래스형 컴포넌트에서 `props`를 사용할 때는 `render` 함수에서 `this.props`를 조회하면 된다. 그리고 defaultPorps와 propTypes는 #3.2와 똑같은 방식으로 설정할 수 있다.
+
+<br>
+
+```
+import React, {Component} from 'react';   // {Component} 추가
+import PropTypes from 'prop-types';
+
+class MyComponent extends Component {
+  render() {
+    const { name, favoriteNumber, children } = this.props; // 비구조화 할당(destructuring assignment)
+
+    return (
+      <div style={{fontSize:'48px', backgroundColor: 'black', color: 'aqua', padding: 16}}>
+        Hello, My name is {name} <br/>
+        children value is {children} <br/>
+        My favorite Number is {favoriteNumber}
+      </div>
+    )
+  }
+}
+
+...
+```
+
+<br>
+
+클래스형 컴포넌트에서 defaultProps와 propTypes를 설정할 때 아래 처럼 class 내부에서 지정하는 방법도 있다.
+
+<br>
+
+```
+class MyComponent extends Component {
+  static defaultProps = {
+    name: 'Default Name' 
+  };
+
+  static propTypes = {
+    name: PropTypes.string,
+    favoriteNumber: PropTypes.number.isRequired
+  };
+
+  render() {
+    const { name, favoriteNumber, children } = this.props;
+
+    return (
+      ...
+    )
+  }
+}
+```
+
+<br>
+<br>
+<br>
+
+## 3.4 state
+
+<br>
+
+리액트에서 state는 컴포넌트 내부에서 바뀔 수 있는 값을 의미한다. `props`는 컴포넌트가 사용되는 과정에서 부모 컴포넌트가 설정하는 값이며, 컴포넌트 자신은 해당 `props`를 읽기 전용으로만 사용할 수 있다. 즉 `props`를 바꾸려면 부모 컴포넌트에서 바꾸어 주어야 한다.
+
+리액트에는 두 가지 종류의 state가 있다. 하나는 클래스형 컴포넌트가 지니고 있는 state 이고, 다른 하나는 함수형 컴포넌트에서 useState라는 함수를 통해 사용하는 state 이다.
+
+<br>
+
+```
+// Counter.js
+
+import React, { Component } from 'react';
+
+class Counter extends Component {
+  // 컴포넌트에 state를 설정할 때는 다음과 같이 constructor 메서드를 작성하여 설정한다.
+  // 이는 컴포넌트의 생성자 메서드로 반드시 super(props)를 호출해 주어야 한다. 
+  // 이 함수가 호출되면 현재 클래스형 컴포넌트가 상속받고있는 리액트의 Component 클래스가 지닌 생성자 함수를 호출해 준다.
+  constructor(props) {
+    super(props);
+
+    // state의 초기 값 설정 (컴포넌트의 state는 객체 형식이어야 한다.)
+    this.state = {
+      number: 0
+    };
+  }
+
+  render() {
+    const { number } = this.state;  // state르 조회할 때는 this.state로 조회한다.
+
+    return (
+      <div>
+        <h1>{number}</h1>
+        <button
+          // onClick을 통해 버튼이 클릭되었을 때 호출할 함수를 지정한다. (이벤트 설정)
+          onClick={ () => 
+          {
+            // this.setState를 사용하여 state에 새로운 값을 넣을 수 있다.
+            this.setState({number: number + 1});
+          }}
+        >
+          +1
+        </button>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+```
+
+<br>
+<br>
+
+```
+// Counter_edit.js
+
+import React, { Component } from 'react';
+
+class CounterEdit extends Component {
+  // 아래 처럼 작성하면 counstructor 메서드를 선언하지 않고도 state 초기 값을 설정할 수 있다.
+  state = {
+    number: 0,
+    fixedNumber: 0
+  };
+
+  render() {
+    const { number, fixedNumber } = this.state;
+
+    return (
+      <div>
+        <h1>Number: {number}</h1>
+        <h2>Fixed Number: {fixedNumber}</h2>
+        <button
+          onClick={() => {
+            // 1) `fixedNumber` 추가 후 `this.setState` 함수를 사용할 때 인자로 전달되는 개체 내부에
+            //    `fixedNumber`를 넣어주지는 않는다. `this.setState` 함수는 인자로 전달된 객체 안에 들어 있는 값만 바꾸어 준다.
+            // 2) `this.setState`를 두번 작성해도 버튼을 클릭할 때 숫자가 1씩 더해지는데,
+            //    `this.setState`를 사용한다고 해서 `state` 값이 바뀌지는 않기 때문이다.
+            // this.setState({number: number + 1});
+            // this.setState({number: this.state.number + 1});
+
+            // 2)에 대한 해결책으로 아래의 코드처럼 객체 대신에 함수를 인자로 넣어주는것이다.
+            //   `this.setState((prevState, props) => {...}`에서 `prevState`는 기존 상태이고 
+            //   `props`는 현재 지니고 있는 `props`를 가리킨다. 만약 업데이트 하는 과정에서 `props`가 필요하지 않다면 생략해도 된다.
+            this.setState(prevState => {
+              return {
+                number: prevState.number + 1
+              };
+            });
+
+            // 위 코드와 아래 코드는 완전히 똑같은 기능을 한다. 아래 코드는 함수에서 바로 객체를 반환해주고 있다.
+            this.setState(prevState => ({
+              number: prevState.number + 1
+            }));
+          }}
+        >
+          +1
+        </button>
+
+        <button
+          // 3) setState를 사용하여 값을 업데이트 하고 난 다음에 특정 작업을 하고 싶을 때는 
+          //    setState의 두 번째 파라미터로 콜백 함수를 등록하여 작업을 처리할 수 있다.
+          onClick={() => {
+            this.setState(
+              {
+                number: number + 1
+              },
+              () => {
+                console.log('state가 호출되었다.')
+                console.log(this.state); // {number: 1, fixedNumber: 0} 출력되며 버튼을 클릭할때마다 number값도 갱신되며 출력된다.
+              }
+            )
+          }}
+        >
+          +1
+        </button>
+      </div>
+    );
+  }
+}
+
+export default CounterEdit;
+```
+
+<br>
+<br>
+
+### 3.4.1 배열 비구조화 할당(Array destructuring assignment)
+
+<br>
+
+배열 비구조화 할당(Array destructuring assignment)은 이전에 배운 객체 비구조화 할당과 비슷한데, 배열 안에 들어 있는 값을 쉽게 추출할 수 있도록 해주는 문법이다.
+
+<br>
+
+```
+const array = [1, 2];
+const one = array[0];
+const two = array[1];
+```
+
+위는 array 안에 있는 값을 one과 two에 담아 주는 코드로 이를 배열 비구조화 할당을 사용하면 다음과 같이 표현 가능하다
+
+```
+const array = [1, 2];
+const [one, tow] = array;
+```
+
+<br>
+<br>
+
+### 3.4.2 useState 사용하기
+
+<br>
+
+`useState` 함수의 인자에는 상태의 초깃값을 넣어 준다. 클래스형 컴포넌트에서의 `state` 초기값은 객체 형태를 넣어 주어야 하지만 `useState`에서는 반드시 객체가 아니어도 상관 없다. 값의 형태는 숫자, 문자열, 객체, 배열과 같이 자유롭다.
+
+함수를 호출하면 배열이 반환되는데 배열의 첫 번째 원소는 현재 상태이고, 두번째 원소는 상태를 바꾸어 주는 함수이다. 이 함수를 세터(Setter) 함수라고 부른다.
+
+그리고 배열 비구조화 할당(Array destructuring assignment)을 통해 이름을 자유롭게 정해 줄 수 있다. 현재 `message`와 `setMessage`라고 설정 한 이름을 `text`와 `setText`라고 자유롭게 변경할 수 있다.
+
+`useState`는 한 컴포넌트에서 여러 번 사용할 수도 있다.
+
+```
+// Say.js
+
+import React, { useState } from 'react';
+
+const Say = () => {
+  const [message, setMessage] = useState('Click button');
+  const onClickEnter = () => setMessage('Hello!');
+  const onClickLeave = () => setMessage('Goodbye!');
+
+  const [color, setColor] = useState('pink');   // 추가 useState로 message의 color를 변경시켜준다.
+
+  return (
+    <div>
+      <button onClick={onClickEnter}> Enter </button>
+      <button onClick={onClickLeave}> Leave </button>
+      <h1 style={{ color }}>{message}</h1>
+
+      <button style={{ color: 'red' }} onClick={() => setColor('red')}> Red </button>
+      <button style={{ color: 'green' }} onClick={() => setColor('green')}> Green </button>
+      <button style={{ color: 'blue' }} onClick={() => setColor('blue')}> Blue </button>
+    </div>
+  );
+};
+
+export default Say;
+```
+
+<br>
+<br>
+<br>
+
+## 3.5 state를 사용할 때 주의 사항
+
+<br>
+
+`state` 값을 바꾸어야 할 때는 `setState` 혹은 `useState`를 통해 전달받은 세터(Setter) 함수를 사용해야 한다. 예를 들어 다음 코드는 잘못된 코드이다.
+
+```
+// 클래스형 컴포넌트의 잘못된 예시
+this.state.number = this.state.number + 1;
+this.state.array = this.array.push(2);
+this.state.object.value = 5;
+
+// 함수형 컴포넌트의 잘못된 예시
+const [object, setObject] = useState{( a: 1, b: 1 )};
+object.b = 2;
+```
+
+<br>
+
+배열이나 객체를 업데이트 해야 한다면, 배열이나 객체 사본을 만들고 그 사본에 값을 업데이트 한 후 그 사본의 상태를 setState 혹은 Setter 함수를 통해 업데이트 해준다. 예시는 다음과 같다
+
+```
+// 객체 다루기
+const object = { a: 1, b: 2, c: 3 };
+const nextObject = { ...object, b: 2 };   // 사본을 만들어 b 값만 덮어 씌우기
+
+
+// 배열 다루기
+const array = [
+  { id: 1, value: true },
+  { id: 2, value: true },
+  { id: 3, value: false }
+];
+
+let nextArray = array.concat({ id: 4 });    // 새 항목 추가
+nextArray.filter(item => item.id != = 2);    // id가 2인 항목 제거
+nextArray.map(item => (item.id === 1? { ...item, value: false } : item));   // id가 1인 항목의 value를 false로 설정
+```
+
+객체에 대한 사본을 만들때 spread 연산자(`...`)를 사용하여 처리하고, 배열에 대한 사본을 만들 때는 배열의 내장 함수들을 활용해 준다.
