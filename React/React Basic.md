@@ -985,3 +985,167 @@ nextArray.map(item => (item.id === 1? { ...item, value: false } : item));   // i
 ```
 
 객체에 대한 사본을 만들때 spread 연산자(`...`)를 사용하여 처리하고, 배열에 대한 사본을 만들 때는 배열의 내장 함수들을 활용해 준다.
+
+<br>
+<br>
+<br>
+
+## 3.6 정리
+
+<br>
+
+props와 state는 둘 다 컴포넌트에서 사용하거나 렌더링할 데이터를 담고 있으므로 비슷해 보이지만, 역할은 매우 다르다. props는 부모 컴포넌트가 설정하고 state는 컴포넌트 자체적으로 지닌 값으로 컴포넌트 내부에서 값을 업데이트 할 수 있다.
+
+props를 사용한다고 해서 값이 무조건 고정적이지는 않은데, 부모 컴포넌트의 state를 자식 컴포넌트의 props로 전달하고 자식 컴포넌트에서 특정 이벤트가 발생할 때 부모 컴포넌트의 메서드를 호출하면 props도 유동적으로 사용 가능하다.
+
+앞으로도 컴포넌트를 만들 때 useState 사용을 권장한다. 코드가 간결해질 뿐만 아니라 리액트 팀에서 함수형 컴포넌트와 Hooks를 사용하는 것이 주요 컴포넌트 개발 방식이 될 것으로 공지했기 때문이다.
+
+<br>
+<br>
+<br>
+<br>
+
+# 4. 이벤트 핸들링
+
+<br>
+
+사용자가 웹 브라우저에서 DOM 요소들과 상호 작용 하는 것을 이벤트(event)라고 한다. 예를 들어 버튼에 마우스 커서를 올렸을 때는 `onmouseover` 이벤트를 실행하고, 클릭했을 때는 `onclick` 이벤트를, Form 요소는 값이 바뀔 때 `onchage`이벤트를 실행한다. HTML에서 사용한 적이 있다면 매우 익숙할 것이다.
+
+<br>
+<br>
+<br>
+
+## 4.1 리액트의 이벤트 시스템
+
+<br>
+<br>
+
+### 4.1.1 이벤트를 사용할 때 주의 사항
+
+<br>
+
+리액트에서는 이벤트 이름을 카멜 표기법(`onClick`, `onKeyUp`)으로 작성해야 한다.
+
+이벤트에서 실행할 자바스크립트 코드를 전달하는 것이 아닌, 함수 형태의 값을 전달한다. HTML에서는 큰따옴표 안에 실행할 코드를 넣었지만 리액트에서는 함수 형태의 객체를 전달한다.
+
+DOM 요소에만 이벤트를 설정할 수 있다. 즉 `div`, `button`, `form` 등의 DOM 요소에는 이벤트를 설정할 수 있지만, `<MyComponent onClick={doSomething}/>`처럼 컴포넌트에 자체적으로 이벤트를 설정할 수는 없다. 
+
+하지만 `<div onClick={this.props.onClick}>...</div>`와 같이 전달받은 props를 컴포넌트 내부의 DOM 이벤트로 설정할 수는 있다.
+
+<br>
+
+- **이벤트 종류: https://reactjs.org/docs/events.html**
+
+<br>
+<br>
+<br>
+
+## 4.2 예제로 이벤트 핸들링 익히기
+
+<br>
+<br>
+
+## 4.2.1 `onChange` 이벤트 핸들링하기
+
+<br>
+
+EventPractice 컴포넌트에 input 요소를 렌더링하는 코드와 해당 요소에 `onChange` 이벤트를 설정하는 코드를 작성해보자. 아래처럼 작성 후 콘솔을 확인해보면 이벤트 객체(`e`)가 콘솔에 나타난다. 
+
+여기서 `e` 객체는 SyntheticEvent로 웹 브라우저의 네이티브 이벤트를 감싸는 객체이다. 네이티브 이벤트와 인터페이스가 같으므로 순수 자바스크립트에서 HTML 이벤트를 다룰 때와 똑같이 사용하면 된다.
+
+<br>
+
+```
+import React, { Component } from 'react';
+
+class EventPractice extends Component {
+	render() 
+	{
+		return (
+			<div>
+				<h1>Event Practice</h1>
+				<input
+					type="text"
+					name="message"
+					placeholder="Please enter text"
+					onChange={
+						(e) => {
+							console.log(e)
+						}
+					}
+				>
+				</input>
+			</div>
+		)
+	}
+}
+
+export default EventPractice;
+
+
+[LOG] SyntheticBaseEvent {_reactName: "onChange", _targetInst: null, type: "change", nativeEvent: InputEvent, target: input, …}
+```
+<br>
+
+SyntheticEvent는 네이티브 이벤트와 달리 이벤트가 끝나고나면 초기화되므로 정보를 참조할 수 없다. 예를 들어 0.5초 뒤에 `e`객체를 참조하면 객체 내부의 모든 값이 비워지게 된다.
+
+만약 비동기적으로 이벤트 객체를 참조할 일이 있다면 `e.persist()` 함수를 호출해 주어야 한다. 예를 들어 아래처럼 `onChange` 이벤트가 발생할 때, 앞으로 변할 인풋 값인 e.target.value를 콘솔에 기록해보자. 인풋의 값이 바뀔 때마다 바뀌는 값을 콘솔에 기록해주는 것을 확인할 수 있다.
+
+<br>
+
+```
+onChange={
+  (e) => {
+    console.log(e.target.value);
+  }
+}
+```
+
+<br>
+<br>
+
+## 4.2.2 `state`에 input 값 담기
+
+<br>
+
+`state`에 input 값을 담아보자, 3장에서 배운 대로 생성자 메서드인 `constructor`에서 `state` 초기값을 설정하고, 이벤트 핸들링 함수 내부에서 `this.setState` 메서드를 호출하여 `state`를 업데이트 한 후 input의 value 값을 `state`에 있는 값으로 설정해보자.
+
+아래 처럼 작성 후 input에 입력했을때 오류가 발생하지 않고 제대로 입력할 수 있다면 `state`에 텍스트를 잘 담은 것이다.
+
+<br>
+
+```
+// EventPractice.js
+import React, { Component } from 'react';
+
+class EventPractice extends Component {
+	state = {
+		message: ''
+	}
+
+	render() {
+		return (
+			<div>
+				<h1>Event Practice</h1>
+				<input
+					type="text"
+					name="message"
+					placeholder="Please enter text"
+					value={this.state.message}		// state에 인풋 텍스트를 담아주도록
+					onChange={
+						(e) => {
+							this.setState({
+								message: e.target.value
+                console.log(message);
+							})
+						}
+					}
+				>
+				</input>
+			</div>
+		)
+	}
+}
+
+export default EventPractice;
+```
