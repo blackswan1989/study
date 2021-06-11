@@ -1045,7 +1045,7 @@ DOM 요소에만 이벤트를 설정할 수 있다. 즉 `div`, `button`, `form` 
 <br>
 <br>
 
-## 4.2.1 `onChange` 이벤트 핸들링하기
+### 4.2.1 `onChange` 이벤트 핸들링하기
 
 <br>
 
@@ -1104,7 +1104,7 @@ onChange={
 <br>
 <br>
 
-## 4.2.2 `state`에 input 값 담기
+### 4.2.2 `state`에 input 값 담기
 
 <br>
 
@@ -1142,6 +1142,18 @@ class EventPractice extends Component {
          }
         >
        </input>
+       
+       <button
+          onClick={() => {
+              alert(this.state.message);
+              this.setState({
+                message:''
+              })
+            }
+          }
+	>
+         확인
+	</button>
      </div>
     )
   }
@@ -1149,3 +1161,14 @@ class EventPractice extends Component {
 
 export default EventPractice;
 ```
+
+<br>
+
+위 코드를 실행해보면 alert를 사용하여 input에 입력한 현재 message값을 화면에 표시하도록 만들었다.
+
+<br>
+<br>
+
+### 4.2.3 임의 메서드 만들기
+
+<br>
