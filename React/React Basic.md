@@ -1229,3 +1229,107 @@ export default EventPractice;
 <br>
 
 함수가 호출될 때 this는 호출부에 따라 결정되므로, 클래스의 임의 메서드가 특정 HTML 요소의 이벤트로 등록되는 과정에서 메서드와 this의 관계가 끊어져 버린다. 따라서 this를 컴포넌트 자신으로 제대로 가리키기 위해서는 메서드를 this와 바인딩 하는 작업이 필요하다. 만약 바인딩되지 않으면 this가 undefined를 가리키게 된다.
+
+<br>
+<br>
+
+### 4.2.3.1 Property Initializer Syntax를 사용한 메서드 작성
+
+<br>
+
+메서드 바인딩은 생성자 메서드에서 하는 것이 정석이다. 하지만 이 방법은 새 메서드를 만들 때마다 `counstructor`도 수정해야 되기 때문에 불편한 점이 있다.
+
+이를 간단하게 하기 위해선 바벨의 transform-class-properties 문법을 사용하여 화살표 함수 형태로 메서드를 정의하는 것이다. `counstructor` 부분을 삭제 후 handle 코드를 아래처럼 변경할 수 있다.
+
+<br>
+
+```
+  ...
+
+  handleChange = (e) => {
+    this.setState({
+      message: e.target.value
+    });
+  }
+
+  handleClick = () => {
+    alert(this.state.message);
+    this.setState({
+      message: ''
+    })
+  }
+
+  ...
+```
+
+<br>
+<br>
+
+### 4.2.4 input 여러개 다루기
+
+<br>
+
+`event` 객체를 활용하면 input을 쉽게 여러개를 다룰 수 있는데 `e.target.name` 값을 사용하면 된다. 
+
+`onChange` 이벤트 핸들러에서 `e.target.name`은 해당 인풋의 name을 가리킨다. 이 값을 사용하여 state를 설정하면 쉽게 해결할 수 있다.
+
+다음 코드에서는 render 함수에서 name 값이 username 인 input을 렌더링해 주었고, state 쪽에도 username 이라는 값 추가 등을 해주었다.
+
+<br>
+
+```
+// EventPractice_edit.js
+import React, {Component} from 'react';
+
+class EventPracticeEdit extends Component {
+  state = {
+    // 디폴트 메세지
+    username:'',
+    message:''
+  }
+
+  handleChange = (e) => {
+    // `e.target.name`은 해당 인풋의 name을 가리킨다. 이 값을 사용하여 state를 설정하면 쉽게 해결할 수 있다.
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
+  
+  handleClick = () => {
+    alert(this.state.username + ': ' + this.state.message);
+    this.setState({
+      // 버튼 클릭 이후 초기화를 시켜준다.
+      username:'',
+      message:''
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Event Practice "[e.target.name]"</h1>
+        <input type="text" name="username" placeholder="User Name" value={this.state.username} onChange={this.handleChange}/>
+        <input type="text" name="message" placeholder="Text Enter" value={this.state.message} onChange={this.handleChange}/>
+        <button onClick={this.handleClick}> 확인 </button>
+      </div>
+    )
+  }
+}
+
+export default EventPracticeEdit;
+```
+
+<br>
+
+위 코드에서는 `handleChange` 함수가 핵심인데 객체 안에서 key를 `[]`로 감싸면 그 안에 넣은 레퍼런스가 가리키는 실제 값이 key값으로 사용된다. 예를 들어 다음과 같은 객체를 만들고 콘솔창을 확인해보자.
+
+<br>
+
+```
+const name = 'variantKey';
+const object = {
+  [name]: 'value'
+};
+
+console.log(object) // {variantKey: "value"}
+```
