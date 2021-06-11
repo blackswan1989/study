@@ -1,0 +1,110 @@
+<div class="fixed-dropdown-menu"
+	[style.left.px]="PositionX"
+	[style.top.px]="PositionY"
+	[style.bottom.px]="PositionBottom"
+	[style.visibility]="IsShow"
+	[class.outside-submenu]="IsOutSide"
+	(mouseenter)="SetInClick(true)"
+	(touchstart)="SetInClick(true)"
+	(mouseleave)="SetInClick(false)">
+	<div class="dropdown-header">
+		<span class="btn-icon" (click)="IsUserBalance($event)"><i class="fa fa-caret-down" [ngClass]="IsShowBalance ? 'fa-caret-up' : 'fa-caret-down'" aria-hidden="true"></i></span>
+		<service-mode Include="mbp">
+			<p class="info-box-agent">{{PlayerInfo.Agent}}</p>
+			<div class="info-box">
+				<i class="fa" [ngClass]="SelectedDefaultIcon" aria-hidden="true"></i>
+				<span>{{SelectedDefaultInformation}}</span>
+			</div>
+
+			<div id="detail-info-box" [innerHTML]="SelectedInfoBox" *ngIf="IsShowBalance">
+			</div>
+
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_BALANCE' | translate}}:</small><span>{{PlayerInfo.Balance | incurrency}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_CDOLLAR' | translate}}:</small><span>{{PlayerInfo.CDollar | cdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TDOLLAR' | translate}}:</small><span>{{PlayerInfo.TDollar | tdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TICKET' | translate}}:</small><span>{{PlayerInfo.TicketValue | incurrency}}</span>
+			</div>
+		</service-mode>
+
+		<service-mode Include="7xl">
+			<p class="info-box-agent">{{PlayerInfo.Agent}}</p>
+			<div class="info-box">
+				<i class="fa" [ngClass]="SelectedDefaultIcon" aria-hidden="true"></i>
+				<span>{{SelectedDefaultInformation}}</span>
+			</div>
+
+			<div id="detail-info-box" [innerHTML]="SelectedInfoBox" *ngIf="IsShowBalance && PlayerMenuPermissions?.HasHeaderPlayerInfo">
+			</div>
+
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_BALANCE' | translate}}:</small><span>{{PlayerInfo.Balance | incurrency}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_CDOLLAR' | translate}}:</small><span>{{PlayerInfo.CDollar | cdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TDOLLAR' | translate}}:</small><span>{{PlayerInfo.TDollar | tdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TICKET' | translate}}:</small><span>{{PlayerInfo.TicketValue | incurrency}}</span>
+			</div>
+		</service-mode>
+
+		<service-mode Include="natural8">
+			<p class="info-box-agent">{{PlayerInfo.Agent}}</p>
+			<div class="info-box">
+				<i class="fa" [ngClass]="SelectedDefaultIcon" aria-hidden="true"></i>
+				<span>{{SelectedDefaultInformation}}</span>
+			</div>
+
+			<div id="detail-info-box" [innerHTML]="SelectedInfoBox" *ngIf="IsShowBalance">
+			</div>
+
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_BALANCE' | translate}}:</small><span>{{PlayerInfo.Balance | incurrency}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_CDOLLAR' | translate}}:</small><span>{{PlayerInfo.CDollar | cdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TDOLLAR' | translate}}:</small><span>{{PlayerInfo.TDollar | tdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TICKET' | translate}}:</small><span>{{PlayerInfo.TicketValue | incurrency}}</span>
+			</div>
+		</service-mode>
+
+		<service-mode Include="pokerok, ggpcom, ggpokeruk, ggpokerpa, ggpokernj, ggpokernv, davaopoker">
+			<p class="info-box-agent">{{PlayerInfo.Agent}}</p>
+			<div class="info-box">
+				<i class="fa" [ngClass]="SelectedDefaultIcon" aria-hidden="true"></i>
+				<span>{{SelectedDefaultInformation}}</span>
+			</div>
+
+			<div id="detail-info-box" [innerHTML]="SelectedInfoBox" *ngIf="IsShowBalance">
+			</div>
+
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_BALANCE' | translate}}:</small><span>{{PlayerInfo.Balance | incurrency}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_CDOLLAR' | translate}}:</small><span>{{PlayerInfo.CDollar | cdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TDOLLAR' | translate}}:</small><span>{{PlayerInfo.TDollar | tdollar}}</span>
+			</div>
+			<div class="balance-box" *ngIf="IsShowBalance">
+				<small>{{'PLAYERDROPDOWN_TICKET' | translate}}:</small><span>{{PlayerInfo.TicketValue | incurrency}}</span>
+			</div>
+		</service-mode>
+	</div>
+
+	...
+</div>
