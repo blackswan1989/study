@@ -1333,3 +1333,143 @@ const object = {
 
 console.log(object) // {variantKey: "value"}
 ```
+
+<br>
+<br>
+
+### 4.2.5 onKeyPress 이벤트 핸들링
+
+<br>
+
+이번에는 키를 눌렀을 때 발생하는 KeyPress 이벤트를 처리하는 방법을 알아보자. comment 인풋에서 enter를 눌렀을때 `handleClick` 메서드를 호출하도록 하였다.
+
+<br>
+
+```
+// EventPractice_edit.js
+
+...
+
+  handleKeyPress = (e) => {
+    if(e.key === 'Enter') {
+      this.handleClick();
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Event Practice "[e.target.name]"</h1>
+        <input type="text" name="username" placeholder="User Name" value={this.state.username} onChange={this.handleChange}/>
+        <input type="text" name="message" placeholder="Text Enter" value={this.state.message} onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
+        <button onClick={this.handleClick}> 확인 </button>
+      </div>
+    )
+  }
+
+...
+```
+
+
+<br>
+<br>
+<br>
+
+## 4.3 함수형 컴포넌트로 구현해 보기
+
+<br>
+
+아래 예제는 함수형 컴포넌트 방식으로 위와 똑같이 동작하는 코드를 작성하였다. 아래 코드에서는 `e.target.name`을 활용하지 않고 `onChange` 관련 함수 두 개를 따로 만들어 주었다.
+
+<br>
+
+```
+import React, {useState} from 'react';
+
+const EventPracticeEdit = () => {
+  const [username, setUsername] = useState('');
+  const [message, setMessage] = useState('');
+  const onChangeUsername = e => setUsername(e.target.value);
+  const onChangeMessage = e => setMessage(e.target.value);
+  const onClick = () => {
+    alert(username + ': ' + message);
+    setUsername('');
+    setMessage('');
+  };
+
+  const onKeyPress = e => {
+    if (e.key === 'Enter') {
+      onClick();
+    }
+  };
+
+  return (
+    <div>
+      <h1>Event Practice</h1>
+      <input type="text" name="username" placeholder="User Name" value={username} onChange={onChangeUsername}/>
+      <input type="text" name="message" placeholder="Text Enter" value={message} onChange={onChangeMessage} onKeyPress={onKeyPress}/>
+    </div>
+  )
+}
+
+export default EventPracticeEdit;
+```
+
+<br>
+
+위 처럼 인풋이 두 개 밖에 없다면 이런 코드도 나쁘지 않으나 인풋의 갯수가 많아질 것 같으면 `e.target.name`을 활용하는 것이 더 좋을 수도 있다. 다음으로는 `useState`를 통해 사용하는 상태에 문자열이 아닌 객체를 넣어보자
+
+`e.target.name` 값을 활용하려면 아래와 같이 `useState`를 쓸 때 인풋 값들이 들어있는 form 객체를 사용해주면 된다.
+
+<br>
+
+```
+// EventPractice_edit2.js
+import React, {useState} from 'react';
+
+const EventPracticeEdit2 = () => {
+  const [form, setForm] = useState({
+    username:'',
+    message:''
+  });
+
+  const { username, message } = form;
+  const onChange = e => {
+    const nextForm = {
+      ...form,
+      [e.target.name]: e.target.value
+    };
+
+    setForm(nextForm);
+  };
+
+  const onClick = () => {
+    alert(username + ': ' + message);
+    setForm({
+      username: '',
+      message: ''
+    })
+  }
+
+  const onKeyPress = e => {
+    if (e.key === 'Enter') {
+      onClick();
+    }
+  };
+
+  return (
+    <div>
+    <h1>Event Practice</h1>
+    <input type="text" name="username" placeholder="User Name" value={username} onChange={onChange}/>
+    <input type="text" name="message" placeholder="Text Enter" value={message} onChange={onChange} onKeyPress={onKeyPress}/>
+    <button onClick={onClick}> 확인 </button>
+  </div>
+  )
+}
+
+export default EventPracticeEdit2;
+```
+
+<br>
+
+** 출처: 리액트를 다루는 기술 **
