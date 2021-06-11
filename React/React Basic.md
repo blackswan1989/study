@@ -1059,25 +1059,25 @@ EventPractice 컴포넌트에 input 요소를 렌더링하는 코드와 해당 �
 import React, { Component } from 'react';
 
 class EventPractice extends Component {
-	render() 
-	{
-		return (
-			<div>
-				<h1>Event Practice</h1>
-				<input
-					type="text"
-					name="message"
-					placeholder="Please enter text"
-					onChange={
-						(e) => {
-							console.log(e)
-						}
-					}
-				>
-				</input>
-			</div>
-		)
+  render() 
+  {
+    return (
+      <div>
+      <h1>Event Practice</h1>
+      <input
+	type="text"
+	name="message"
+	placeholder="Please enter text"
+	onChange={
+	  (e) => {
+	    console.log(e)
+	  }
 	}
+      >
+      </input>
+    </div>
+    )
+  }
 }
 
 export default EventPractice;
@@ -1119,32 +1119,32 @@ onChange={
 import React, { Component } from 'react';
 
 class EventPractice extends Component {
-	state = {
-		message: ''
-	}
+  state = {
+    message: ''
+  }
 
-	render() {
-		return (
-			<div>
-				<h1>Event Practice</h1>
-				<input
-					type="text"
-					name="message"
-					placeholder="Please enter text"
-					value={this.state.message}		// state에 인풋 텍스트를 담아주도록
-					onChange={
-						(e) => {
-							this.setState({
-								message: e.target.value
-                console.log(message);
-							})
-						}
-					}
-				>
-				</input>
-			</div>
-		)
-	}
+  render() 
+  {
+    return (
+      <div>
+        <h1>Event Practice</h1>
+        <input
+          type="text"
+          name="message"
+          placeholder="Please enter text"
+          value={this.state.message}		// state에 인풋 텍스트를 담아주도록
+          onChange={
+            (e) => {
+              this.setState({
+	      message: e.target.value
+            })
+           }
+         }
+        >
+       </input>
+     </div>
+    )
+  }
 }
 
 export default EventPractice;
