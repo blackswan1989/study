@@ -1172,3 +1172,60 @@ export default EventPractice;
 ### 4.2.3 임의 메서드 만들기
 
 <br>
+
+4.1에서 이벤트를 처리할 때 렌더링을 하는 동시에 함수를 만들어서 전달해주는 방법을 보았는데, 이 방법 대신 함수를 미리 준비하여 전달하는 방법도 있다. 성능상으로는 차이가 없으나 가독성이 높다.
+
+`onChange`와 `onClick`에 전달한 함수를 따로 빼내서 컴포넌트 임의 메서드를 만들어보자. 아래 예제를 보면 constructor 함수에서 함수를 바인딩하는 작업을 해주고 있다.
+
+<br>
+
+```
+import React, { Component } from 'react';
+
+class EventPractice extends Component {
+  state = {
+    message: ''
+  }
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({
+      message: e.target.value
+    });
+  }
+
+  handleClick() {
+    alert(this.state.message);
+    this.setState({
+      message: ''
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Event Practice</h1>
+        <input
+          type="text"
+          name="message"
+          placeholder="Please enter text"
+          value={this.state.message}		// state에 인풋 텍스트를 담아주도록
+          onChange={this.handleChange}
+        />
+      	<button onClick={this.handleClick}> 확인 </button>
+      </div>
+    )
+  }
+}
+
+export default EventPractice;
+```
+
+<br>
+
+함수가 호출될 때 this는 호출부에 따라 결정되므로, 클래스의 임의 메서드가 특정 HTML 요소의 이벤트로 등록되는 과정에서 메서드와 this의 관계가 끊어져 버린다. 따라서 this를 컴포넌트 자신으로 제대로 가리키기 위해서는 메서드를 this와 바인딩 하는 작업이 필요하다. 만약 바인딩되지 않으면 this가 undefined를 가리키게 된다.
