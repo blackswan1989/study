@@ -7,6 +7,7 @@ import React, { Component } from 'react';
 // import EventPracticeEdit from './EventPractice_edit';
 // import ValidationSample from './ValidationSample';
 import ScrollBox from './ScrollBox';
+import IterationSample from './IterationSample.js'
 
 // const App = () => {
 //   return <MyComponent name={"Kate"} favoriteNumber={2}> React </MyComponent>;
@@ -22,10 +23,11 @@ class App extends Component {
   render() {
     return (
       <div>
-        {/* <ValidationSample/> */}
         <ScrollBox ref={(ref) => this.scrollBox=ref} />
         <button onClick={() => this.scrollBox.scrollToBottom()}> Scroll To Bottom </button>
         <button onClick={() => this.scrollBox.scrollToTop()}> Scroll To Top </button>
+
+        <IterationSample/>
       </div>
     )
   }
