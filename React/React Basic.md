@@ -1924,7 +1924,17 @@ export default IterationSample;
 
 자바스크립트 배열 객체의 내장 함수인 `map` 함수를 사용하여 반복되는 컴포넌트를 렌더링 할 수 있다. `map` 함수는 파라미터로 전달된 함수를 사용해서 배열 내 각 요소를 원하는 규칙에 따라 변환한 후 그 결과로 새로운 배열을 생성해준다.
 
-<small>map : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map</small>
+<br>
+
+`map()` 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환해 준다.
+
+```
+const array1 = [1, 4, 9, 16];
+
+const map1 = array1.map(x => x * 2);
+
+console.log(map1);  // (4) [2, 8, 18, 32]
+```
 
 <br>
 <br>
