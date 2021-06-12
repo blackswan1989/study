@@ -2078,3 +2078,97 @@ const IterationSample = () => {
 ### 6.4.1 초기 상태 설정하기
 
 <br>
+
+먼저 `useState`를 사용하여 상태를 설정해준다. 세 가지 상태를 사용할 것인데 하나는 데이터 배열이고, 다른 하나는 텍스트를 입력할 수 있는 input의 상태입니다. 마지막 하나는 데이터 배열에서 새로운 항목을 추가할 때 사용할 고유 id를 위한 상태이다.
+
+이번에는 객체 형태로 이루어진 배열을 만들어보자, 해당 객체에는 문자열과 고유 id 값이 있고 `map` 함수를 사용할 때 key 값을 `index` 대신 `name.id` 값으로 지정해 주었다.
+
+<br>
+
+```
+// IterationSample.js
+import React, {useState} from 'react';
+
+const IterationSample = () => {
+  const [names, setNames] = useState([
+    { id: 1, text: 'Snowman' },
+    { id: 2, text: 'Ice' },
+    { id: 3, text: 'Snow' },
+    { id: 4, text: 'Wind' }
+  ]);
+
+  const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5);    // 새로운 항목을 추가할 때 사용할 id
+
+  const nameList = names.map((name) => <li key={name.id}>{name.text}</li>);
+  return <ul>{nameList}</ul>
+}
+
+export default IterationSample;
+```
+
+<br>
+<br>
+
+### 6.4.2 데이터 추가 기능 구현하기
+
+<br>
+
+새로운 이름을 등록할 수 있는 input 기능을 구현해보자. 우선 input과 buttom을 렌더링하고 input 상태를 관리해보자. 
+
+그 다음에는 버튼을 클릭했을 때 호출할 `onClick`함수를 선언하여 버튼의 이벤트로 설정하고 `onClick` 함수에서는 배열의 내장 함수 `concat`을 사용하여 새로운 항목을 추가한 배열을 만들어준다. 그리고 `setNames`를 통해 상태를 업데이트 해줄 수 있다.
+
+<small> - `concat()` 메서드는 인자로 주어진 배열이나 값들을 기존 배열에 합쳐서 새 배열을 반환해준다. </small>
+
+`onClick`함수에서 새로운 항목을 추가할 때 객체의 `id`값은 `nextId`를 사용하도록 하고, 클릭될 때 마다 값이 1씩 올라가도록 구현하였다. 추가로 button이 클릭될 때 기존의 input의 내용을 비우는 기능도 추가하였다.
+
+<br>
+
+```
+import React, {useState} from 'react';
+
+const IterationSample = () => {
+  const [names, setNames] = useState([
+    { id: 1, text: 'Snowman' },
+    { id: 2, text: 'Ice' },
+    { id: 3, text: 'Snow' },
+    { id: 4, text: 'Wind' }
+  ]);
+
+  const [inputText, setInputText] = useState('');
+  const [nextId, setNextId] = useState(5);    // 새로운 항목을 추가할 때 사용할 id
+  
+  const onChange = (e) => setInputText(e.target.value);
+  const onClick = () => {
+    const nextNames = names.concat({
+      id: nextId,           // 1) nextId 값을 id로 설정하고
+      text: inputText
+    });
+
+    setNextId(nextId + 1);  // 2) nextId 값에 1을 더해 준다.
+    setNames(nextNames);    // 3) names 값을 업데이트 해준다.
+    setInputText('');       // 4) inputText를 비워 준다.
+  }
+
+  const nameList = names.map((name) => <li key={name.id}>{name.text}</li>);
+  
+  return (
+    <div style={{padding:'30px'}}>
+      <ul>{nameList}</ul>
+      <input value={inputText} onChange={onChange}></input>
+      <button onClick={onClick}>Add</button>
+    </div>
+  )
+}
+
+export default IterationSample;
+```
+
+<br>
+
+위 코드에서 배열에 새 항목을 추가할 때 배열의 `push`함수가 아닌 `concat`을 사용했는데, `push`함수는 기존 배열 자체를 변경해 주는 반면 `concat`은 새로운 배열을 만들어 준다는 차이점이 있다.
+
+리액트에서 상태를 업데이트 할 때는 기존  상태를 그대로 두면서 새로운 값을 상태로 설정해야 하는데, 이를 불변성 유지 라고 한다. 불변성 유지를 해 주어야 나중에 리액트 컴포넌트의 성능을 최적화 할 수 있다.
+
+<br>
+<br>
