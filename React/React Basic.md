@@ -1888,3 +1888,193 @@ class App extends Component {
 <br>
 <br>
 <br>
+
+
+# 6. 컴포넌트 반복
+
+<br>
+
+## 6.1 자바스크립트 배열의 map() 함수
+
+<br>
+
+웹 애플리케이션을 만들다 보면 다음과 같이 반복되는 코드를 작성할 때가 있다. 아래 예시를 보면 `<li></li>` 태그가 반복되는데, 코드가 좀 더 복잡해지고 유동적이라면 절대로 관리하지 못할 것이다. 리액트 프로젝트에서 반복적인 내용을 효율적으로 보여 주고 관리하는 방법을 알아보자.
+
+<br>
+
+```
+// IterationSample.js
+import React from 'react';
+
+const IterationSample = () => {
+  return (
+    <ul>
+      <li>Snowman</li>
+      <li>Ice</li>
+      <li>Snow</li>
+      <li>Wind</li>
+    </ul>
+  )
+}
+
+export default IterationSample;
+```
+
+<br>
+
+자바스크립트 배열 객체의 내장 함수인 `map` 함수를 사용하여 반복되는 컴포넌트를 렌더링 할 수 있다. `map` 함수는 파라미터로 전달된 함수를 사용해서 배열 내 각 요소를 원하는 규칙에 따라 변환한 후 그 결과로 새로운 배열을 생성해준다.
+
+<small>map : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/map</small>
+
+<br>
+<br>
+
+### 6.1.1 문법
+
+<br>
+
+`arr.map(callback, [thisArg])` 이 함수의 파라미터는 다음과 같다.
+
+<br>
+
+- callback : 새로운 배열의 요소를 생성하는 함수로 파라미터는 다음 세 가지 이다.
+
+  - currentValue : 현재 처리하고 있는 요소
+  - index : 현재 처리하고 있는 요소의 index 값
+  - array : 현재 처리하고 있는 원본 배열
+
+<br>
+
+- thisArg(선택항목): callback 함수 내부에서 사용할 this 레퍼런스
+
+<br>
+<br>
+
+### 6.1.2 예제
+
+<br>
+
+```
+const numbers = [1,2,3,4,5];
+const result = numbers.map(function(num) {
+  return num * num
+})
+
+console.log(result)    // (5) [1, 4, 9, 16, 25]
+```
+
+<br>
+
+위 코드처럼 map 함수는 기존 배열로 새로운 배열을 만드는 역할을 한다.
+
+<br>
+<br>
+<br>
+
+## 6.2 데이터 배열을 컴포넌트 배열로 변환하기
+
+<br>
+
+이전 예시에서 기존 배열에 있는 값들을 제곱하여 새로운 배열을 생성했는데, 이와 똑같은 원리로 기존 배열의 컴포넌트로 구성된 배열을 생성할 수도 있다.
+
+<br>
+<br>
+
+### 6.2.1 컴포넌트 수정하기
+
+<br>
+
+문자열로 구성된 배열을 선언한 후, 그 배열 값을 사용하여 `<li>...</li>` JSX 코드로 된 배열을 새로 생성한 후 nameList에 담아주었다.
+
+map 함수에서 JSX를 작성할 때는 앞에서 다룬 예제처럼 DOM 요소를 작성해도 되고 컴포넌트를 사용해도 된다.
+
+<br>
+
+```
+// IterationSample.js
+import React from 'react';
+
+const IterationSample = () => {
+  const names = ['Snowman', 'Ice', 'snow', 'Wind'];
+  const nameList = names.map((name) => <li>{name}</li>);
+  return <ul>{nameList}</ul>
+}
+
+export default IterationSample;
+```
+
+<br>
+
+위 파일을 App.js에서 렌더링하면, 원하는데로 렌더링은 되지만 콘솔에 "key" prop이 없다는 에러메세지가 뜨게 된다. 여기서의 key를 알아보도록 하자.
+
+<br>
+<br>
+<br>
+
+## 6.3 key
+
+<br>
+
+리액트에서 key는 컴포넌트 배열을 렌더링 했을 때 어떤 원소에 변동이 있었는지 알아내려고 사용한다. 
+
+예를 들어 유동적인 데이터를 다룰 때는 원소를 생성하거나 수정할 수도 있는데, key가 없을 때는 Virtual DOM을 비교하는 과정에서 리스트를 순차적으로 비교하면서 변화를 감지한다. 하지만 key가 있다면 이 값을 사용하여 변화를 더욱 빠르게 알아낼 수 있다.
+
+<br>
+<br>
+
+## 6.3.1 key 설정
+
+<br>
+
+key 값을 설정할 때는 map 함수의 인자로 전달되는 함수 내부에서 컴포넌트를 props를 설정하듯이 설정해준다. key값은 언제나 유일해야 하기 때문에 데이터가 가진 고유의 값을 key 값으로 설정해야 한다.
+
+<br>
+
+```
+const articleList = articles.map((article) => (
+  <Article 
+    title={article.title}
+    writer={article.writer}
+    key={article.id}
+  />
+))
+```
+
+<br>
+
+예를 들어 위과 같이 게시판의 게시물을 렌더링한다면 게시물 번호를 key 값으로 설정해야 한다. 
+
+하지만 앞에서 만들었던 예제 컴포넌트에는 이런 고유 번호가 없기 때문에 이때는 map 함수에 전달되는 콜백 함수의 인수인 `index` 값을 아래 처럼 사용하면 된다.
+
+<br>
+
+```
+// IterationSample.js
+...
+const IterationSample = () => {
+  const names = ['Snowman', 'Ice', 'snow', 'Wind'];
+  const nameList = names.map((name, index) => <li key={index}>{name}</li>);
+  return <ul>{nameList}</ul>
+}
+```
+
+<br>
+
+위와 같이 수정하면 콘솔에 더이상 에러메세지가 뜨지 않게 된다. 고유한 값이 없을 때만 index 값을 key로 사용해야 한다. index를 key로 사용하면 배열이 변경될 때 효율적으로 리렌더링 하지 못한다.
+
+<br>
+<br>
+<br>
+
+## 6.4 응용하기
+
+<br>
+
+동적인 배열을 렌더링하는 코드를 구현해보자. 그리고 index 값을 key로 사용하면 리렌더링이 비효율적이라고 했는데, 이러한 상황에 어떻게 고유의 값을 만들 수 있는지도 알아보자.
+
+<br>
+<br>
+
+### 6.4.1 초기 상태 설정하기
+
+<br>
