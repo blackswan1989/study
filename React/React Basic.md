@@ -1758,3 +1758,133 @@ ref를 달아준 후 버튼에서 onClick 이벤트가 발생할 때 input에 �
 
 <br>
 <br>
+
+### 5.3.1 컴포넌트 생성 및 렌더링
+
+<br>
+
+```
+//App.js
+...
+
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <ScrollBox/>
+      </div>
+    )
+  }
+}
+```
+
+```
+//ScrollBox.js
+import React, {Component} from 'react';
+
+class ScrollBox extends Component {
+  render() {
+    const style = {
+      border: '1px solid black',
+      height: '300px',
+      width: '300px',
+      overflow: 'auto',
+      position: 'relative',
+      margin: '30px'
+    };
+
+    const innerStyle = {
+      width: '100%',
+      height: '650px',
+      background: 'linear-gradient(white, black)'
+    }
+
+    return (
+      <div style={style} ref={(ref) => (this.box=ref)}>
+        <div style={innerStyle}></div>
+      </div>
+    )
+  }
+}
+
+export default ScrollBox;
+```
+
+<br>
+<br>
+
+### 5.3.2 컴포넌트에 메서드 생성
+
+<br>
+
+위에서 만든 컴포넌트에 스크롤바를 맨 아래로 내리는 메서드를 추가해보자. 자바스크립트로 스크롤바를 내릴 때는 DOM 노드가 가진 다음 값들을 사용한다. 스크롤바를 맨 아래쪽으로 내리려면 `scrollHeight`에서 `clientHeight` 높이를 빼면 된다.
+
+<br>
+
+- scrollTop: 세로 스크롤바 위치 (0 ~ 350)
+- scrollHeight: 스크롤 박스 내부의 div 박스 높이 (650)
+- clientHeight: 스크롤 박스의 높이 (300)
+
+<br>
+
+```
+...
+
+class ScrollBox extends Component {
+  scrollToBottom = () => {
+    // 아래 비구조화 할당 문법을 풀이하면 const scrollHeight = this.box.scrollHeight; 와 같다.
+    const { scrollHeight, clientHeight } = this.box;
+    this.box.scrollTop = scrollHeight - clientHeight;
+  }
+
+  //추가로 스크롤을 상단으로 올려주는 버튼도 추가해보았다. (scrollTop의 1 위치로 보내주도록)
+  scrollToTop = () => {
+    this.box.scrollTop = 1;
+  }
+ 
+  render(){
+   ... 
+  }
+}
+```
+
+<br>
+
+`ScrollToBottom` 메서드는 부모 컴포넌트인 App 컴포넌트에서 ScrollBox에 ref를 달면 사용할 수 있게 된다. 
+
+주의 할 점으로는 문법상 `onClick = {this.scrollBox.scrollBottom}` 같은 형식으로 작성해도 틀린 것은 아니지만, 컴포넌트가 처음 렌더링 될 때는 `this.scrollBox` 값이 undefined이므로 `this.scrollBox.scrollBottom` 값을 읽어오는 과정에서 에러가 발생한다.
+
+따라서 화살표 함수 문법을 사용하여 아예 새로운 함수를 만들고 구 내부에서 `this.scrollBox.scrollBottom` 메서드를 실행하면 버튼을 누를 때, 이미 한번 렌더링을 해서 `this.scrollBox`를 설정한 시점에 `this.scrollBox.scrollBottom`값을 읽어 와서 실행하므로 오류가 발생하지 않는다.
+
+
+<br>
+
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        {/* <ValidationSample/> */}
+        <ScrollBox ref={(ref) => this.scrollBox=ref} />
+        <button onClick={() => this.scrollBox.scrollToBottom()}> Scroll To Bottom </button>
+         <button onClick={() => this.scrollBox.scrollToTop()}> Scroll To Top </button>
+      </div>
+    )
+  }
+}
+```
+
+<br>
+
+이렇게 컴포넌트 내부에서 DOM에 직접 접근해야 할 때는 ref를 사용한다. 먼저 ref를 사용하지 않고도 원하는 기능을 구현할 수 있는지 반드시 고려한 후에 활용하길 추천한다.
+
+하지만 주의해야 할 점은 서로 다른 컴포넌트끼리 데이터를 교류해야 할 때 ref를 사용하면 잘못된 사용이다. 물론 할 수는 있지만 앱 규모가  커지면 구조가 꼬여 버려 유지보수가 불가능해진다.
+
+컴포넌트끼리 데이터 교류를 할 때는 언제나 데이터를 부모와 자식의 흐름으로 교류해야 한다. 이는 리덕스 혹운 Context API를 사용하여 효율적으로 교류하는 방법을 배울 것이다.
+
+함수형 컴포넌트에서는 useRef라는 Hook 함수를 사용하는데, 사용법은 React.createRef와 유사하다.
+
+<br>
+<br>
+<br>
+<br>
