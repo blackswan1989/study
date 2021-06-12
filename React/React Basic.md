@@ -2172,3 +2172,68 @@ export default IterationSample;
 
 <br>
 <br>
+
+### 6.4.3 데이터 제거 기능 구현하기
+
+<br>
+
+이번에도 마찬가지로 불변성을 유지하면서 업데이트를 해주어야  한다. 불변성을 유지하면서 배열의 특정 항목을 지울 때는 배열의 내장 함수 `filter`를 사용한다.
+
+`filter()` 메서드는 주어진 함수의 테스트를 통과하는 모든 요소를 모아 새로운 배열로 반환시켜준다. 이 함수를 사용하면 배열에서 특정 조건을 만족하는 원소들만 쉽게 분류할 수 있다.
+
+<br>
+
+```
+// 특정 조건의 원소 분류하기
+const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
+const result = words.filter((word) => word.length > 6);
+
+console.log(result);  // (3) ["exuberant", "destruction", "present"]
+```
+
+```
+// 특정 조건 원소 제외시키기
+const numbers = [1, 2, 3, 4, 5, 6];
+const withoutFive = numbers.filter((number) => number !== 6)  // 6이 아닌 원소들만 출력되도록
+
+console.log(withoutFive)
+```
+
+<br>
+
+이제 filter 함수를 사용하여 컴포넌트의 항목 제거 기능을 구현해보자. HTML 요소를 더블클릭할 때 사용하는 이벤트 이름은 `onDoubleClick`이다. `onRemove`라는 함수를 만들어 각 `li`요소에 이벤트 등록을 해주자.
+
+<br>
+
+```
+// IterationSample.js
+
+  ...
+
+  const onRemove = (id) => {
+    const nextNames = names.filter((name) => name.id !== id);
+    setNames(nextNames);
+    console.log(nextNames);
+  }
+
+  const nameList = names.map((name) => 
+    <li key={name.id} onDoubleClick={() => onRemove(name.id)}> {name.text} </li>
+  );
+
+  return (
+    <div style={{padding:'30px'}}>
+      <ul>{nameList}</ul>
+      <input value={inputText} onChange={onChange}></input>
+      <button onClick={onClick}>Add</button>
+    </div>
+  )
+}
+
+export default IterationSample;
+```
+
+<br>
+
+지금까지 반복되는 데이터를 렌더링 하는 방법을 배우고, 이를 응용하여 유동적인 배열을 다루었다. 컴포넌트 배열을 렌더링 할때는 key 값 설정에 항상 주의 해야 하며 key 값은 항상 유일해야 한다. key 값이 중복되면 렌더링 과정에 에러가 발생하게 된다.
+
+상태 안에서 배열을 변형할 때는 배열에 직접 접근하여 수정하는 것이 아닌 `concat`, `filter` 등의 배열 내장 함수를 사용하여 새로운 배열을 만든 후 이를 새로운 상태로 설정해 주어야 한다.
