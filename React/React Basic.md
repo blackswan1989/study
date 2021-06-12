@@ -2120,17 +2120,14 @@ export default IterationSample;
 
 `concat()` 메서드는 인자로 주어진 배열이나 값들을 기존 배열에 합쳐서 새 배열을 반환해준다.
 
-<br>
-
 ```
+// concat() example
 const array1 = ['a', 'b', 'c'];
 const array2 = ['d', 'e', 'f'];
 const array3 = array1.concat(array2);
 
 console.log(array3);  // (6) ["a", "b", "c", "d", "e", "f"]
 ```
-
-<br>
 
 `onClick`함수에서 새로운 항목을 추가할 때 객체의 `id`값은 `nextId`를 사용하도록 하고, 클릭될 때 마다 값이 1씩 올라가도록 구현하였다. 추가로 button이 클릭될 때 기존의 input의 내용을 비우는 기능도 추가하였다.
 
