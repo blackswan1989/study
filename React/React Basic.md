@@ -2118,7 +2118,19 @@ export default IterationSample;
 
 그 다음에는 버튼을 클릭했을 때 호출할 `onClick`함수를 선언하여 버튼의 이벤트로 설정하고 `onClick` 함수에서는 배열의 내장 함수 `concat`을 사용하여 새로운 항목을 추가한 배열을 만들어준다. 그리고 `setNames`를 통해 상태를 업데이트 해줄 수 있다.
 
-<small> - `concat()` 메서드는 인자로 주어진 배열이나 값들을 기존 배열에 합쳐서 새 배열을 반환해준다. </small>
+`concat()` 메서드는 인자로 주어진 배열이나 값들을 기존 배열에 합쳐서 새 배열을 반환해준다.
+
+<br>
+
+```
+const array1 = ['a', 'b', 'c'];
+const array2 = ['d', 'e', 'f'];
+const array3 = array1.concat(array2);
+
+console.log(array3);  // (6) ["a", "b", "c", "d", "e", "f"]
+```
+
+<br>
 
 `onClick`함수에서 새로운 항목을 추가할 때 객체의 `id`값은 `nextId`를 사용하도록 하고, 클릭될 때 마다 값이 1씩 올라가도록 구현하였다. 추가로 button이 클릭될 때 기존의 input의 내용을 비우는 기능도 추가하였다.
 
