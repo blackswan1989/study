@@ -2477,10 +2477,12 @@ componentDidCatch(error, info)
 <br>
 
 - index.js & index.html
+  
+- AppLifeCycle.js
 
 - LifeCycleSample.js
 
-- AppLifeCycle.js
+- ErrorBoundary.js
 
 <br>
 <br>
