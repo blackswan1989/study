@@ -2492,3 +2492,233 @@ componentDidCatch(error, info)
 # 8. Hooks
 
 <br>
+
+Hooks는 리액트 v16.8에 새로 도입된 기능으로 함수형 컴포넌트에서도 상태 관리를 할 수 있는 `useState`, 렌더링 직후 작업을 설정하는 `useEffect` 등의 기능을 제공하여 기존의 함수형 컴포넌트에서 할 수 없었던 다양한 작업을 할 수 있게 해준다.
+
+`create-react-app`을 사용하여 새로운 프로젝트를 생성해보자 `yarn create react-app hooks-tutorial`
+
+<br>
+<br>
+<br>
+
+## 8.1 useState
+
+<br>
+
+useState 코드는 상단에서 import 구문을 통해 불러오고 다음 처럼 사용한다. useState(0)은 카운터의 기본값을 0으로 설정하겠다는 의미이다.
+
+<br>
+
+```
+//Counter.js
+
+import React, { useState } from 'react'
+
+const Counter = () => {
+  const [value, setValue] = useState(0);
+
+  return(
+    <div>
+      <h2>
+        현재 카운터 값: {value}
+      </h2>
+
+      <button onClick={() => setValue(value + 1)}>+1</button>
+      <button onClick={() => setValue(value - 1)}>-1</button>
+    </div>
+  );
+};
+
+export default Counter;
+```
+
+<br>
+<br>
+
+### 8.1.1 useState 여러 번 사용하기
+
+<br>
+
+```
+// Info.js
+
+import React, { useState } from 'react'
+
+const Info = () => {
+  const [name, setName] = useState('');
+  const [nickName, setNickName] = useState('');
+
+  const onChangeName = (e) => {
+    setName(e.target.value);
+  };
+
+  const onChangeNickName = (e) => {
+    setNickName(e.target.value);
+  };
+
+  return(
+    <div style={{marginTop: '50px'}}>
+      <div>
+        Name: <input value={name} onChange={onChangeName}/><br/>
+        Nick Name: <input value={nickName} onChange={onChangeNickName}/>
+      </div>
+      <div style={{marginTop: '20px'}}>
+        <b>Name : {name}</b><br/>   // onChangeName 함수를 통해 input에 입력한 값이 실시간 바인딩 된다.
+        <b>Nick Name : {nickName}</b>   // 위와 동일
+      </div>
+    </div>
+  )
+}
+
+export default Info;
+```
+
+<br>
+<br>
+<br>
+
+## 8.2 useEffect 
+
+<br>
+
+`useEffect`는 리액트 컴포넌트가 렌더링될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hooks 이다. 클래스형 컴포넌트의 `componentDidMount`와 `componentDidUpdate`를 합친 형태로 보아도 무방하다.
+
+<br>
+
+```
+// info.js - useEffect 수정
+
+import React, { useState, useEffect } from 'react'
+
+const Info = () => {
+  const [name, setName] = useState('');
+  const [nickName, setNickName] = useState('');
+
+  useEffect(() => {
+    console.log('렌더링 완료');
+    console.log({name, nickName});  // {name: "", nickName: ""} 출력 후 인풋에 값이 없데이트 될때마다 변경된다.
+  });
+
+  ...
+}
+```
+
+<br>
+<br>
+
+### 8.2.1 마운트될 때만 실행하고 싶을 때
+
+<br>
+
+`useEffect`에서 설정한 함수를 화면에 맨 처음 렌더링될 때만 실행하고, 업데이트될 때는 실행하지 않으려면 함수의 두 번째 파라미터로 비어 있는 배열을 넣어주면 된다.
+
+<br>
+
+```
+// info.js - useEffect 수정
+
+useEffect(() => {
+  console.log('마운트될 때만 실행된다');
+  console.log({name, nickName});
+}, []);
+```
+
+<br>
+<br>
+
+### 8.2.2 특정 값이 업데이트될 때만 실행하고 싶을 때
+
+<br>
+
+```
+componentDidUpdate(prevProps, prevState) {
+  if(prevProps.value !== this.props.value){
+    doSomeThing()
+  }
+}
+```
+
+<br>
+
+위 코드는 props 안에 들어 있는 value 값을 바뀔 때만 특정 작업을 수행한다. 이러한 작업을 `useEffect`에서 하려면 `useEffect`의 두 번째 파라미터로 전달되는 배열 안에, 검사하고 싶은 값을 넣어 주면 된다.
+
+배열 안에는 `useState`를 통해 관리하고 있는 상태를 넣어 주어도 되고, props로 전달 받은 값을 넣어 주어도 된다.
+
+<br>
+
+```
+// info.js - useEffect 수정
+
+useEffect(() => {
+  console.log({name});
+}, [name]);
+```
+
+<br>
+<br>
+
+### 8.2.3 뒷정리(cleanup)하기
+
+<br>
+
+`useState`는 기본적으로 렌더링되고 난 직후마다 실행되며, 두 번째 파라미터 배열에 무엇을 넣는지에 따라 실행되는 조건이 달라진다.
+
+컴포넌트가 언마운트되기 전이나 업데이트 되기 직전에 어떠한 작업을 수행하고 싶다면 `useState`에서 `cleanup`함수를 반환해주어야 한다.
+
+<br>
+
+```
+// info.js - useEffect 수정
+
+useEffect(() => {
+  console.log('Effect');
+  console.log(name);
+
+  return () => {
+    console.log('CleanUp');
+    console.log(name)
+  }
+}, [name]);
+```
+
+<br>
+
+App 컴포넌트에서 info 컴포넌트의 가시성을 바꿀 수 있도록 useState를 사용하여 show/hide 기능을 추가하였다.
+
+```
+// App.js
+
+import React, { useState } from 'react'
+import './App.css';
+import Info from './Info'
+
+const App = () => {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => {setVisible(!visible)}}> {visible ? 'Hide' : 'Show'} </button>
+      <hr/>
+      {visible && <Info/>}
+    </div>
+  );
+}
+
+export default App;
+```
+
+컴포넌트가 나타날 때 콘솔에 `effect`가 출력되고, 사라질 때 `cleanup`이 나타난다. 그리고 렌더링될 때마다 `cleanup` 함수가 계속 나타나는 것을 확인할 수 있다. 그리고 `cleanup` 함수가 호출될 때 업데이트되기 직전의 값을 보여 준다.
+
+<br>
+
+언마운트될 때만 `cleanup` 함수를 호출하고 싶다면 아래 처럼 `useEffect` 함수의 두 번째 파라미터에 비어 있는 배열을 넣으면 된다.
+
+```
+useEffect(() => {
+  console.log('Effect');
+
+  return () => {
+    console.log('unmount');
+  };
+}, []);
+```
