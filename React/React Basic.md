@@ -2467,3 +2467,26 @@ componentDidCatch(error, info)
 여기서 `error`는 파라미터에 어떤 에러가 발생했는지 알려 주고 `info` 파라미터는 어디에 있는 코드에서 오류가 발생했는지에 대한 정보를 넘겨준다. 위의 코드에서는 console.log만 했지만 나중에 실제로 사용할 때 오류가 발생하면 서버 API를 호출하여 따로 수집할 수도 있다.
 
 주의할 점은 이 메서드는 컴포넌트 자신에게 발생하는 에러를 잡아낼 수는 없고, 자신의 `this.props.children`으로 전달되는 컴포넌트에서 발생하는 에러만 잡아낼 수 있다.
+
+<br>
+<br>
+<br>
+
+## 7.3 라이프사이클 메서드 사용하기(해당 파일 참조)
+
+<br>
+
+- index.js & index.html
+
+- LifeCycleSample.js
+
+- AppLifeCycle.js
+
+<br>
+<br>
+<br>
+<br>
+
+# 8. Hooks
+
+<br>
