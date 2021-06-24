@@ -99,7 +99,7 @@ var a = 'abc';	// 변수 선언과 할당을 한 문장으로 표현
 
 변수 할당 과정으로는 `a`라는 이름을 가진 주소를 검색해서 그곳에 문자열 `'abc'`를 할당한다고 해보자, 실제로는 메모리에서 `a`가 들어가있는 주소값의 위치에 문자열 `'abc'`를 직접 저장하지는 않는다.
 
-<img `src="https://user-images.githubusercontent.com/67410919/123027127-46610880-d418-11eb-8ff3-677af63fb1a1.png" width="70%">
+<img src="https://user-images.githubusercontent.com/67410919/123027127-46610880-d418-11eb-8ff3-677af63fb1a1.png" width="70%">
 
 <br>
 <br>
