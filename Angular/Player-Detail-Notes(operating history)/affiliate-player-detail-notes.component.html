@@ -1,0 +1,316 @@
+<div class="card history-card">
+	<div class="card-header">
+		<div class="card-title">
+			{{'PLAYER_DETAIL_PLAYER_OPERATING_TITLE' | translate }}
+		</div>
+		<div class="align-right">
+			<button type="button" class="btn btn-outline-secondary btn-refresh" (click)="Model.GetOperatingHistory()">
+				<i class="fa fa-refresh" [class.fa-spin]="IsLoading" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div>
+	<div class="card-tabs">
+		<ul class="tabs-handle">
+			<li class="tab-item" [class.active]="Model.OperatingTabActive === Model.OperatingTabList.AllDetails">
+				<button type="button" class="tab-link" (click)="onChangeTabs(Model.OperatingTabList.AllDetails)" [disabled]="Model.IsLoading === true">{{'PLAYER_DETAIL_PLAYER_ALL_TITLE' | translate}}</button>
+			</li>
+			<li class="tab-item" [class.active]="Model.OperatingTabActive === Model.OperatingTabList.NoteDetails">
+				<button type="button" class="tab-link" (click)="onChangeTabs(Model.OperatingTabList.NoteDetails)" [disabled]="Model.IsLoading === true">{{'PLAYER_DETAIL_PLAYER_GENERAL_TITLE' | translate}}</button>
+			</li>
+			<li class="tab-item" [class.active]="Model.OperatingTabActive === Model.OperatingTabList.InterviewDetails">
+				<button type="button" class="tab-link" (click)="onChangeTabs(Model.OperatingTabList.InterviewDetails)" [disabled]="Model.IsLoading === true">{{'PLAYER_DETAIL_PLAYER_INTERVIEW_TITLE' | translate}}</button>
+			</li>
+			<li class="tab-item" [class.active]="Model.OperatingTabActive === Model.OperatingTabList.InterventionDetails">
+				<button type="button" class="tab-link" (click)="onChangeTabs(Model.OperatingTabList.InterventionDetails)" [disabled]="Model.IsLoading === true">{{'PLAYER_DETAIL_PLAYER_INTERVENTION_TITLE' | translate}}</button>
+			</li>
+			<li class="tab-item" [class.active]="Model.OperatingTabActive === Model.OperatingTabList.ComplaintDetails">
+				<button type="button" class="tab-link" (click)="onChangeTabs(Model.OperatingTabList.ComplaintDetails)" [disabled]="Model.IsLoading === true">{{'PLAYER_DETAIL_PLAYER_COMPLAINT_TITLE' | translate}}</button>
+			</li>
+		</ul>
+	</div>
+	<div class="operating-history-box" *ngIf="Model.OperatingTabActive === Model.OperatingTabList.AllDetails">
+		<div class="card-body">
+			<div class="total-wrap">
+				<span class="title">{{'PLAYER_DETAIL_PLAYER_TOTAL' | translate }} ({{Model.TotalCount}})</span>
+				<div class="btn-group" dropdown>
+					<button type="button" class="btn btn-primary" dropdownToggle>{{'PLAYER_DETAIL_PLAYER_ADD_NEW' | translate }}</button>
+					<ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+						<li class="dropdown-item" (click)="AddNote()">{{'PLAYER_DETAIL_PLAYER_NOTE_NAME' | translate}}</li>
+						<li class="dropdown-item" (click)="AddInterview()">{{'PLAYER_DETAIL_PLAYER_INTERVIEW_TITLE' | translate}}</li>
+						<li class="dropdown-item" (click)="AddIntervention()">{{'PLAYER_DETAIL_PLAYER_INTERVENTION_TITLE' | translate}}</li>
+						<li class="dropdown-item" (click)="AddComplaint()">{{'PLAYER_DETAIL_PLAYER_COMPLAINT_TITLE' | translate}}</li>
+					</ul>
+				</div>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCount === 0" class="nodata-box note">
+				<i class="ico ico-note" aria-hidden="true"></i>
+				<span class="text">{{'PLAYER_DETAIL_PLAYER_NOTE_NODATA' | translate }}</span>
+			</div>
+			<div *ngIf="Model.IsLoading" class="loading-box note">
+				<i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCount > 0" class="note-box">
+				<div class="note-item" *ngFor="let Item of Model.PlayerAllItems">
+					<div class="note-item-head">
+						<span class="operating-history-name">{{Item.OperatingHistoryTabTypeLabel | translate}}</span>
+						<strong class="typeCause smaller ml-2" *ngIf="Item.TabType === Model.TabTypeList.Complaint && Item.ComplaintText">No.&nbsp;{{Item.Id}} {{Item.ComplaintTypeLabel | translate}}</strong>
+						<strong class="typeCause smaller ml-2" *ngIf="Item.TabType === Model.TabTypeList.Intervention && Item.InterventionText">{{Item.InterventionTypeLabel | translate}}_{{Item.InterventionCauseLabel | translate}}</strong>
+						<span class="dateStatus" [ngClass]="{ 'active':  Item.ComplaintStatus === 0}" *ngIf="!Model.IsLoading && Item.TabType === Model.TabTypeList.Complaint && Item.ComplaintText">{{Item.ComplaintStatusLabel | translate}}</span>
+						<div class="title mt-1">
+							<strong class="name">{{Item.OperatorId}}{{Item.UpdatedBy}}</strong>
+							<small class="date" [translate]="Item.UpdatedAtString" [translateParams]="{INTERVAL: Item.UpdatedAtInterval}"></small>
+						</div>
+					</div>
+					<p class="content" *ngIf="Item.TabType === Model.TabTypeList.General && Item.Note" (click)="OpenViewModal(Item)">{{Item.Note}}</p>
+					<p class="content" *ngIf="Item.TabType === Model.TabTypeList.Interview && Item.ReasonText" (click)="OpenInterviewViewModal(Item)">{{Item.ReasonText}}</p>
+					<p class="content" *ngIf="Item.TabType === Model.TabTypeList.Intervention && Item.InterventionText" (click)="OpenInterventionViewModal(Item)">{{Item.InterventionText}}</p>
+					<p class="content" *ngIf="Item.TabType === Model.TabTypeList.Complaint && Item.ComplaintText" (click)="OpenComplaintViewModal(Item)">{{Item.ComplaintText}}</p>
+					<div class="date-wrap complaint mt-1" *ngIf="!Model.IsLoading && Item.TabType === Model.TabTypeList.Complaint && Item.ComplaintText">
+						<div>
+							<div>{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_INCIDENT_DATE' | translate }}</div>
+							<div>{{Item.IncidentDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+					</div>
+					<div class="date-wrap intervention mt-1" *ngIf="!Model.IsLoading && Item.TabType === Model.TabTypeList.Intervention && Item.InterventionText">
+						<div class="mt-1">
+							<div>{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_BEGIN_DATE' | translate }}</div>
+							<div>{{Item.BeginDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+						<div class="mt-1" *ngIf="Item.EndDate">
+							<div>{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_END_DATE' | translate }}</div>
+							<div>{{Item.EndDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+					</div>
+					<div class="reply-wrap" *ngIf="!Model.IsLoading && Item.TabType === Model.TabTypeList.Interview && Item.ReasonText">
+						<strong class="mt-2 d-inline-block" *ngIf="Item.ConclusionCount > 0">{{Item.ConclusionCount}} {{ 'PLAYER_DETAIL_PLAYER_REPLIES' | translate }}</strong><span *ngIf="Item.InterviewConclusionTypeLabel"> &middot; {{Item.InterviewConclusionTypeLabel | translate}}</span>
+					</div>
+					<div class="reply-wrap" *ngIf="!Model.IsLoading && Item.TabType === Model.TabTypeList.Complaint && Item.ComplaintText">
+						<strong class="mt-2 d-inline-block" *ngIf="Item.ResponseCount > 0">{{Item.ResponseCount}} {{ 'PLAYER_DETAIL_PLAYER_REPLIES' | translate }}</strong> <span class="mt-2 d-inline-block" *ngIf="Item.ComplaintResponseTypeLabel"> &middot; {{ Item.ComplaintResponseTypeLabel | translate}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="card-bottom pt-3 mo320-fix">
+				<pagination [totalItems]="Model.TotalCount"
+							[(ngModel)]="Model.CurrentPage"
+							[itemsPerPage]="Model.PageSize"
+							(pageChanged)="PageChanged($event)"
+							[maxSize]="5"
+							[boundaryLinks]="true"
+							[previousText]="'<i class=\'fa fa-caret-left\'></i>'"
+							[nextText]="'<i class=\'fa fa-caret-right\'></i>'"
+							[firstText]="'<i class=\'fa fa-caret-left\'></i><i class=\'fa fa-caret-left\'></i>'"
+							[lastText]="'<i class=\'fa fa-caret-right\'></i><i class=\'fa fa-caret-right\'></i>'"
+							[ngClass]="{disabled: Model.IsLoading}"
+							class="justify-content-center note-page"></pagination>
+			</div>
+		</div>
+	</div>
+	<div class="operating-history-box" *ngIf="Model.OperatingTabActive === Model.OperatingTabList.NoteDetails">
+		<div class="card-body">
+			<div class="total-wrap">
+				<span class="title">{{'PLAYER_DETAIL_PLAYER_TOTAL' | translate }} ({{Model.TotalCountNote}})</span>
+				<button type="button" class="btn btn-primary" (click)="AddNote()">{{'PLAYER_DETAIL_PLAYER_ADD_NEW' | translate }}</button>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCountNote === 0" class="nodata-box note">
+				<i class="ico ico-note" aria-hidden="true"></i>
+				<span class="text">{{'PLAYER_DETAIL_PLAYER_NOTE_NODATA' | translate }}</span>
+			</div>
+			<div *ngIf="Model.IsLoading" class="loading-box note">
+				<i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+			</div>
+			<div class="note-box" *ngIf="!Model.IsLoading && Model.TotalCountNote > 0">
+				<div class="note-item" *ngFor="let Item of Model.PlayerNoteItems" [class.pin]="Item.IsPinned">
+					<div class="note-item-head">
+						<div class="title">
+							<span class="ico-pin pin-hover" [class.on]="Item.IsPinned" (click)="EditPin(Item)"></span>
+							<strong class="name">{{Item.UpdatedBy}}</strong>
+							<small class="date" [translate]="Item.UpdatedAtString" [translateParams]="{INTERVAL: Item.UpdatedAtInterval}"></small>
+						</div>
+					</div>
+					<p class="content" (click)="OpenViewModal(Item)">
+						{{Item.Note}}
+					</p>
+				</div>
+			</div>
+			<div class="card-bottom pt-3 mo320-fix">
+				<pagination [totalItems]="Model.TotalCountNote"
+							[(ngModel)]="Model.CurrentPage"
+							[itemsPerPage]="Model.PageSize"
+							(pageChanged)="PageChanged($event)"
+							[maxSize]="5"
+							[boundaryLinks]="true"
+							[previousText]="'<i class=\'fa fa-caret-left\'></i>'"
+							[nextText]="'<i class=\'fa fa-caret-right\'></i>'"
+							[firstText]="'<i class=\'fa fa-caret-left\'></i><i class=\'fa fa-caret-left\'></i>'"
+							[lastText]="'<i class=\'fa fa-caret-right\'></i><i class=\'fa fa-caret-right\'></i>'"
+							[ngClass]="{disabled: Model.IsLoading}"
+							class="justify-content-center note-page"></pagination>
+			</div>
+		</div>
+	</div>
+	<div class="operating-history-box" *ngIf="Model.OperatingTabActive === Model.OperatingTabList.InterviewDetails">
+		<div class="card-body">
+			<div class="total-wrap">
+				<span class="title">{{'PLAYER_DETAIL_PLAYER_TOTAL' | translate }} ({{Model.TotalCountInterview}})</span>
+				<button type="button" class="btn btn-primary" (click)="AddInterview()">{{'PLAYER_DETAIL_PLAYER_ADD_NEW' | translate }}</button>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCountInterview === 0" class="nodata-box note">
+				<i class="ico ico-note" aria-hidden="true"></i>
+				<span class="text">{{'PLAYER_DETAIL_PLAYER_INTERVIEW_NODATA' | translate }}</span>
+			</div>
+			<div *ngIf="Model.IsLoading" class="loading-box note">
+				<i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+			</div>
+			<div class="note-box" *ngIf="!Model.IsLoading && Model.TotalCountInterview > 0">
+				<div class="note-item" *ngFor="let Item of Model.PlayerInterviewItems" [class.pin]="Item.IsPinned">
+					<div class="note-item-head">
+						<div class="title">
+							<span class="ico-pin pin-hover" [class.on]="Item.IsPinned" (click)="EditInterviewPin(Item)"></span>
+							<strong class="name">{{Item.OperatorId}}</strong>
+							<small class="date" [translate]="Item.UpdatedAtString" [translateParams]="{INTERVAL: Item.UpdatedAtInterval}"></small>
+						</div>
+					</div>
+					<p class="content" (click)="OpenInterviewViewModal(Item)">
+						{{Item.ReasonText}}
+					</p>
+					<div class="reply-wrap">
+						<strong class="mt-2 d-inline-block" *ngIf="Item.ConclusionCount > 0">{{Item.ConclusionCount}} {{ 'PLAYER_DETAIL_PLAYER_REPLIES' | translate }}</strong><span *ngIf="Item.InterviewConclusionTypeLabel"> &middot; {{ Item.InterviewConclusionTypeLabel | translate}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="card-bottom pt-3 mo320-fix">
+				<pagination [totalItems]="Model.TotalCountInterview"
+							[(ngModel)]="Model.CurrentPage"
+							[itemsPerPage]="Model.PageSize"
+							(pageChanged)="PageChanged($event)"
+							[maxSize]="5"
+							[boundaryLinks]="true"
+							[previousText]="'<i class=\'fa fa-caret-left\'></i>'"
+							[nextText]="'<i class=\'fa fa-caret-right\'></i>'"
+							[firstText]="'<i class=\'fa fa-caret-left\'></i><i class=\'fa fa-caret-left\'></i>'"
+							[lastText]="'<i class=\'fa fa-caret-right\'></i><i class=\'fa fa-caret-right\'></i>'"
+							[ngClass]="{disabled: Model.IsLoading}"
+							class="justify-content-center note-page"></pagination>
+			</div>
+		</div>
+	</div>
+
+	<div class="operating-history-box" *ngIf="Model.OperatingTabActive === Model.OperatingTabList.InterventionDetails">
+		<div class="card-body">
+			<div class="total-wrap">
+				<span class="title">{{'PLAYER_DETAIL_PLAYER_TOTAL' | translate }} ({{Model.TotalCountIntervention}})</span>
+				<button type="button" class="btn btn-primary" (click)="AddIntervention()">{{'PLAYER_DETAIL_PLAYER_ADD_NEW' | translate }}</button>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCountIntervention === 0" class="nodata-box note">
+				<i class="ico ico-note" aria-hidden="true"></i>
+				<span class="text">{{'PLAYER_DETAIL_PLAYER_INTERVENTION_NODATA' | translate }}</span>
+			</div>
+			<div *ngIf="Model.IsLoading" class="loading-box note">
+				<i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+			</div>
+			<div class="note-box" *ngIf="!Model.IsLoading && Model.TotalCountIntervention > 0">
+				<div class="note-item" *ngFor="let Item of Model.PlayerInterventionItems" [class.pin]="Item.IsPinned">
+					<div class="note-item-head">
+						<span class="ico-pin pin-hover" [class.on]="Item.IsPinned" (click)="EditInterventionPin(Item)"></span>
+						<strong class="typeCause">{{Item.InterventionTypeLabel | translate}}_{{Item.InterventionCauseLabel | translate}}</strong>
+						<div class="title mt-1">
+							<strong class="name">{{Item.OperatorId}}</strong>
+							<small class="date" [translate]="Item.UpdatedAtString" [translateParams]="{INTERVAL: Item.UpdatedAtInterval}"></small>
+						</div>
+					</div>
+					<p class="content" (click)="OpenInterventionViewModal(Item)">
+						{{Item.InterventionText}}
+					</p>
+					<div class="date-wrap intervention mt-1">
+						<div class="mt-1">
+							<div>{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_BEGIN_DATE' | translate }}</div>
+							<div>{{Item.BeginDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+						<div class="mt-1" *ngIf="Item.EndDate">
+							<div>{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_END_DATE' | translate }}</div>
+							<div>{{Item.EndDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-bottom pt-3 mo320-fix">
+				<pagination [totalItems]="Model.TotalCountIntervention"
+							[(ngModel)]="Model.CurrentPage"
+							[itemsPerPage]="Model.PageSize"
+							(pageChanged)="PageChanged($event)"
+							[maxSize]="5"
+							[boundaryLinks]="true"
+							[previousText]="'<i class=\'fa fa-caret-left\'></i>'"
+							[nextText]="'<i class=\'fa fa-caret-right\'></i>'"
+							[firstText]="'<i class=\'fa fa-caret-left\'></i><i class=\'fa fa-caret-left\'></i>'"
+							[lastText]="'<i class=\'fa fa-caret-right\'></i><i class=\'fa fa-caret-right\'></i>'"
+							[ngClass]="{disabled: Model.IsLoading}"
+							class="justify-content-center note-page"></pagination>
+			</div>
+		</div>
+	</div>
+
+	<div class="operating-history-box" *ngIf="Model.OperatingTabActive === Model.OperatingTabList.ComplaintDetails">
+		<div class="card-body">
+			<div class="total-wrap complaint">
+				<span class="title">{{'PLAYER_DETAIL_PLAYER_TOTAL' | translate }} ({{Model.TotalCountComplaint}})</span>
+				<button type="button" class="btn btn-show-active" [class.active]="showActive" (click)="ShowActiveClick()">
+					<i class="fa fa-eye fa-lg mr-1" aria-hidden="true"></i>
+					<span>{{'PLAYER_DETAIL_PLAYER_COMPLAINT_SHOW_ACTIVE' | translate }}</span>
+				</button>
+				<button type="button" class="btn btn-primary" (click)="AddComplaint()">{{'PLAYER_DETAIL_PLAYER_ADD_NEW' | translate }}</button>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCountComplaint === 0" class="nodata-box note">
+				<i class="ico ico-note" aria-hidden="true"></i>
+				<span class="text">{{'PLAYER_DETAIL_PLAYER_COMPLAINT_NODATA' | translate }}</span>
+			</div>
+			<div *ngIf="Model.IsLoading" class="loading-box note">
+				<i class="fa fa-spinner fa-pulse fa-4x fa-fw" aria-hidden="true"></i>
+				<span class="sr-only">{{ 'COMMON_PROGRESS_TEXT' | translate }}</span>
+			</div>
+			<div *ngIf="!Model.IsLoading && Model.TotalCountComplaint > 0" class="note-box">
+				<div *ngFor="let Item of Model.PlayerComplaintItems" class="note-item" [class.pin]="Item.IsPinned">
+					<div class="note-item-head">
+						<span class="ico-pin pin-hover" [class.on]="Item.IsPinned" (click)="EditComplaintPin(Item)"></span>
+						<strong class="typeCause">No.&nbsp;{{Item.Id}} {{Item.ComplaintTypeLabel | translate}}</strong>
+						<span class="dateStatus" [ngClass]="{ 'active':  Item.ComplaintStatus === 0}">{{Item.ComplaintStatusLabel | translate}}</span>
+						<div class="title mt-1">
+							<strong class="name">{{Item.OperatorId}}</strong>
+							<small class="date" [translate]="Item.UpdatedAtString" [translateParams]="{INTERVAL: Item.UpdatedAtInterval}"></small>
+						</div>
+					</div>
+					<p class="content" (click)="OpenComplaintViewModal(Item)">
+						{{Item.ComplaintText}}
+					</p>
+					<div class="date-wrap complaint mt-1">
+						<div>
+							<div>{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_INCIDENT_DATE' | translate }}</div>
+							<div>{{Item.IncidentDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+						</div>
+					</div>
+					<div class="reply-wrap">
+						<strong class="mt-2 d-inline-block" *ngIf="Item.ResponseCount > 0">{{Item.ResponseCount}} {{ 'PLAYER_DETAIL_PLAYER_REPLIES' | translate }}</strong> <span class="mt-2 d-inline-block" *ngIf="Item.ComplaintResponseTypeLabel"> &middot; {{ Item.ComplaintResponseTypeLabel | translate}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="card-bottom pt-3 mo320-fix">
+				<pagination [totalItems]="Model.TotalCountComplaint"
+							[(ngModel)]="Model.CurrentPage"
+							[itemsPerPage]="Model.PageSize"
+							(pageChanged)="PageChanged($event)"
+							[maxSize]="5"
+							[boundaryLinks]="true"
+							[previousText]="'<i class=\'fa fa-caret-left\'></i>'"
+							[nextText]="'<i class=\'fa fa-caret-right\'></i>'"
+							[firstText]="'<i class=\'fa fa-caret-left\'></i><i class=\'fa fa-caret-left\'></i>'"
+							[lastText]="'<i class=\'fa fa-caret-right\'></i><i class=\'fa fa-caret-right\'></i>'"
+							[ngClass]="{disabled: Model.IsLoading}"
+							class="justify-content-center note-page"></pagination>
+			</div>
+		</div>
+	</div>
+</div>

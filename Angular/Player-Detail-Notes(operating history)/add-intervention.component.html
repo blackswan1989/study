@@ -1,0 +1,102 @@
+<div class="modal-header">
+	<h4 id="dialog-child-name" class="modal-title pull-left">
+		{{ 'PLAYER_DETAIL_PLAYER_ADD_INTERVENTION' | translate }}
+	</h4>
+	<button type="button" class="close pull-right" aria-label="Close" (click)="Hide()">
+		<i class="fa fa-close" aria-hidden="true"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="modal-transfer-area">
+		<div class="row">
+			<div class="col-md-12 mt-1 mb-3">
+				<span>{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_DESC' | translate }}</span>
+			</div>
+		</div>
+		<div class="row" [formGroup]="InterventionForm">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_TYPE' | translate }} <span class="required-symbol">&#42;</span></label>
+						<ng-select placeholder="{{ 'PLAYER_DETAIL_PLAYER_TYPE_PLACEHOLDER' | translate }}" formControlName="InterventionType" [items]="Model.InterventionTypeList" bindValue="value" [searchable]="false" [clearable]="false" [ngClass]="{ 'is-invalid': InterventionTypeControl.invalid && (InterventionTypeControl.touched || InterventionTypeControl.dirty) }">
+							<ng-template ng-label-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+							<ng-template ng-option-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+						</ng-select>
+					</div>
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_CAUSE' | translate }} <span class="required-symbol">&#42;</span></label>
+						<ng-select placeholder="{{ 'PLAYER_DETAIL_PLAYER_TYPE_PLACEHOLDER' | translate }}" formControlName="InterventionCause" [items]="Model.InterventionCauseList" bindValue="value" [searchable]="false" [clearable]="false" [ngClass]="{ 'is-invalid': InterventionCauseControl.invalid && (InterventionCauseControl.touched || InterventionCauseControl.dirty) }">
+							<ng-template ng-label-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+							<ng-template ng-option-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+						</ng-select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_DETAIL' | translate }} <span class="required-symbol">&#42;</span></label>
+					<div class="form-group">
+						<div class="note-write-box history-height-auto" [class.focus]="WritingNote" [class.is-invalid]="InterventionDetailControl.invalid && (InterventionDetailControl.touched || InterventionDetailControl.dirty)">
+							<textarea class="form-control" rows="4" maxlength="4000" (focus)="WritingNote = true" (focusout)="WritingNote = false" placeholder="{{'PLAYER_DETAIL_PLAYER_NOTE_PLACEHOLDER' | translate}}" formControlName="InterventionDetail" (keyup)="CheckInterventionDetailLength()"></textarea>
+							<p class="text-length"><span>{{ NoteLength }}</span>/{{NoteMaxLength}}</p>
+						</div>
+						<div class="invalid-feedback">{{'INVALID_INTERVENTION' | translate}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_BEGIN_DATE' | translate }} <span class="required-symbol">&#42;</span></label>
+						<div class="display-flex input-control">
+							<div class="input-group col-7 pl-0 input-date">
+								<span class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</span>
+								<input type="text" class="form-control" formControlName="ExpiryDate" [datePicker]="datePickerOptions" [(StartDate)]="startDateBegin" [(EndDate)]="endDateBegin" (DatesChanged)="onStartDateChanged($event)" [ngClass]="{ 'is-invalid': InterventionStartDateControl.invalid && (InterventionStartDateControl.touched || InterventionStartDateControl.dirty) }" />
+							</div>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryHour" placeholder="00" min="0" max="23" [ngClass]="{ 'is-invalid': InterventionStartHourControl.invalid && (InterventionStartHourControl.touched || InterventionStartHourControl.dirty) }" />
+							<span class="time-separator">:</span>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryMinute" placeholder="00" min="0" max="59" [ngClass]="{ 'is-invalid': InterventionStartMinuteControl.invalid && (InterventionStartMinuteControl.touched || InterventionStartMinuteControl.dirty) }" />
+						</div>
+						<div class="invalid-feedback" [ngClass]="{'d-block': (InterventionStartHourControl.invalid && (InterventionStartHourControl.touched || InterventionStartHourControl.dirty)) || (InterventionStartMinuteControl.invalid && (InterventionStartMinuteControl.touched || InterventionStartMinuteControl.dirty)) }">
+							<span *ngIf="InterventionStartDateControl.getError('invalidPeriod')">{{'PLAYER_DETAIL_INTERVENTION_INVALID_START_DATE' | translate}}</span>
+							<span *ngIf="!InterventionStartDateControl.getError('invalidPeriod')">{{'PLAYER_DETAIL_BEGIN_INVALID_DATE' | translate}}</span>
+						</div>
+					</div>
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_INTERVENTION_END_DATE' | translate }}</label>
+						<div class="display-flex input-control">
+							<div class="input-group col-7 pl-0 input-date">
+								<span class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</span>
+								<input type="text" class="form-control" formControlName="ExpiryDateEnd" [datePicker]="datePickerEndOptions" [(StartDate)]="startDateEnd" [(EndDate)]="endDateEnd" (DatesChanged)="onEndDateChanged($event)" [ngClass]="{ 'is-invalid': InterventionEndDateControl.invalid && (InterventionEndDateControl.touched || InterventionEndDateControl.dirty) }" />
+							</div>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryHourEnd" placeholder="00" min="0" max="23" [ngClass]="{ 'is-invalid': InterventionEndHourControl.invalid && (InterventionEndHourControl.touched || InterventionEndHourControl.dirty) }" />
+							<span class="time-separator">:</span>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryMinuteEnd" placeholder="00" min="0" max="59" [ngClass]="{ 'is-invalid': InterventionEndMinuteControl.invalid && (InterventionEndMinuteControl.touched || InterventionEndMinuteControl.dirty) }" />
+						</div>
+						<div class="invalid-feedback" [ngClass]="{'d-block': (InterventionEndDateControl.invalid && (InterventionEndDateControl.touched || InterventionEndDateControl.dirty)) || (InterventionEndHourControl.invalid && (InterventionEndHourControl.touched || InterventionEndHourControl.dirty)) || (InterventionEndMinuteControl.invalid && (InterventionEndMinuteControl.touched || InterventionEndMinuteControl.dirty)) && !InterventionEndDateControl.getError('invalidPeriod') }">{{'PLAYER_DETAIL_INTERVENTION_INVALID_END_DATE' | translate}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="Hide()" [disabled]="IsOnProcessing">{{ 'BUTTON_CANCEL' | translate }}</button>
+	<button type="button" class="btn btn-primary" (click)="Add()" [disabled]="IsOnProcessing || InterventionForm.invalid">{{ 'PLAYER_DETAIL_PLAYER_BUTTON_ADD' | translate }}</button>
+</div>

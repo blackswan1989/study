@@ -1,0 +1,74 @@
+<div class="modal-header">
+	<h4 id="dialog-child-name" class="modal-title pull-left">
+		{{ 'PLAYER_DETAIL_PLAYER_ADD_COMPLAINT' | translate }}
+	</h4>
+	<button type="button" class="close pull-right" aria-label="Close" (click)="Hide()">
+		<i class="fa fa-close" aria-hidden="true"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="modal-transfer-area">
+		<div class="row">
+			<div class="col-md-12 mt-1 mb-3">
+				<span>{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_DESC' | translate }}</span>
+			</div>
+		</div>
+		<div class="row" [formGroup]="ComplaintForm">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_TYPE' | translate }} <span class="required-symbol">&#42;</span></label>
+						<ng-select placeholder="{{ 'FINANCEHISTORYMODAL_TRANSACTION_TYPE_PLACEHOLDER_TYPE' | translate }}" formControlName="Subtype" [items]="Model.ComplaintTypeList" bindValue="value" [searchable]="false" [clearable]="false" [ngClass]="{ 'is-invalid': ComplaintTypeControl.invalid && (ComplaintTypeControl.touched || ComplaintTypeControl.dirty) }">
+							<ng-template ng-label-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+							<ng-template ng-option-tmp let-item="item">
+								<span>{{item.label | translate}}</span>
+							</ng-template>
+						</ng-select>
+					</div>
+					<div class="col-md-6 form-group">
+						<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_INCIDENT_DATE' | translate }} <span class="required-symbol">&#42;</span></label>
+						<div class="display-flex input-control">
+							<div class="input-group col-7 pl-0 input-date">
+								<span class="input-group-prepend">
+									<span class="input-group-text">
+										<i class="fa fa-calendar" aria-hidden="true"></i>
+									</span>
+								</span>
+								<input type="text" class="form-control" formControlName="ExpiryDate" [datePicker]="datePickerOptions" [(StartDate)]="startDate" [(EndDate)]="endDate" (DatesChanged)="onDateChanged($event)" [ngClass]="{ 'is-invalid': ComplaintDateControl.invalid && (ComplaintDateControl.touched || ComplaintDateControl.dirty) }"/>
+							</div>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryHour" placeholder="00" min="0" max="23" [ngClass]="{ 'is-invalid': ComplaintHourControl.invalid && (ComplaintHourControl.touched || ComplaintHourControl.dirty) }"/> <span class="time-separator">:</span>
+							<input type="number" class="form-control col-2 align-middle number-spin-button" formControlName="ExpiryMinute"  placeholder="00" min="0" max="59" [ngClass]="{ 'is-invalid': ComplaintMinuteControl.invalid && (ComplaintMinuteControl.touched || ComplaintMinuteControl.dirty) }"/>
+						</div>
+						<div class="invalid-feedback" [ngClass]="{'d-block': (ComplaintHourControl.invalid && (ComplaintHourControl.touched || ComplaintHourControl.dirty)) || (ComplaintMinuteControl.invalid && (ComplaintMinuteControl.touched || ComplaintMinuteControl.dirty)) }">{{'PLAYER_DETAIL_INCIDENT_INVALID_DATE' | translate}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_COMPLAINT_DETAIL' | translate }} <span class="required-symbol">&#42;</span></label>
+					<div class="form-group">
+						<div class="note-write-box history-height-auto" [class.focus]="WritingNote" [class.is-invalid]="ComplaintNoteControl.invalid && (ComplaintNoteControl.touched || ComplaintNoteControl.dirty)">
+							<textarea class="form-control" rows="4" maxlength="4000" (focus)="WritingNote = true" (focusout)="WritingNote = false" placeholder="{{ 'PLAYER_DETAIL_PLAYER_NOTE_PLACEHOLDER' | translate }}" formControlName="Note" (keyup)="CheckPlayNoteLength()"></textarea>
+							<p class="text-length"><span>{{ NoteLength }}</span>/{{NoteMaxLength}}</p>
+						</div>
+						<div class="invalid-feedback">{{'INVALID_CONCLUSION' | translate}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-grup">
+					<label class="col-form-label">{{ 'PLAYER_DETAIL_PLAYER_COMPLAINT_INVOLVED_PLAYER' | translate }}</label>
+					<div class="w-100">
+						<ng-select [multiple]="true" placeholder="{{'FINANCEHISTORYMODAL_SELECTPLAYER_PLACEHOLDER'| translate }}" [items]="Model.ActivePlayers" formControlName="SelectedPlayers" bindLabel="{{SelectedSearchType.Label}}" [closeOnSelect]="true" [clearable]="true" [virtualScroll]="true" [loading]="Model.IsLoading" [typeahead]="Model.InputString" (change)="changeValidation()" [dropdownPosition]="'top'"></ng-select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="Hide()" [disabled]="IsOnProcessing">{{ 'BUTTON_CANCEL' | translate }}</button>
+	<button type="button" class="btn btn-primary" (click)="Add()" [disabled]="IsOnProcessing || ComplaintForm.invalid">{{ 'PLAYER_DETAIL_PLAYER_BUTTON_ADD' | translate }}</button>
+</div>

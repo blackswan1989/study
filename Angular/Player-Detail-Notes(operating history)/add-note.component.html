@@ -1,0 +1,24 @@
+<div class="modal-header">
+	<h4 id="dialog-child-name" class="modal-title pull-left">
+		{{ 'PLAYER_DETAIL_PLAYER_ADD_NOTE' | translate }}
+	</h4>
+	<button type="button" class="close pull-right" aria-label="Close" (click)="Hide()">
+		<i class="fa fa-close" aria-hidden="true"></i>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="modal-transfer-area">
+		<form  [formGroup]="BalanceForm">
+			<div class="form-group">
+				<div class="note-write-box" [class.focus]="WritingNote">
+					<textarea class="form-control" rows="4" maxlength="4000" (focus)="WritingNote = true" (focusout)="WritingNote = false" placeholder="{{ 'PLAYER_DETAIL_PLAYER_NOTE_PLACEHOLDER' | translate }}" formControlName="Note" (keyup)="CheckPlayNoteLength()"></textarea>
+					<p class="text-length"><span>{{ NoteLength }}</span>/{{NoteMaxLength}}</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="Hide()" [disabled]="IsOnProcessing">{{ 'BUTTON_CANCEL' | translate }}</button>
+	<button type="button" class="btn btn-primary" (click)="Add()" [disabled]="IsOnProcessing || BalanceForm.invalid">{{ 'PLAYER_DETAIL_PLAYER_BUTTON_ADD' | translate }}</button>
+</div>
