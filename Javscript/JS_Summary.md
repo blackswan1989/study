@@ -13,30 +13,6 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 2. let 변수 : 기존의 함수-스코프였던 변수와 다르게 hoisting없는 블록-스코프 변수 지원, 재선언 불가
    
 3. Block-Scoped 함수 : 블록-스코프 함수 정의 방식 개선
-   
-	```
-	// ES6
-	{
-		function foo () { return 1 }
-		console.log(foo()) // 1
-		{
-			function foo() { return 2 }
-			console.log(foo()) // 2
-		}
-		console.log(foo()) // 1
-	}
-
-	// ES5
-	(function () {
-		var foo = function () { return 1;}
-		foo() === 1;
-		(function () {
-				var foo = function () { return 2; }
-				foo() === 2;
-		})();
-		foo() === 1;
-	})();
-	```
 
 4. Arrow Function : function과 return을 묶어 화살표 함수로 변형 가능.
    
@@ -53,9 +29,11 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 	// ES5
 	function foo (x, y, z) {
 		if(y === undefined)
-				y = 2;
+			y = 2;
+
 		if(z === undefined)
-				z = 3;
+			z = 3;
+
 		return x + y + z;
 	};
 
@@ -99,6 +77,7 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 	let info = { id: "STAR", email: "Foo@example.com"}
 	let userInfo = `Hello ${user.name}. Your ID is ${info.id} and email is ${info.email}.`
 	// "Hello Foo. Your ID is STAR and email is Foo@example.com."
+	```
 
 9. Enhanced Object Properties : 공통 객체 속성 정의를 간결하게 할 수 있다.
 
@@ -116,14 +95,14 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 
 	```
 	class Car {
-    constuctor (id, x ,y) {
-      this.id = id
-      this.move(x,y)
-    }
-    move (x, y) {
-      this.x = x
-      this.y = y
-    }
+		constuctor (id, x ,y) {
+ 		 this.id = id
+  		this.move(x,y)
+		}
+		move (x, y) {
+			this.x = x
+			this.y = y
+		}
 	}
 
 	// ES5
@@ -131,6 +110,7 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 		this.id = id;
 		this.move(x, y);
 	};
+
 	Car.prototype.move = function (x, y) {
 		this.x = x;
 		this.y = y;
@@ -140,26 +120,20 @@ ES6 에서는 ES5 이하 명세에서 문제가 되었던 부분들이 해결되
 11. Promise : 비동기 처리 이후 동작을 순차적 또는 병렬로 진행하기 위해 사용하는 클래스. 가독성이 좋으며 중첩된 콜백의 단점을 완화.
 
 	```
-	let _promise = () => {
-		return new Promise((resolve,reject) => {
-				if(success) {
-					resolve(value)       // success
-			} else {
-				reject(reason)         // fail
-			}
-		})
-	}
-	_promise().then((res) => {
-		//success일때 처리
-		console.log(res)
-	},
-	(err) => {
-		//reject 일때 처리
-		console.error(err)
-	})
-	_promise().then(...).catch((err) => {
-		console.error(err)
-	})
+	const wait = inputStr => {
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				console.log(inputStr);
+				resolve();
+			}, 500);
+		});
+	};
+
+	wait('A')
+		.then(() => wait('B'))
+		.then(() => wait('C'));
+
+	// A -> B -> C 
 	```
 
 12. Export & Import : 값을 `export`, `import`로 모듈에 가져오거나 모듈로 내보낼 수 있다.
