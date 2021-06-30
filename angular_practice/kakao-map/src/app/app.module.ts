@@ -1,18 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MapComponent } from './map.component';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+
 
 @NgModule({
   declarations: [
-    MapComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    CommonModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
-  bootstrap: [MapComponent]
+  providers: [BsModalRef],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule
+{
+}
