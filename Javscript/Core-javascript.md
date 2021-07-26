@@ -412,6 +412,275 @@ obj2 = { c:20, d: 'ddd' };
 <br>
 <br>
 
-## 5. 기본형 데이터와 참조형 데이터
+## 5. 불변 객체
+
+<br>
+
+### 5.1 불변 객체(immutable object)를 만드는 간단한 방법
+
+<br>
+
+불변 격체(immutable object)는 최근 라이브러리나 프레임워크에서 뿐만 아니라 함수형 프로그래밍과 디자인 패턴 등에서도 매우 중요한 기초가 되는 개념이다. 
+
+위에서 설명했듯이 참조형 데이터의 '가변'은 데이터 자체가 아닌 내부 프로퍼티를 변경할 때만 성립한다. 데이터 자체를 변경(새로운 데이터를 할당)하고자 하면 기본형 데이터와 마찬가지로 **기존 데이터는 변하지 않는다.** 
+
+그렇다면 내부 프로퍼티를 변경할 필요가 있을 때마다 매번 새로운 객체를 만들어 재할당하기로 규칙을 정하거나, 자동으로 새로운 객체를 만드는 도구<small>(ES6에서 spread operator, Object,assign 메서드나 immutable.js 라이브러리 등)</small>를 활용한다면 객체 역시 불변성을 확보할 수 있다. 
+
+보통 '값으로 전달 받은 객체에 변경을 가하더라도 원본 객체는 변하지 않아야 하는 경우'에 위와 같은 불변 객체가 필요하다.
+
+<br>
+
+```
+let user = {
+	name: 'Jane',
+	gender: 'female'
+};
+
+let changeName = function (user, newName) {
+	let newUser = user;
+	newUser.name = newName;
+
+	return newUser
+};
+
+let user2 = changeName(user, 'Kim');
+
+if (user !== user2) {
+	console.log('유저 정보가 변경되었습니다.');
+}
+
+console.log(user.name, user2.name);		// Kim, Kim
+console.log(user === user2);					// true
+```
+
+<br>
+
+위 예제를 실행해보면 if문에서 `user !== user2` 조건일 때 `'유저 정보가 변경되었습니다.'` 라는 내용이 출력되지 않고 통과하는 것을 알 수 있다. 그 후 두 변수 `user.name`과 `user2.name` 프로퍼티 모두 `kim`으로 출력되고 두 변수가 서로 동일하다고 한다. 
+
+만약 if문에서 처럼 정보가 바뀐 시점에 알림을 보내야 한다거나, 바뀌기 전의 정보와 바뀐 후의 정보의 차이를 가시적으로 보여줘야 하는 등의 기능을 구현하려면 다음 처럼 변경 전과 변경 후에 서로 다른 객체를 바라보도록 만들어야 한다.
+
+<br>
+
+```
+let user = {
+	name: 'Jane',
+	gender: 'female'
+};
+
+let changeName = function (user, newName) {
+	return {
+		name: newName,
+		gender: user.gender
+	}
+};
+
+let user2 = changeName(user, 'Kim');
+
+if (user !== user2) {
+	console.log('유저 정보가 변경되었습니다.');		// 유저 정보가 변경되었습니다.
+}
+
+console.log(user.name, user2.name);		// Jane, Kim
+console.log(user === user2);					// false
+```
+
+`changeName` 함수가 새로운 객체를 반환하도록 수정하여 `user`와 `user2`는 서로 다른 객체이므로 변경 전과 후를 비교할 수 있게 된다.
+
+<br>
+
+더 나아가 기존 객체의 프로퍼티(`gender`)를 하드코딩하지 않고, 대상 객체의 프로퍼티 갯수에 상관 없이 모든 프로퍼티를 복사하는 함수예제를 만들어보자. 아래 `copyObject`는 `for in` 문법을 이용해 `result` 객체에 `target` 객체의 프로퍼티들을 복사하는 함수이다. 
+
+<br>
+
+- 기존 정보를 복사해서 새로운 객체를 반환하는 함수(얕은 복사)
+
+	```
+
+	let copyObject = function (target) {
+		let result = {};
+
+		for(let prop in target) {
+			result[prop] = target[prop];
+		}
+
+		return result;
+	};
+	```
+
+	```
+	// copyObject를 이용한 객체 복사
+
+	let user = {
+		name: 'Jane',
+		gender: 'femaie'
+	};
+
+	let user2 = copyObject(user);
+	user2.name = 'emile';
+
+	if (user !== user2) {
+		console.log('유저 정보가 변경되었습니다.');
+	}
+
+	console.log(user.name, user2.name);
+	console.log(user === user2);
+	```
+
+	`copyObject` 함수를 통해 간단하게 객체를 복사하고 내용을 수정할 수 있게 되었다. `user` 객체 내부의 변경이 필요할 때 `copyObject` 함수를 사용한다는 규칙을 지킨다는 전제가 있다면 `user` 객체가 불변 객체라고 볼 수 있다.
+
+	> <small>하지만 이러한 규칙은 깨지기 쉽기 때문에 시스템적으로 제약을 거는 것이 안전하다. 이런 맥락에서 `immutable.js`나 `baobab.js` 등의 라이브러리가 등장해서 인기를 끌고 있다. 이들은 자바스크립트 내장 객체가 아닌 라이브러리 자체에서 불변성을 지닌 별도의 데이터 타입과 그에 따른 메서드를 제공한다.</small>
+
+<br>
+<br>
+<br>
+
+### 5.2 얕은 복사(shallow copy)와 깊은 복사(deep copy)
+
+<br>
+
+얕은 복사는 바로 아래 단계의 값만 복사하는 방법이고, 깊은 복사는 내부의 모든 값들을 하나하나 찾아서 전부 복사하는 방법이다. 위 예제에서는 얕은 복사만 수행했다. 
+
+이는 중첩된 객체에서 참조형 데이터가 저장된 프로퍼티를 복사할 때 그 주소값만 복사한다는 의미이다. 그렇게 되면 해당 프로퍼티에 대해 원본과 사본이 모두 동일한 참조형 데이터의 주소를 가리키게 된다. 사본을 바꾸면 원본도 바뀌고, 원본을 바꾸면 사본도 바뀐다.
+
+<br>
+
+- 중첩된 객체에 대한 얕은 복사
+
+	```
+	let user = {
+		name: 'Jane',
+		urls: {
+			portfolio: 'http://github.com/abc',
+			blog: 'http://blog.com'
+		}
+	}
+
+	let user2 = copyObject(user);
+
+	user2.name = 'blake';
+	console.log(user.name === user2.name);	// false
+
+	user.urls.portfolio = 'http://portfolio.com';
+	console.log(user.urls.portfolio === user2.urls.portfolio);	// true
+
+	user2.urls.blog = '';
+	console.log(user.urls.blog === user2.urls.blog);	// true
+	```
+
+	위 예제를 출력해보면 `user.name` 프로퍼티는 바뀌지 않았으나, `user.urls.portfolio`와 `user2.urls.blog`는 원본과 사본 중 어느 쪽을 바꾸더라도 다른 한쪽의 값도 같이 바뀌어 `true`가 출력됨을 확인할 수 있다.
+
+	즉 `user` 객체에 직접 속한 프로퍼티에 대해서는 복사하여 완전히 새로운 데이터가 만들어진 반면, 한 단계 더 들어간 `urls`의 내부 프로퍼티들은 기존 데이터를 그대로 참조한다. 이런 현상을 방지하려면 `user.urls` 프로퍼티에 대해서 불변 객체로 만들 필요가 있다.
+
+<br>
+
+  - 중첩된 객체에 대한 깊은 복사
+
+	```
+	var user2 = copyObject(user);
+	user2.urls = copyObject(user.urls);	// urls 프로퍼티에 copyObject 함수를 실행한 결과를 할당.
+
+	user.urls.portfolio = 'http://portfolio.com';
+	console.log(user.urls.portfolio === user2.urls.portfolio);	// false
+
+	user2.urls.blog = '';
+	console.log(user.urls.blog === user2.urls.blog);	// false
+	```
+
+	위 예제에서 `urls` 프로퍼티에 `copyObject` 함수를 실행한 결과를 할당하여 `url` 프로퍼티의 내부까지 복사해서 새로운 데이터가 만들어졌으므로 다시 콘솔에 출력해보면 서로 값이 다르다는 결과를 얻을 수 있다.
+
+	이처럼 어떤 객체를 복사할 때 객체 내부의 모든 값을 복사해서 완전히 새로운 데이터를 만들고자 할 떄, 객체의 프로퍼티 중에서 그 값이 **기본형 데이터 일 경우에는 그대로 복사**를 하면 되지만 **참조형 데이터는 다시 그 내부의 프로퍼티들을 복사**해야 한다. 이 과정을 참조형 데이터가 있을 때마다 재귀적으로 수행해야만 깊은 복사가 되는 것이라고 할 수 있다.
+
+<br>
+<br>
+
+- 객체의 깊은 복사를 수행하는 범용 함수
+
+	```
+
+	let copyObjectDeep = function(target) {
+		let result = {};
+
+		if(typeof target === 'object' && target !== null) {
+			for (let prop in target) {
+				result[prop] = copyObjectDeep(target[prop]);
+			}
+		}
+		else {
+			result = target;
+		}
+
+		return result;
+	};
+	```
+
+	```
+	// 깊은 복사 결과 확인
+
+	let obj = {
+		a: 1,
+		b: {
+			c: null,
+			d: [1, 2]
+		}
+	};
+
+	let obj2 = copyObjectDeep(obj);
+
+	obj2.a = 3;
+	obj2.b.c = 4;
+	obj.b.d[1] = 3;
+
+	console.log(obj);	// { a:1, b:{ c:null, d:[1, 3] } }
+	console.log(obj2);	// { a:3, b:{ c:4, d:[0:1, 1:2] } }
+	```
+
+	아래 3번째 줄에서 `target`이 객체인 경우 내부 프로퍼티들을 순회하며 `copyObjectDeep` 함수를 재귀적으로 호출하고, 객체가 아닌 경우 8번째 줄에서 `target`을 그대로 지정하게끔 했다. 이 함수를 사용해 객체를 복사한 다음에는 원본과 사본이 완전히 다른 객체를 참조하게 되어 어느 쪽의 프로퍼티를 변경하더라도 다른쪽에 영향을 주지 않는다.
+
+	> 추가로 `hasOwnProperty` 메서드를 활용해 프로토타입 체이닝을 통해 상속된 프로퍼티를 복사하지 않게끔 할 수도 있다. 
+	> 
+	> ES5의 `getter`와 `setter`를 복사하는 방법은 ES6의 `Object.getOwnPropertyDescriptor` 또는 ES7의 `Object.getOwnPropertyDescriptors` 외에는 마땅한 방법이 없다.
+
+<br>
+
+- JSON을 활용한 간단한 깊은 복사
+
+	```
+	let copyObjectViaJSON = function (target) {
+		return JSON.parse(JSON.stringify(target));
+	};
+
+	let obj = {
+		a: 1,
+		b: {
+			c: null,
+			d: [1, 2],
+			func1: function() { 
+				console.log(3); 
+			}
+		},
+
+		func2: function() {
+			console.log(4);
+		}
+	}
+
+	let obj2 = copyObjectViaJSON(obj);
+
+	obj2.a = 3;
+	obj2.b.c = 4;
+	obj.b.d[1] = 3;
+
+	console.log(obj);	// { a:1, b:{ c:null, d:[1, 3], func1: f() }, fun2: f() }
+	console.log(obj2);	// { a:3, b:{ c:4, d:[1, 2] } }
+	```
+
+	위 예제는 객체를 JSON 문법으로 표현된 문자열로 전환했다가, 다시 JSON 객체로 바꾸는 것이다. `httpRequest`로 받은 데이터를 저장한 객체를 복사할 때 등 순수한 정보만 다룰 때 활용하기 좋은 방법이다.
+
+<br>
+<br>
+<br>
+<br>
+
+## 6. undefined & null
 
 <br>
