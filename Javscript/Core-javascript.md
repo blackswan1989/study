@@ -185,8 +185,8 @@ b = 7
 
 ```
 var obj1 = {
-	a: 1,
-	b: 'bbb'
+  a: 1,
+  b: 'bbb'
 };
 ```
 
@@ -231,8 +231,8 @@ var obj1 = {
 
 ```
 var obj = {
-	x: 3,
-	arr: [ 3, 4, 5 ]
+  x: 3,
+  arr: [ 3, 4, 5 ]
 };
 ```
 
@@ -267,8 +267,8 @@ var obj = {
 
 ```
 var obj = {
-	x: 3,
-	arr: [ 3, 4, 5 ]
+  x: 3,
+  arr: [ 3, 4, 5 ]
 };
 
 obj.arr = 'str';
@@ -432,21 +432,21 @@ obj2 = { c:20, d: 'ddd' };
 
 ```
 let user = {
-	name: 'Jane',
-	gender: 'female'
+  name: 'Jane',
+  gender: 'female'
 };
 
 let changeName = function (user, newName) {
-	let newUser = user;
-	newUser.name = newName;
+  let newUser = user;
+  newUser.name = newName;
 
-	return newUser
+  return newUser
 };
 
 let user2 = changeName(user, 'Kim');
 
 if (user !== user2) {
-	console.log('유저 정보가 변경되었습니다.');
+  console.log('유저 정보가 변경되었습니다.');
 }
 
 console.log(user.name, user2.name);		// Kim, Kim
@@ -463,21 +463,21 @@ console.log(user === user2);					// true
 
 ```
 let user = {
-	name: 'Jane',
-	gender: 'female'
+  name: 'Jane',
+  gender: 'female'
 };
 
 let changeName = function (user, newName) {
-	return {
-		name: newName,
-		gender: user.gender
-	}
+  return {
+    name: newName,
+    gender: user.gender
+  }
 };
 
 let user2 = changeName(user, 'Kim');
 
 if (user !== user2) {
-	console.log('유저 정보가 변경되었습니다.');		// 유저 정보가 변경되었습니다.
+  console.log('유저 정보가 변경되었습니다.');		// 유저 정보가 변경되었습니다.
 }
 
 console.log(user.name, user2.name);		// Jane, Kim
