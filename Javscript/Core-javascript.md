@@ -185,8 +185,8 @@ b = 7
 
 ```
 var obj1 = {
-  a: 1,
-  b: 'bbb'
+	a: 1,
+	b: 'bbb'
 };
 ```
 
@@ -231,8 +231,8 @@ var obj1 = {
 
 ```
 var obj = {
-  x: 3,
-  arr: [ 3, 4, 5 ]
+	x: 3,
+	arr: [ 3, 4, 5 ]
 };
 ```
 
@@ -267,8 +267,8 @@ var obj = {
 
 ```
 var obj = {
-  x: 3,
-  arr: [ 3, 4, 5 ]
+	x: 3,
+	arr: [ 3, 4, 5 ]
 };
 
 obj.arr = 'str';
@@ -432,21 +432,21 @@ obj2 = { c:20, d: 'ddd' };
 
 ```
 let user = {
-  name: 'Jane',
-  gender: 'female'
+	name: 'Jane',
+	gender: 'female'
 };
 
 let changeName = function (user, newName) {
-  let newUser = user;
-  newUser.name = newName;
+	let newUser = user;
+	newUser.name = newName;
 
-  return newUser
+	return newUser
 };
 
 let user2 = changeName(user, 'Kim');
 
 if (user !== user2) {
-  console.log('유저 정보가 변경되었습니다.');
+	console.log('유저 정보가 변경되었습니다.');
 }
 
 console.log(user.name, user2.name);		// Kim, Kim
@@ -463,21 +463,21 @@ console.log(user === user2);					// true
 
 ```
 let user = {
-  name: 'Jane',
-  gender: 'female'
+	name: 'Jane',
+	gender: 'female'
 };
 
 let changeName = function (user, newName) {
-  return {
-    name: newName,
-    gender: user.gender
-  }
+	return {
+		name: newName,
+		gender: user.gender
+	}
 };
 
 let user2 = changeName(user, 'Kim');
 
 if (user !== user2) {
-  console.log('유저 정보가 변경되었습니다.');		// 유저 정보가 변경되었습니다.
+	console.log('유저 정보가 변경되었습니다.');		// 유저 정보가 변경되었습니다.
 }
 
 console.log(user.name, user2.name);		// Jane, Kim
@@ -684,3 +684,19 @@ console.log(user === user2);					// false
 ## 6. undefined & null
 
 <br>
+
+자바스크립트 엔진은 사용자가 어떤 값을 지정할 것이라고 예상되는 상황임에도 지정하지 않았을때 `undefined`를 반환한다. 다음 세 경우가 이에 해당 된다.
+
+<br>
+
+1.  값을 대입하지 않은 변수, 즉 데이터 영역의 메모리 주소를 지정하지 않은 식별자에 접근할 때
+2.  객체 내부의 존재하지 않는 프로퍼티에 접근하려고 할 때
+3.  return 문이 없거나 호출되지 않은 함수의 실행 결과
+
+<br>
+
+- 자동으로 `undefined`를 부여하는 경우
+
+	```
+	
+	```
