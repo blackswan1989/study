@@ -91,7 +91,7 @@
 
 <br>
 
-```
+```javascript
 var a;          // 변수 a 선언
 a = 'abc';      // 변수 a에 데이터 할당
 
@@ -148,7 +148,7 @@ var a = 'abc';	// 변수 선언과 할당을 한 문장으로 표현
 
 기본형 데이터인 숫자, 문자열, boolean, null 등은 모두 불변값이다. 예를 통해 개념을 알아보자
 
-```
+```javascript
 var a = 'abc';
 a = a + 'def';
 ```
@@ -157,7 +157,7 @@ a = a + 'def';
 
 <br>
 
-```
+```javascript
 var b = 5;
 var c = 5;
 b = 7
@@ -183,7 +183,7 @@ b = 7
 
 <br>
 
-```
+```javascript
 var obj1 = {
 	a: 1,
 	b: 'bbb'
@@ -229,7 +229,7 @@ var obj1 = {
 
 <br>
 
-```
+```javascript
 var obj = {
 	x: 3,
 	arr: [ 3, 4, 5 ]
@@ -265,7 +265,7 @@ var obj = {
 
 위 상태에서 다음과 같이 재할당 명령(`obj.arr = 'str';`)을 내리면 어떻게 될까?
 
-```
+```javascript
 var obj = {
 	x: 3,
 	arr: [ 3, 4, 5 ]
@@ -298,7 +298,7 @@ obj.arr = 'str';
 
 <br>
 
-```
+```javascript
 var a = 10;
 var b = a;
 
@@ -331,7 +331,7 @@ var obj2 = obj1;
 
 <br>
 
-```
+```javascript
 var a = 10;
 var b = a;
 var obj1 = { c: 10, d: 'ddd' };
@@ -363,7 +363,7 @@ obj2.c = 20;
 
 <br>
 
-```
+```javascript
 a !== b
 obj1 === obj2
 ```
@@ -385,7 +385,7 @@ obj1 === obj2
 
 <br>
 
-```
+```javascript
 var a = 10;
 var b = a;
 var obj1 = { c: 10, d: 'ddd' };
@@ -430,7 +430,7 @@ obj2 = { c:20, d: 'ddd' };
 
 <br>
 
-```
+```javascript
 let user = {
 	name: 'Jane',
 	gender: 'female'
@@ -461,7 +461,7 @@ console.log(user === user2);					// true
 
 <br>
 
-```
+```javascript
 let user = {
 	name: 'Jane',
 	gender: 'female'
@@ -494,7 +494,7 @@ console.log(user === user2);					// false
 
 - 기존 정보를 복사해서 새로운 객체를 반환하는 함수(얕은 복사)
 
-	```
+	```javascript
 
 	let copyObject = function (target) {
 		let result = {};
@@ -507,7 +507,7 @@ console.log(user === user2);					// false
 	};
 	```
 
-	```
+	```javascript
 	// copyObject를 이용한 객체 복사
 
 	let user = {
@@ -546,7 +546,7 @@ console.log(user === user2);					// false
 
 - 중첩된 객체에 대한 얕은 복사
 
-	```
+	```javascript
 	let user = {
 		name: 'Jane',
 		urls: {
@@ -575,7 +575,7 @@ console.log(user === user2);					// false
 
   - 중첩된 객체에 대한 깊은 복사
 
-	```
+	```javascript
 	var user2 = copyObject(user);
 	user2.urls = copyObject(user.urls);	// urls 프로퍼티에 copyObject 함수를 실행한 결과를 할당.
 
@@ -595,7 +595,7 @@ console.log(user === user2);					// false
 
 - 객체의 깊은 복사를 수행하는 범용 함수
 
-	```
+	```javascript
 
 	let copyObjectDeep = function(target) {
 		let result = {};
@@ -613,7 +613,7 @@ console.log(user === user2);					// false
 	};
 	```
 
-	```
+	```javascript
 	// 깊은 복사 결과 확인
 
 	let obj = {
@@ -644,7 +644,7 @@ console.log(user === user2);					// false
 
 - JSON을 활용한 간단한 깊은 복사
 
-	```
+	```javascript
 	let copyObjectViaJSON = function (target) {
 		return JSON.parse(JSON.stringify(target));
 	};
@@ -697,6 +697,6 @@ console.log(user === user2);					// false
 
 - 자동으로 `undefined`를 부여하는 경우
 
-	```
+	```javascript
 	
 	```
