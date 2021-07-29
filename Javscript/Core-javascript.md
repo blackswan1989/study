@@ -694,9 +694,107 @@ console.log(user === user2);					// false
 3.  return 문이 없거나 호출되지 않은 함수의 실행 결과
 
 <br>
+<br>
 
-- 자동으로 `undefined`를 부여하는 경우
+### 6.1 자동으로 `undefined`를 부여하는 경우
 
-	```javascript
-	
-	```
+<br>
+
+```javascript
+let a
+console.log(a);	// undefined: 값을 대입하지 않은 변수에 접근
+
+let obj = { a: 1 };
+console.log(obj.a);	// 1
+console.log(obj.b);	// undefined: 존재하지 않는 프로퍼티에 접근
+console.log(b);	// ReferenceError: b is not defined
+
+let func = function() { };
+let c = func();	// return 값이 없으면 undefined를 반환한 것으로 간주됨.
+console.log(c);	//undefined
+```
+
+<br>
+<br>
+<br>
+
+### 6.2 undefined와 배열
+
+<br>
+
+```javascript
+let arr1 = [];
+arr1.length = 3;
+console.log(arr1);	// [empty * 3]
+
+let arr2 = new Array(3);
+console.log(arr2);	// [empty * 3]
+
+let arr3 = [undefined, undefined, undefined];
+console.log(arr3);	// [undefined, undefined, undefined]
+```
+
+<br>
+
+`arr1`와 `arr2`에서  배열의 크기를 3으로 지정했으나 `undefined` 조차 할당돼 있지 않음을 알 수 있다. 한 편 `arr3`에서는 리터럴 방식으로 배열을 생성하면서 각 요소에 `undefined`를 부여하여 출력해보면 `arr1`와 `arr2`와 다른 결과를 확인할 수 있다. 
+
+이처럼 '비어있는 요소(empty)'와 `undefined`를 할당한 요소는 출력 결과부터 다르다. 비어있는 요소는 순회와 관련된 배열 메서드들의 순회 대상에서 제외된다. 아래 예제를 참조해보자.
+
+<br>
+<br>
+<br>
+
+### 6.3 빈 요소와 배열의 순회
+
+<br>
+
+아래 예제에서 `arr1`은 `undefined`와 1을 직접 할당한 반면 `arr2`는 빈 배열의 인덱스 1에 값 1을 할당했다. 두 배열은 배열의 각 요소를 순회하는 것을 기본으로 `forEach`, `map`, `filter`, `reduce와` 같이 추가적인 기능을 수행하는 메서드들에서 서로 다른 결과를 보인다.
+
+<br>
+
+```javascript
+let arr1 = [undefined, 1];
+let arr2 = [];
+arr2[1] = 1;
+
+arr1.forEach(element => console.log(element));	// undefined, 1
+arr1.forEach((v, i) => console.log(v, i));	// undefined 0, 1 1
+arr2.forEach((v, i) => console.log(v, i));	// 1 1
+
+arr1.map((v, i) => { return v + i });	// [Nan, 2]
+arr2.map((v, i) => { return v + i });	// [empty, 2]
+
+arr1.filter( v => { return !v; });	// [undefined]
+arr2.filter( v => { return !v; });	//
+
+arr1.reduce((p, c, i) => { return p + c + i; }, '');	// undefined011
+arr2.reduce((p, c, i) => { return p + c + i; }, '');	// 11
+```
+
+<br>
+
+`arr1`에 대해서는 일반적으로 배열의 모든 요소를 순회해서 결과를 출력한다. 하지만 `arr2`에 대한 결과는 각 메서드들이 비어 있는 요소에 대해서 어떠한 처리도 하지 않고 건너 뛰었음을 알 수 있다. 이러한 현상도 '배열도 객체'임을 생각하면 자연스러운 현상이다. 존재하지 않는 프로퍼티에 대해서는 순회할 수 없는 것이 당연하기 때문이다.
+
+배열은 무조건 `length` 프로퍼티의 개수만큼 빈 공간을 확보하고 각 공간에 인덱스를 이름으로 지정할 것이라 생각하기 쉽지만 실제로는 객체와 마찬가지로 특정 인덱스에 값을 지정할 때 비로소 빈 공간을 확보하고 인덱스를 이름으로 지정하여 데이터의 주소값을 지정하는 등의 동작을 한다. 즉 값이 지정되지 않은 인덱스는 '아직 존재하지 않는 프로퍼티'에 지나지 않는다.
+
+정리하자면 `arr1`에서 `undefined`는 명시적으로 부여했기 때문에(`undefined` 자체는 비어있음을 의미하지만) 그 자체로 값이 되어 동작하므로 프로퍼티나 배열의 요소는 고유의 키값(프로퍼티 이름)이 실존하여 순회의 대상이 될 수 있다. 한편 `arr2`에서 반환되는 `undefined`는 해당 프로퍼티 내지 배열의 키 값(인데스) 자체가 존재하지 않음을 의미하는 것이다. 
+
+<br>
+<br>
+<br>
+
+### 6.4 undefined와 null의 비교
+
+<br>
+
+위 예제의 `arr1`처럼 `undefined`를 직접 할당할 일은 거의 없을 것이다. 같은 의미를 가진 `null`이라는 값이 있기 때문에 '비어 있음'을 명시적으로 나타내고 싶을 때에는 `null`을 사용하면 된다.
+
+하지만 주의할 점이 있다. 바로 `type of null`이 `object`라는 점이다. 따라서 어떤 변수의 값이 `null`인지 여부를 판별하기 위해서는 `typeof`대신 다른 방식으로 접근해야한다.
+
+<br>
+
+```
+
+```
+
+<br>
